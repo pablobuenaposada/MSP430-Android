@@ -1,8 +1,9 @@
 #include <msp430.h>
+#include <string.h>
 
-char message[4]="hola";
+char message[]="hola";
 
-void sendString(char* string){
+void sendString(const char *string){
 	int index;
     for(index=0; index < strlen(string); index++){
     	UCA0TXBUF = string[index];

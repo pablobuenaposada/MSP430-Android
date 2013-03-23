@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.1.2                      
 ******************************************************************************
->> Linked Sat Mar 23 03:19:13 2013
+>> Linked Sat Mar 23 22:46:39 2013
 
 OUTPUT FILE NAME:   <uart.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00005c62
@@ -18,8 +18,8 @@ MEMORY CONFIGURATION
   INFOC                 00001880   00000080  00000000  00000080  RWIX
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
-  RAM                   00001c00   00004000  000000a4  00003f5c  RWIX
-  FLASH                 00005c00   0000a380  00000308  0000a078  RWIX
+  RAM                   00001c00   00004000  000000a5  00003f5b  RWIX
+  FLASH                 00005c00   0000a380  0000030a  0000a076  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -95,8 +95,8 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00005c00    00000000     UNINITIALIZED
 
-.data      0    00001c00    00000004     
-                  00001c00    00000004     msp430x54x_uscia0_duplex_9600.obj (.data:message)
+.data      0    00001c00    00000005     
+                  00001c00    00000005     msp430x54x_uscia0_duplex_9600.obj (.data:message)
 
 .TI.persistent 
 *          0    00001c00    00000000     UNINITIALIZED
@@ -122,10 +122,11 @@ section   page    origin      length       input sections
                   00005ee6    00000004                            : pre_init.obj (.text:_system_pre_init)
                   00005eea    00000004                            : exit.obj (.text:abort)
 
-.cinit     0    00005eee    0000001a     
-                  00005eee    0000000a     (.cinit..data.load) [load image, compression = rle]
-                  00005ef8    00000008     (__TI_handler_table)
-                  00005f00    00000008     (__TI_cinit_table)
+.cinit     0    00005eee    0000001c     
+                  00005eee    0000000b     (.cinit..data.load) [load image, compression = rle]
+                  00005ef9    00000001     --HOLE-- [fill = 0]
+                  00005efa    00000008     (__TI_handler_table)
+                  00005f02    00000008     (__TI_cinit_table)
 
 USCI_A0    0    0000fff2    00000002     
                   0000fff2    00000002     msp430x54x_uscia0_duplex_9600.obj (.int57)
@@ -136,13 +137,13 @@ USCI_A0    0    0000fff2    00000002
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00005f00 records: 1, size/record: 8, table size: 8
-	.data: load addr=00005eee, load size=0000000a bytes, run addr=00001c00, run size=00000004 bytes, compression=rle
+__TI_cinit_table @ 00005f02 records: 1, size/record: 8, table size: 8
+	.data: load addr=00005eee, load size=0000000b bytes, run addr=00001c00, run size=00000005 bytes, compression=rle
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00005ef8 records: 2, size/record: 4, table size: 8
+__TI_handler_table @ 00005efa records: 2, size/record: 4, table size: 8
 	index: 0, handler: __TI_decompress_rle24
 	index: 1, handler: __TI_decompress_none
 
@@ -829,10 +830,10 @@ address    name
 0000015c   WDTCTL_L
 00005c00   __STACK_END
 000000a0   __STACK_SIZE
-00005f00   __TI_CINIT_Base
-00005f08   __TI_CINIT_Limit
-00005ef8   __TI_Handler_Table_Base
-00005f00   __TI_Handler_Table_Limit
+00005f02   __TI_CINIT_Base
+00005f0a   __TI_CINIT_Limit
+00005efa   __TI_Handler_Table_Base
+00005f02   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 00000001   __TI_args_main
@@ -1553,10 +1554,10 @@ address    name
 00005ee6   _system_pre_init
 00005eea   C$$EXIT
 00005eea   abort
-00005ef8   __TI_Handler_Table_Base
-00005f00   __TI_CINIT_Base
-00005f00   __TI_Handler_Table_Limit
-00005f08   __TI_CINIT_Limit
+00005efa   __TI_Handler_Table_Base
+00005f02   __TI_CINIT_Base
+00005f02   __TI_Handler_Table_Limit
+00005f0a   __TI_CINIT_Limit
 0000fffe   _reset_vector
 ffffffff   __binit__
 ffffffff   __c_args__
