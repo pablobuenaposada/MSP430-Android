@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v4.1.2                      
 ******************************************************************************
->> Linked Sat Mar 23 22:46:39 2013
+>> Linked Tue Mar 26 23:57:16 2013
 
 OUTPUT FILE NAME:   <uart.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 00005c62
+ENTRY POINT SYMBOL: "_c_int00"  address: 00005c28
 
 
 MEMORY CONFIGURATION
@@ -18,8 +18,8 @@ MEMORY CONFIGURATION
   INFOC                 00001880   00000080  00000000  00000080  RWIX
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
-  RAM                   00001c00   00004000  000000a5  00003f5b  RWIX
-  FLASH                 00005c00   0000a380  0000030a  0000a076  RWIX
+  RAM                   00001c00   00004000  00000268  00003d98  RWIX
+  FLASH                 00005c00   0000a380  00002e26  0000755a  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -95,38 +95,98 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00005c00    00000000     UNINITIALIZED
 
-.data      0    00001c00    00000005     
-                  00001c00    00000005     msp430x54x_uscia0_duplex_9600.obj (.data:message)
+.data      0    00001c00    000001ae     
+                  00001c00    000000b0     rts430x_lc_sd_eabi.lib : signal.obj (.data:sigtable)
+                  00001cb0    00000080                            : xvalues.obj (.data)
+                  00001d30    00000068                            : xfvalues.obj (.data)
+                  00001d98    00000008                            : _lock.obj (.data)
+                  00001da0    00000008                            : feraiseexcept.obj (.data)
+                  00001da8    00000004     msp430x54x_uscia0_duplex_9600.obj (.data)
+                  00001dac    00000002     rts430x_lc_sd_eabi.lib : errno.obj (.data)
 
 .TI.persistent 
 *          0    00001c00    00000000     UNINITIALIZED
+
+.bss       0    00001dae    0000001a     UNINITIALIZED
+                  00001dae    0000001a     msp430x54x_uscia0_duplex_9600.obj (.bss)
+
+.TI.noinit 
+*          0    00001dae    00000000     UNINITIALIZED
 
 .stack     0    00005b60    000000a0     UNINITIALIZED
                   00005b60    00000002     rts430x_lc_sd_eabi.lib : boot.obj (.stack)
                   00005b62    0000009e     --HOLE--
 
 .text:_isr 
-*          0    00005c00    0000007c     
-                  00005c00    00000062     msp430x54x_uscia0_duplex_9600.obj (.text:_isr:USCI_A0_ISR)
-                  00005c62    0000001a     rts430x_lc_sd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
+*          0    00005c00    00000042     
+                  00005c00    00000028     msp430x54x_uscia0_duplex_9600.obj (.text:_isr:USCI_A0_ISR)
+                  00005c28    0000001a     rts430x_lc_sd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
 
-.text      0    00005c7c    00000272     
-                  00005c7c    000000d6     rts430x_lc_sd_eabi.lib : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
-                  00005d52    0000006e                            : autoinit.obj (.text:_auto_init)
-                  00005dc0    00000064     msp430x54x_uscia0_duplex_9600.obj (.text:main)
-                  00005e24    00000040     rts430x_lc_sd_eabi.lib : cpy_util.obj (.text:__memcpy_far)
-                  00005e64    0000003c                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
-                  00005ea0    00000026     msp430x54x_uscia0_duplex_9600.obj (.text:sendString)
-                  00005ec6    00000012     rts430x_lc_sd_eabi.lib : strlen.obj (.text:strlen)
-                  00005ed8    0000000e                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
-                  00005ee6    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  00005eea    00000004                            : exit.obj (.text:abort)
+.text      0    00005c42    00002cd8     
+                  00005c42    00000698     rts430x_lc_sd_eabi.lib : pow.obj (.text:pow)
+                  000062da    00000448                            : xlog.obj (.text:_Log)
+                  00006722    00000444                            : frcdivd.obj (.text:_frcdivd)
+                  00006b66    0000038a                            : xexp.obj (.text:_Exp)
+                  00006ef0    000002da                            : frcmpyd.obj (.text:_frcmpyd)
+                  000071ca    000002d8                            : addd.obj (.text:__mspabi_addd)
+                  000074a2    00000260                            : frcaddd.obj (.text:_frcaddd)
+                  00007702    00000244                            : mpyd.obj (.text:__mspabi_mpyd)
+                  00007946    00000218                            : divd.obj (.text:__mspabi_divd)
+                  00007b5e    000001a0                            : xdscale.obj (.text:_Dscale)
+                  00007cfe    00000134                            : cmpd.obj (.text:__mspabi_cmpd)
+                  00007e32    00000118     msp430x54x_uscia0_duplex_9600.obj (.text:main)
+                  00007f4a    000000fc     rts430x_lc_sd_eabi.lib : xdnorm.obj (.text:_Dnorm)
+                  00008046    000000d6                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  0000811c    000000c6                            : xdint.obj (.text:_Dint)
+                  000081e2    000000b4                            : renormd.obj (.text:_renormd)
+                  00008296    000000a0                            : fltlid.obj (.text:__mspabi_fltlid)
+                  00008336    00000082                            : fixdul.obj (.text:__mspabi_fixdul)
+                  000083b8    00000080                            : fixdli.obj (.text:__mspabi_fixdli)
+                  00008438    00000074                            : cvtfd.obj (.text:__mspabi_cvtfd)
+                  000084ac    00000072                            : xdunscal.obj (.text:_Dunscale)
+                  0000851e    0000006e                            : autoinit.obj (.text:_auto_init)
+                  0000858c    00000040                            : cpy_util.obj (.text:__memcpy_far)
+                  000085cc    0000003e                            : asr32.obj (.text:l_asr_const)
+                  0000860a    0000003e                            : lsl32.obj (.text:l_lsl_const)
+                  00008648    0000003e                            : lsr32.obj (.text:l_lsr_const)
+                  00008686    0000003c                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  000086c2    00000038                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  000086fa    00000036                            : signal.obj (.text:signal)
+                  00008730    00000032                            : xferaise.obj (.text:_Feraise)
+                  00008762    00000032                            : subd.obj (.text:__mspabi_subd)
+                  00008794    00000032                            : raise.obj (.text:raise)
+                  000087c6    00000030                            : feraiseexcept.obj (.text:feraiseexcept)
+                  000087f6    0000002a                            : negd.obj (.text:__mspabi_negd)
+                  00008820    00000028                            : fixdi.obj (.text:__mspabi_fixdi)
+                  00008848    00000022                            : mult32_f5hw.obj (.text)
+                  0000886a    00000016                            : mult16_f5hw.obj (.text)
+                  00008880    00000012                            : fixdu.obj (.text:__mspabi_fixdu)
+                  00008892    00000010                            : asr32.obj (.text:l_asr)
+                  000088a2    00000010                            : lsl32.obj (.text:l_lsl)
+                  000088b2    00000010                            : lsr32.obj (.text:l_lsr)
+                  000088c2    0000000e                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  000088d0    0000000e                            : log.obj (.text:log)
+                  000088de    0000000c                            : fltid.obj (.text:__mspabi_fltid)
+                  000088ea    0000000a                            : fs_neg.obj (.text)
+                  000088f4    0000000a                            : lsl16.obj (.text)
+                  000088fe    0000000a                            : lsr16.obj (.text)
+                  00008908    00000008     msp430x54x_uscia0_duplex_9600.obj (.text:char2Int)
+                  00008910    00000004     rts430x_lc_sd_eabi.lib : pre_init.obj (.text:_system_pre_init)
+                  00008914    00000004                            : exit.obj (.text:abort)
+                  00008918    00000002                            : _lock.obj (.text:_nop)
 
-.cinit     0    00005eee    0000001c     
-                  00005eee    0000000b     (.cinit..data.load) [load image, compression = rle]
-                  00005ef9    00000001     --HOLE-- [fill = 0]
-                  00005efa    00000008     (__TI_handler_table)
-                  00005f02    00000008     (__TI_cinit_table)
+.const     0    0000891a    00000088     
+                  0000891a    00000038     rts430x_lc_sd_eabi.lib : xlog.obj (.const:p)
+                  00008952    00000020                            : xdint.obj (.const:mask$1)
+                  00008972    00000018                            : xexp.obj (.const:s)
+                  0000898a    00000010                            : xexp.obj (.const:c)
+                  0000899a    00000008                            : xdint.obj (.const:sub$2)
+
+.cinit     0    000089a2    00000084     
+                  000089a2    00000062     (.cinit..data.load) [load image, compression = rle]
+                  00008a04    0000000c     (__TI_handler_table)
+                  00008a10    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  00008a16    00000010     (__TI_cinit_table)
 
 USCI_A0    0    0000fff2    00000002     
                   0000fff2    00000002     msp430x54x_uscia0_duplex_9600.obj (.int57)
@@ -137,15 +197,17 @@ USCI_A0    0    0000fff2    00000002
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00005f02 records: 1, size/record: 8, table size: 8
-	.data: load addr=00005eee, load size=0000000b bytes, run addr=00001c00, run size=00000005 bytes, compression=rle
+__TI_cinit_table @ 00008a16 records: 2, size/record: 8, table size: 16
+	.data: load addr=000089a2, load size=00000062 bytes, run addr=00001c00, run size=000001ae bytes, compression=rle
+	.bss: load addr=00008a10, load size=00000006 bytes, run addr=00001dae, run size=0000001a bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00005efa records: 2, size/record: 4, table size: 8
-	index: 0, handler: __TI_decompress_rle24
-	index: 1, handler: __TI_decompress_none
+__TI_handler_table @ 00008a04 records: 3, size/record: 4, table size: 12
+	index: 0, handler: __TI_zero_init
+	index: 1, handler: __TI_decompress_rle24
+	index: 2, handler: __TI_decompress_none
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -234,7 +296,7 @@ address    name
 00000732   ADC12MEM9
 00000733   ADC12MEM9_H
 00000732   ADC12MEM9_L
-00005eea   C$$EXIT
+00008914   C$$EXIT
 00000150   CRCDI
 00000152   CRCDIRB
 00000153   CRCDIRB_H
@@ -828,33 +890,141 @@ address    name
 0000015c   WDTCTL
 0000015d   WDTCTL_H
 0000015c   WDTCTL_L
+00001cb0   _Denorm
+0000811c   _Dint
+00007f4a   _Dnorm
+00007b5e   _Dscale
+000084ac   _Dunscale
+00001cc0   _Eps
+00001dac   _Errno
+00006b66   _Exp
+00001d30   _FDenorm
+00001d40   _FEps
+00001d50   _FInf
+00001d60   _FNan
+00001d80   _FRteps
+00001d70   _FSnan
+00001d90   _FXbig
+00001d94   _FZero
+00001da0   _Fenv
+00008730   _Feraise
+00001cd0   _Hugeval
+00001ce0   _Inf
+000062da   _Log
+00001cf0   _Nan
+00001d10   _Rteps
+00001d00   _Snan
+00001da4   _Tls_setup__Fenv
+00001d20   _Xbig
+00001d28   _Zero
 00005c00   __STACK_END
 000000a0   __STACK_SIZE
-00005f02   __TI_CINIT_Base
-00005f0a   __TI_CINIT_Limit
-00005efa   __TI_Handler_Table_Base
-00005f02   __TI_Handler_Table_Limit
+00008a16   __TI_CINIT_Base
+00008a26   __TI_CINIT_Limit
+00008a04   __TI_Handler_Table_Base
+00008a10   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 00000001   __TI_args_main
-00005e64   __TI_decompress_none
-00005ed8   __TI_decompress_rle24
+00008686   __TI_decompress_none
+000088c2   __TI_decompress_rle24
 00000001   __TI_exit
+000086c2   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-00005e24   __memcpy_far
-00005d52   _auto_init
-00005c62   _c_int00
-00005c62   _c_int00_noexit
+0000858c   __memcpy_far
+000071ca   __mspabi_addd
+00007cfe   __mspabi_cmpd
+00008438   __mspabi_cvtfd
+00007946   __mspabi_divd
+00008820   __mspabi_fixdi
+000083b8   __mspabi_fixdli
+00008880   __mspabi_fixdu
+00008336   __mspabi_fixdul
+000088de   __mspabi_fltid
+00008296   __mspabi_fltlid
+00007702   __mspabi_mpyd
+0000886a   __mspabi_mpyi_f5hw
+00008848   __mspabi_mpyl_f5hw
+000087f6   __mspabi_negd
+000088ea   __mspabi_negf
+000088f4   __mspabi_slli
+000088a2   __mspabi_slll
+00008642   __mspabi_slll_1
+0000861e   __mspabi_slll_10
+0000861a   __mspabi_slll_11
+00008616   __mspabi_slll_12
+00008612   __mspabi_slll_13
+0000860e   __mspabi_slll_14
+0000860a   __mspabi_slll_15
+0000863e   __mspabi_slll_2
+0000863a   __mspabi_slll_3
+00008636   __mspabi_slll_4
+00008632   __mspabi_slll_5
+0000862e   __mspabi_slll_6
+0000862a   __mspabi_slll_7
+00008626   __mspabi_slll_8
+00008622   __mspabi_slll_9
+00008892   __mspabi_sral
+00008604   __mspabi_sral_1
+000085e0   __mspabi_sral_10
+000085dc   __mspabi_sral_11
+000085d8   __mspabi_sral_12
+000085d4   __mspabi_sral_13
+000085d0   __mspabi_sral_14
+000085cc   __mspabi_sral_15
+00008600   __mspabi_sral_2
+000085fc   __mspabi_sral_3
+000085f8   __mspabi_sral_4
+000085f4   __mspabi_sral_5
+000085f0   __mspabi_sral_6
+000085ec   __mspabi_sral_7
+000085e8   __mspabi_sral_8
+000085e4   __mspabi_sral_9
+000088fe   __mspabi_srli
+000088b2   __mspabi_srll
+00008680   __mspabi_srll_1
+0000865c   __mspabi_srll_10
+00008658   __mspabi_srll_11
+00008654   __mspabi_srll_12
+00008650   __mspabi_srll_13
+0000864c   __mspabi_srll_14
+00008648   __mspabi_srll_15
+0000867c   __mspabi_srll_2
+00008678   __mspabi_srll_3
+00008674   __mspabi_srll_4
+00008670   __mspabi_srll_5
+0000866c   __mspabi_srll_6
+00008668   __mspabi_srll_7
+00008664   __mspabi_srll_8
+00008660   __mspabi_srll_9
+00008762   __mspabi_subd
+0000851e   _auto_init
+00005c28   _c_int00
+00005c28   _c_int00_noexit
+000074a2   _frcaddd
+00006722   _frcdivd
+00006ef0   _frcmpyd
+00001d98   _lock
+00008918   _nop
+000081e2   _renormd
 0000fffe   _reset_vector
 00005b60   _stack
-00005ee6   _system_pre_init
-00005eea   abort
+00008910   _system_pre_init
+00001d9c   _unlock
+00008914   abort
 ffffffff   binit
-00005dc0   main
-00001c00   message
-00005ea0   sendString
-00005ec6   strlen
+00001dc2   buf
+00008908   char2Int
+00001daa   cmdRdy
+00001dae   command
+000087c6   feraiseexcept
+00001da8   i
+000088d0   log
+00007e32   main
+00005c42   pow
+00008794   raise
+000086fa   signal
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1538,26 +1708,134 @@ address    name
 0000073e   ADC12MEM15
 0000073e   ADC12MEM15_L
 0000073f   ADC12MEM15_H
-00001c00   message
+00001cb0   _Denorm
+00001cc0   _Eps
+00001cd0   _Hugeval
+00001ce0   _Inf
+00001cf0   _Nan
+00001d00   _Snan
+00001d10   _Rteps
+00001d20   _Xbig
+00001d28   _Zero
+00001d30   _FDenorm
+00001d40   _FEps
+00001d50   _FInf
+00001d60   _FNan
+00001d70   _FSnan
+00001d80   _FRteps
+00001d90   _FXbig
+00001d94   _FZero
+00001d98   _lock
+00001d9c   _unlock
+00001da0   _Fenv
+00001da4   _Tls_setup__Fenv
+00001da8   i
+00001daa   cmdRdy
+00001dac   _Errno
+00001dae   command
+00001dc2   buf
 00005b60   _stack
 00005c00   USCI_A0_ISR
 00005c00   __STACK_END
-00005c62   _c_int00
-00005c62   _c_int00_noexit
-00005d52   _auto_init
-00005dc0   main
-00005e24   __memcpy_far
-00005e64   __TI_decompress_none
-00005ea0   sendString
-00005ec6   strlen
-00005ed8   __TI_decompress_rle24
-00005ee6   _system_pre_init
-00005eea   C$$EXIT
-00005eea   abort
-00005efa   __TI_Handler_Table_Base
-00005f02   __TI_CINIT_Base
-00005f02   __TI_Handler_Table_Limit
-00005f0a   __TI_CINIT_Limit
+00005c28   _c_int00
+00005c28   _c_int00_noexit
+00005c42   pow
+000062da   _Log
+00006722   _frcdivd
+00006b66   _Exp
+00006ef0   _frcmpyd
+000071ca   __mspabi_addd
+000074a2   _frcaddd
+00007702   __mspabi_mpyd
+00007946   __mspabi_divd
+00007b5e   _Dscale
+00007cfe   __mspabi_cmpd
+00007e32   main
+00007f4a   _Dnorm
+0000811c   _Dint
+000081e2   _renormd
+00008296   __mspabi_fltlid
+00008336   __mspabi_fixdul
+000083b8   __mspabi_fixdli
+00008438   __mspabi_cvtfd
+000084ac   _Dunscale
+0000851e   _auto_init
+0000858c   __memcpy_far
+000085cc   __mspabi_sral_15
+000085d0   __mspabi_sral_14
+000085d4   __mspabi_sral_13
+000085d8   __mspabi_sral_12
+000085dc   __mspabi_sral_11
+000085e0   __mspabi_sral_10
+000085e4   __mspabi_sral_9
+000085e8   __mspabi_sral_8
+000085ec   __mspabi_sral_7
+000085f0   __mspabi_sral_6
+000085f4   __mspabi_sral_5
+000085f8   __mspabi_sral_4
+000085fc   __mspabi_sral_3
+00008600   __mspabi_sral_2
+00008604   __mspabi_sral_1
+0000860a   __mspabi_slll_15
+0000860e   __mspabi_slll_14
+00008612   __mspabi_slll_13
+00008616   __mspabi_slll_12
+0000861a   __mspabi_slll_11
+0000861e   __mspabi_slll_10
+00008622   __mspabi_slll_9
+00008626   __mspabi_slll_8
+0000862a   __mspabi_slll_7
+0000862e   __mspabi_slll_6
+00008632   __mspabi_slll_5
+00008636   __mspabi_slll_4
+0000863a   __mspabi_slll_3
+0000863e   __mspabi_slll_2
+00008642   __mspabi_slll_1
+00008648   __mspabi_srll_15
+0000864c   __mspabi_srll_14
+00008650   __mspabi_srll_13
+00008654   __mspabi_srll_12
+00008658   __mspabi_srll_11
+0000865c   __mspabi_srll_10
+00008660   __mspabi_srll_9
+00008664   __mspabi_srll_8
+00008668   __mspabi_srll_7
+0000866c   __mspabi_srll_6
+00008670   __mspabi_srll_5
+00008674   __mspabi_srll_4
+00008678   __mspabi_srll_3
+0000867c   __mspabi_srll_2
+00008680   __mspabi_srll_1
+00008686   __TI_decompress_none
+000086c2   __TI_zero_init
+000086fa   signal
+00008730   _Feraise
+00008762   __mspabi_subd
+00008794   raise
+000087c6   feraiseexcept
+000087f6   __mspabi_negd
+00008820   __mspabi_fixdi
+00008848   __mspabi_mpyl_f5hw
+0000886a   __mspabi_mpyi_f5hw
+00008880   __mspabi_fixdu
+00008892   __mspabi_sral
+000088a2   __mspabi_slll
+000088b2   __mspabi_srll
+000088c2   __TI_decompress_rle24
+000088d0   log
+000088de   __mspabi_fltid
+000088ea   __mspabi_negf
+000088f4   __mspabi_slli
+000088fe   __mspabi_srli
+00008908   char2Int
+00008910   _system_pre_init
+00008914   C$$EXIT
+00008914   abort
+00008918   _nop
+00008a04   __TI_Handler_Table_Base
+00008a10   __TI_Handler_Table_Limit
+00008a16   __TI_CINIT_Base
+00008a26   __TI_CINIT_Limit
 0000fffe   _reset_vector
 ffffffff   __binit__
 ffffffff   __c_args__
@@ -1565,4 +1843,4 @@ ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[703 symbols]
+[811 symbols]
