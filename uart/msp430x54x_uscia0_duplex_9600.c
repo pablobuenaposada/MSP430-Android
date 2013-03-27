@@ -35,8 +35,7 @@ int main(void){
     __delay_cycles(100000);                 // Delay for Osc to stabilize
   }while (SFRIFG1&OFIFG);                   // Test oscillator fault flag
 
-  //P1OUT = 0x000;                            // P1.0/1 setup for LED output
-  //P1DIR |= BIT0+BIT1;                       //
+  P1OUT = 0x000;                            // P1.0/1 setup for LED output
   P3SEL |= BIT4+BIT5;                       // P3.4,5 UART option select
 
   UCA0CTL1 |= UCSWRST;                      // **Put state machine in reset**
@@ -50,7 +49,7 @@ int main(void){
   _enable_interrupt();
   __no_operation();                         // For debugger
 
-  //P1OUT=0x01;
+
   while(1){
 	  if (cmdRdy == 1){
 		  cmdRdy=0;
@@ -58,16 +57,24 @@ int main(void){
 		  if(command[0] == 'S'){
 			  if(command[1] == 'D'){
 				  if(command[2] == 'O'){
-					  int port = char2Int(command[2]);
-					  int pin = char2Int(command[3])+1;
+					  int port = char2Int(command[3]);
+					  int pin = char2Int(command[4])+1;
 
 					  if(port == 1){
-						  P1DIR |= pin & (1*(int)(pow(2,pin-1)));
-						  P1SEL &=  ~(pin & (1*(int)(pow(2,pin-1))));
+						  P1DIR |= (int)(pow(2,pin-1));
+						  P1SEL &=  ~(int)(pow(2,pin-1));
+					  }
+				  }
+				  else if(command[2] == 'I'){
+					  int port = char2Int(command[3]);
+					  int pin = char2Int(command[4])+1;
+
+					  if(port == 2){
+						  P2DIR &= ~(int)(pow(2,pin-1));
+					  	  P2SEL &= ~(int)(pow(2,pin-1));
 					  }
 				  }
 			  }
-
 		  }
 
 		  else if(command[0] == 'D'){
@@ -77,19 +84,32 @@ int main(void){
 
 				  if (port == 1){
 					  if (command[4] == 'H'){
-						  P1OUT |= pin & (1*(int)(pow(2,pin-1)));
+						  P1OUT |= (int)(pow(2,pin-1));
 					  }
 					  else if (command[4] == 'L'){
-						  P1OUT &=  ~(pin & (1*(int)(pow(2,pin-1))));
+						  P1OUT &=  ~(int)(pow(2,pin-1));
 					  }
 					  else if(command[4] == 'R'){
 
-						  if((int)(P1OUT & (pin & (1*(int)(pow(2,pin-1))))) > 0){
+						  if((int)(P1OUT & (int)(pow(2,pin-1))) > 0){
 							  sendString("1/");
 						  }
 						  else{
 							  sendString("0/");
 						  }
+					  }
+				  }
+			  }
+			  else if(command[1] == 'I'){
+				  int port = char2Int(command[2]);
+				  int pin = char2Int(command[3])+1;
+
+				  if (port == 2){
+					  if((int)(P2IN & (int)(pow(2,pin-1))) > 0){
+						  sendString("1/");
+					  }
+					  else{
+						  sendString("0/");
 					  }
 				  }
 			  }

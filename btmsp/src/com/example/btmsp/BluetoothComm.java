@@ -43,7 +43,7 @@ public class BluetoothComm{
 			Log.d("ERROR", "Problem establishing connection");
 		}
         
-        new Thread(receive).start();
+        //new Thread(receive).start();
         
 	} 
 	
@@ -53,9 +53,24 @@ public class BluetoothComm{
 		} catch (IOException e) {
 			Log.d("ERROR", "Problem sending output");
 		}		
-	}	
+	}
+	
+	public String read(){
+		byte[] buffer = new byte[10];
+		int bytesRead;
+		String message="";
+		while (!message.contains("/")){				
+			try {
+				bytesRead = BTin.read(buffer);
+				message = message + new String(buffer).substring(0, bytesRead);
+			} catch (IOException e) {
+				Log.d("ERROR", "Problem reading input");
+			}
+		}	
+		return message;
+	}
 
-	public final Runnable receive = new Thread(){
+	/*public final Runnable receive = new Thread(){
 		public void run(){
 			byte[] buffer = new byte[1024];
 			int bytes;
@@ -68,7 +83,7 @@ public class BluetoothComm{
 				}
 			}
 		}
-	};
+	};*/
 	
 	public void destroy(){
 		try {

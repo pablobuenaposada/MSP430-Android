@@ -29,7 +29,11 @@ public class Board {
     
     public void send(String data){
     	communication.send(data);
-    }    
+    }
+    
+    public String read(){
+    	return communication.read();
+    }
 
 	public void destroy() {
 		communication.destroy();		
@@ -51,21 +55,56 @@ public class Board {
 	      public DigitalOutput(Board board,int pin){
 	    	  this.board=board;
 	    	  this.pin=pin;
-	    	  board.send("STPDO10/");
+	    	  board.send("SDO"+pin+"/");
 	      }
 	      
 	      public void write(boolean state){
 	    	  if(state == true){
-	    		  board.send("DO"+pin+"HIGH/");
+	    		  board.send("DO"+pin+"H/");
 	    	  }
 	    	  else{
-	    		  board.send("DO"+pin+"LOW/");
+	    		  board.send("DO"+pin+"L/");
+	    	  }
+	      }
+	      
+	      public boolean read(){	    	  
+	    	  board.send("DO"+pin+"R/");
+	    	  if (communication.read().contains("1/")){
+	    		  return true;	    		  
+	    	  }
+	    	  else{
+	    		  return false;
 	    	  }
 	      }
 	}
 	
+	public class DigitalInput{
+		Board board;
+		int pin;
+		
+		public DigitalInput(Board board, int pin){
+			this.board=board;
+			this.pin=pin;
+			board.send("SDI"+pin+"/");
+		}
+		
+		public boolean read(){
+			board.send("DI"+pin+"/");
+			if (communication.read().contains("1/")){
+				return true;	    		  
+	    	}
+	    	else{
+	    		return false;
+	    	}			
+		}
+	}
+	
 	public DigitalOutput createDigitalOutput(int pin){
 		return new DigitalOutput(this,pin);		
+	}
+	
+	public DigitalInput createDigitalInput(int pin){
+		return new DigitalInput(this,pin);
 	}
 	
 
