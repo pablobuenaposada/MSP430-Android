@@ -9,6 +9,7 @@ char command[20];
 int i=0;
 int cmdRdy=0;
 char buf[5];
+
 void sendString(const char *string){
 	int index;
     for(index=0; index < strlen(string); index++){
@@ -17,8 +18,9 @@ void sendString(const char *string){
     }
 }
 
-int char2Int(const char c){
+int char2Int(char c){
 	int number = c - '0';
+	number = number + 0;
 	return number;
 }
 
@@ -75,6 +77,22 @@ int main(void){
 					  }
 				  }
 			  }
+
+			  else if(command[1] == 'A'){
+				  if(command[2] == 'I'){
+					  int port = char2Int(command[3]);
+			  		  int pin = char2Int(command[4]);
+
+			  		  if(port == 6){
+			  			  if (pin == 7){
+			  				  ADC12CTL0 = ADC12ON + ADC12SHT0_2;
+			  				  ADC12CTL1 = ADC12SHP;
+			  				  ADC12MCTL0 = ADC12SREF_1 + ADC12INCH_7;
+			  				  ADC12CTL0 |= ADC12ENC;
+			  			  }
+			  		  }
+				  }
+			  }
 		  }
 
 		  else if(command[0] == 'D'){
@@ -110,6 +128,23 @@ int main(void){
 					  }
 					  else{
 						  sendString("0/");
+					  }
+				  }
+			  }
+		  }
+		  else if(command[0] == 'A'){
+			  if(command[1] == 'I'){
+				  int port = char2Int(command[2]);
+				  int pin = char2Int(command[3]);
+
+				  if(port == 6){
+					  if (pin == 7){
+						  char adcValue[5];
+						  ADC12CTL0 |= ADC12SC;// Start conversions
+						  while (!(ADC12IFG & 0x0001));
+						  sprintf(adcValue,"%d",(int)ADC12MEM0);
+						  strcat(adcValue,"/");
+						  sendString(adcValue);
 					  }
 				  }
 			  }

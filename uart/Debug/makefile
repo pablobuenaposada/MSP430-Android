@@ -8,7 +8,7 @@ CG_TOOL_ROOT := C:/ti/ccsv5/tools/compiler/msp430_4.1.2
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./msp430x54x_uscia0_duplex_9600.obj" \
+"./uart.obj" \
 -l"libc.a" \
 "../lnk_msp430f5438a.cmd" \
 
@@ -122,8 +122,8 @@ uart.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QUOTED) "uart.out"
-	-$(RM) "msp430x54x_uscia0_duplex_9600.pp" 
-	-$(RM) "msp430x54x_uscia0_duplex_9600.obj" 
+	-$(RM) "uart.pp" 
+	-$(RM) "uart.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

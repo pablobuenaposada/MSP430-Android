@@ -1,5 +1,6 @@
 package com.example.btmsp;
 
+import com.example.btmsp.Board.AnalogInput;
 import com.example.btmsp.Board.DigitalInput;
 import com.example.btmsp.Board.DigitalOutput;
 
@@ -13,14 +14,16 @@ public class MainActivity extends Activity {
 
 	private Board board;
 	private boolean b = false;
-	private DigitalInput boton;
+	private AnalogInput pot;
+	private DigitalOutput led;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);		
 		board = new Board(this,"20:13:01:23:01:57");
-		boton = board.createDigitalInput(26);
+		//led = board.createDigitalOutput(17);
+		pot = board.createAnalogInput(67);
 		
 	}
 
@@ -32,12 +35,10 @@ public class MainActivity extends Activity {
 	}
 	
 	public void sendButton(View view) {
-		if(boton.read()){
-			Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-		}
-		else{
-			Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
-		}
+		int a = pot.read();
+		
+		Toast.makeText(this,Integer.toString(a) , Toast.LENGTH_SHORT).show();		
+		
 	}
 			
     

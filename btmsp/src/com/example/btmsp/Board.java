@@ -99,12 +99,34 @@ public class Board {
 		}
 	}
 	
+	public class AnalogInput{
+		Board board;
+		int pin;
+		
+		public AnalogInput(Board board, int pin){
+			this.board=board;
+			this.pin=pin;
+			System.out.println("SAI"+pin+"/");
+			this.board.send("SAI"+pin+"/");
+		}
+		
+		public int read(){
+			board.send("AI"+pin+"/");
+			String rawValue = communication.read();
+			return Integer.parseInt(rawValue.substring(0, rawValue.length()-1));			
+		}
+	}
+	
 	public DigitalOutput createDigitalOutput(int pin){
 		return new DigitalOutput(this,pin);		
 	}
 	
 	public DigitalInput createDigitalInput(int pin){
 		return new DigitalInput(this,pin);
+	}
+	
+	public AnalogInput createAnalogInput(int pin){
+		return new AnalogInput(this,pin);
 	}
 	
 

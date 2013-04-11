@@ -7,21 +7,21 @@ CMD_SRCS += \
 ../lnk_msp430f5438a.cmd 
 
 C_SRCS += \
-../msp430x54x_uscia0_duplex_9600.c 
+../uart.c 
 
 OBJS += \
-./msp430x54x_uscia0_duplex_9600.obj 
+./uart.obj 
 
 C_DEPS += \
-./msp430x54x_uscia0_duplex_9600.pp 
+./uart.pp 
 
 C_DEPS__QUOTED += \
-"msp430x54x_uscia0_duplex_9600.pp" 
+"uart.pp" 
 
 OBJS__QUOTED += \
-"msp430x54x_uscia0_duplex_9600.obj" 
+"uart.obj" 
 
 C_SRCS__QUOTED += \
-"../msp430x54x_uscia0_duplex_9600.c" 
+"../uart.c" 
 
 
