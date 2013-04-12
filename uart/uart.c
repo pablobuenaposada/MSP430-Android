@@ -52,6 +52,7 @@ int main(void){
   __no_operation();                         // For debugger
 
 
+
   while(1){
 	  if (cmdRdy == 1){
 		  cmdRdy=0;
@@ -91,6 +92,23 @@ int main(void){
 			  				  ADC12CTL0 |= ADC12ENC;
 			  			  }
 			  		  }
+				  }
+			  }
+			  else if (command[1] == 'P' & command[2] == 'W' & command[3] == 'M'){
+				  int port = char2Int(command[4]);
+				  int pin = char2Int(command[5])+1;
+				  int period = (char2Int(command[6])*1000)+(char2Int(command[7])*100)+(char2Int(command[8])*10)+char2Int(command[9]);
+				  int duty = (char2Int(command[10])*100)+(char2Int(command[11])*10)+char2Int(command[12]);
+
+				  if(port == 4){
+					  P4DIR |= (int)(pow(2,pin-1));
+					  P4SEL |= (int)(pow(2,pin-1));
+
+					  TB0CCR0 = period; //PWM period
+			   	      TB0CCR2 = (int)((period*duty)/100); //PWM duty cycle, time cycle on vs. off
+
+					  TB0CCTL2 = OUTMOD_7; // TA0CCR1 reset/set -- high voltage below count and
+				      TB0CTL = TASSEL_2 + MC_1;
 				  }
 			  }
 		  }
@@ -182,3 +200,5 @@ __interrupt void USCI_A0_ISR(void){
     default: break;
   }
 }
+
+

@@ -24,4 +24,13 @@
         android:onClick="sendButton"
         android:text="Button" />
 
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:max="65"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="80dp" />
+
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.example.btmsp;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 public class Board {
 	
@@ -105,8 +106,7 @@ public class Board {
 		
 		public AnalogInput(Board board, int pin){
 			this.board=board;
-			this.pin=pin;
-			System.out.println("SAI"+pin+"/");
+			this.pin=pin;			
 			this.board.send("SAI"+pin+"/");
 		}
 		
@@ -115,6 +115,43 @@ public class Board {
 			String rawValue = communication.read();
 			return Integer.parseInt(rawValue.substring(0, rawValue.length()-1));			
 		}
+	}
+	
+	public class PWM{
+		Board board;
+		int pin;
+		int period;
+		int duty;
+		
+		public PWM(Board board, int pin, int period, int duty){
+			this.board = board;
+			this.pin = pin;
+			this.period = period;
+			this.duty = duty;
+			String periodZeros = "";
+			String dutyZeros = "";
+						
+			
+			if (String.valueOf(period).length() == 1){
+				dutyZeros = "000";
+			}
+			else if (String.valueOf(period).length() == 2){
+				dutyZeros = "00";
+			}
+			else if (String.valueOf(period).length() == 3){
+				dutyZeros = "0";
+			}
+			
+			if (String.valueOf(duty).length() == 1){
+				dutyZeros = "00";
+			}
+			else if (String.valueOf(duty).length() == 2){
+				dutyZeros = "0";
+			}
+			
+			
+			this.board.send("SPWM"+pin+periodZeros+period+dutyZeros+duty+"/");
+		}	
 	}
 	
 	public DigitalOutput createDigitalOutput(int pin){
@@ -128,6 +165,12 @@ public class Board {
 	public AnalogInput createAnalogInput(int pin){
 		return new AnalogInput(this,pin);
 	}
+	
+	public PWM createPWM(int pin, int period, int duty){
+		return new PWM(this,pin,period,duty);
+	}
+	
+	
 	
 
 	
