@@ -47,7 +47,7 @@ public class BluetoothComm{
         
 	} 
 	
-	public void send(String data){		
+	public synchronized void send(String data){		
     	try {
 			BTout.write(data.getBytes());
 		} catch (IOException e) {
@@ -55,7 +55,7 @@ public class BluetoothComm{
 		}		
 	}
 	
-	public String read(){
+	public synchronized String read(){
 		byte[] buffer = new byte[10];
 		int bytesRead;
 		String message="";

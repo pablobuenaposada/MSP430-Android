@@ -28,11 +28,24 @@ public class Board {
     	}
     };
     
-    public void send(String data){
+    private synchronized String communicate(char mode, String toSend){
+    	if(mode == 's'){
+    		send(toSend);
+    		return null;
+    	}
+    	else if(mode == 'r'){
+    		return read(toSend);
+    		
+    	}
+    	return null;
+    }
+    
+    private synchronized void send(String data){
     	communication.send(data);
     }
     
-    public String read(){
+    private synchronized String read(String toSend){
+    	send(toSend);
     	return communication.read();
     }
 
@@ -56,21 +69,21 @@ public class Board {
 	      public DigitalOutput(Board board,int pin){
 	    	  this.board=board;
 	    	  this.pin=pin;
-	    	  board.send("SDO"+pin+"/");
+	    	  board.communicate('s',"SDO"+pin+"/");
 	      }
 	      
 	      public void write(boolean state){
 	    	  if(state == true){
-	    		  board.send("DO"+pin+"H/");
+	    		  board.communicate('s',"DO"+pin+"H/");
 	    	  }
 	    	  else{
-	    		  board.send("DO"+pin+"L/");
+	    		  board.communicate('s',"DO"+pin+"L/");
 	    	  }
 	      }
 	      
 	      public boolean read(){	    	  
-	    	  board.send("DO"+pin+"R/");
-	    	  if (communication.read().contains("1/")){
+	    	  
+	    	  if (board.communicate('r',"DO"+pin+"R/").contains("1/")){
 	    		  return true;	    		  
 	    	  }
 	    	  else{
@@ -86,12 +99,12 @@ public class Board {
 		public DigitalInput(Board board, int pin){
 			this.board=board;
 			this.pin=pin;
-			board.send("SDI"+pin+"/");
+			board.communicate('s',"SDI"+pin+"/");
 		}
 		
 		public boolean read(){
-			board.send("DI"+pin+"/");
-			if (communication.read().contains("1/")){
+			
+			if (board.communicate('r',"DI"+pin+"/").contains("1/")){
 				return true;	    		  
 	    	}
 	    	else{
@@ -107,12 +120,11 @@ public class Board {
 		public AnalogInput(Board board, int pin){
 			this.board=board;
 			this.pin=pin;			
-			this.board.send("SAI"+pin+"/");
+			this.board.communicate('s',"SAI"+pin+"/");
 		}
 		
-		public int read(){
-			board.send("AI"+pin+"/");
-			String rawValue = communication.read();
+		public int read(){			
+			String rawValue = board.communicate('r',"AI"+pin+"/");
 			return Integer.parseInt(rawValue.substring(0, rawValue.length()-1));			
 		}
 	}
@@ -123,34 +135,13 @@ public class Board {
 		int period;
 		int duty;
 		
-		public PWM(Board board, int pin, int period, int duty){
+		public PWM (Board board, int pin, int period, int duty){
 			this.board = board;
 			this.pin = pin;
 			this.period = period;
-			this.duty = duty;
-			String periodZeros = "";
-			String dutyZeros = "";
-						
+			this.duty = duty;			
 			
-			if (String.valueOf(period).length() == 1){
-				dutyZeros = "000";
-			}
-			else if (String.valueOf(period).length() == 2){
-				dutyZeros = "00";
-			}
-			else if (String.valueOf(period).length() == 3){
-				dutyZeros = "0";
-			}
-			
-			if (String.valueOf(duty).length() == 1){
-				dutyZeros = "00";
-			}
-			else if (String.valueOf(duty).length() == 2){
-				dutyZeros = "0";
-			}
-			
-			
-			this.board.send("SPWM"+pin+periodZeros+period+dutyZeros+duty+"/");
+			this.board.communicate('s',"SPWM"+pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");
 		}	
 	}
 	

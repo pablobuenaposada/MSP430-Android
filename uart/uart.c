@@ -97,15 +97,25 @@ int main(void){
 			  else if (command[1] == 'P' & command[2] == 'W' & command[3] == 'M'){
 				  int port = char2Int(command[4]);
 				  int pin = char2Int(command[5])+1;
-				  int period = (char2Int(command[6])*1000)+(char2Int(command[7])*100)+(char2Int(command[8])*10)+char2Int(command[9]);
-				  int duty = (char2Int(command[10])*100)+(char2Int(command[11])*10)+char2Int(command[12]);
+				  int lenPeriod = char2Int(command[6]);
+				  int lenDuty = char2Int(command[7]);
+				  int i=0;
+				  int period=0;
+				  int duty=0;
+
+				  for(i=0; i<lenPeriod; i++){
+					  period += (char2Int(command[8+i])*pow(10,lenPeriod-1-i));
+				  }
+				  for(i=0; i<lenDuty; i++){
+					  duty += (char2Int(command[8+lenPeriod+i])*pow(10,lenDuty-1-i));
+				  }
 
 				  if(port == 4){
 					  P4DIR |= (int)(pow(2,pin-1));
 					  P4SEL |= (int)(pow(2,pin-1));
 
 					  TB0CCR0 = period; //PWM period
-			   	      TB0CCR2 = (int)((period*duty)/100); //PWM duty cycle, time cycle on vs. off
+			   	      TB0CCR2 = duty; //PWM duty cycle, time cycle on vs. off
 
 					  TB0CCTL2 = OUTMOD_7; // TA0CCR1 reset/set -- high voltage below count and
 				      TB0CTL = TASSEL_2 + MC_1;
