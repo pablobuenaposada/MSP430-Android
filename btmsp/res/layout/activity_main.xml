@@ -8,40 +8,97 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/button1"
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toLeftOf="@+id/textView2"
+        android:text="S1: " />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_below="@+id/textView2"
+        android:text="S2: " />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView4"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_alignLeft="@+id/textView2"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="47dp"
+        android:text="@string/hello_world" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="105dp"
-        android:onClick="sendButton"
-        android:text="Button" />
+        android:layout_alignRight="@+id/seekBar1"
+        android:layout_marginBottom="100dp"
+        android:onClick="button2"
+        android:text="ToggleButton"
+        android:textOff="LED 2"
+        android:textOn="LED 2" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seekBar1"
+        android:layout_alignTop="@+id/toggleButton2"
+        android:onClick="button1"
+        android:text="ToggleButton"
+        android:textOff="LED 1"
+        android:textOn="LED 1" />
 
     <SeekBar
         android:id="@+id/seekBar1"
-        android:max="300"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="80dp" />
+        android:layout_above="@+id/toggleButton2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="73dp"
+        android:max="300" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/seekBar1"
-        android:layout_alignLeft="@+id/button1"
+        android:layout_alignLeft="@+id/textView5"
         android:text="@string/hello_world" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="27dp"
-        android:text="@string/hello_world" />
+        android:layout_above="@+id/textView1"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_marginBottom="29dp"
+        android:text="POT: " />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView6"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_toRightOf="@+id/textView6"
+        android:text="TextView" />
 
 </RelativeLayout>

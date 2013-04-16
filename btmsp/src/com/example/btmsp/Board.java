@@ -9,7 +9,8 @@ public class Board {
 	
 	private BluetoothComm communication = null;
 	public static final int MESSAGE_READ = 1;
-	private MainActivity context=null;	
+	private MainActivity context=null;
+	private final int safeTime=100;
 	
 	public Board(MainActivity context, String BTaddress){
 		this.context=context;
@@ -34,8 +35,7 @@ public class Board {
     		return null;
     	}
     	else if(mode == 'r'){
-    		return read(toSend);
-    		
+    		return read(toSend);    		
     	}
     	return null;
     }
@@ -70,9 +70,15 @@ public class Board {
 	    	  this.board=board;
 	    	  this.pin=pin;
 	    	  board.communicate('s',"SDO"+pin+"/");
+	    	  try {
+				Thread.sleep(safeTime);
+	    	  }
+	    	  catch (InterruptedException e) {
+	    		  Log.e("DigitalOutput","Error in thread.sleep");
+	    	  }
 	      }
 	      
-	      public void write(boolean state){
+	      public synchronized void write(boolean state){
 	    	  if(state == true){
 	    		  board.communicate('s',"DO"+pin+"H/");
 	    	  }
@@ -81,7 +87,7 @@ public class Board {
 	    	  }
 	      }
 	      
-	      public boolean read(){	    	  
+	      public synchronized boolean read(){	    	  
 	    	  
 	    	  if (board.communicate('r',"DO"+pin+"R/").contains("1/")){
 	    		  return true;	    		  
@@ -100,9 +106,15 @@ public class Board {
 			this.board=board;
 			this.pin=pin;
 			board.communicate('s',"SDI"+pin+"/");
+			try {
+				Thread.sleep(safeTime);
+	    	}
+	    	catch (InterruptedException e) {
+	    		Log.e("DigitalInput","Error in thread.sleep");
+	    	}
 		}
 		
-		public boolean read(){
+		public synchronized boolean read(){
 			
 			if (board.communicate('r',"DI"+pin+"/").contains("1/")){
 				return true;	    		  
@@ -121,9 +133,15 @@ public class Board {
 			this.board=board;
 			this.pin=pin;			
 			this.board.communicate('s',"SAI"+pin+"/");
+			try {
+				Thread.sleep(safeTime);
+	    	}
+	    	catch (InterruptedException e) {
+	    		Log.e("AnalogInput","Error in thread.sleep");
+	    	}
 		}
 		
-		public int read(){			
+		public synchronized int read(){			
 			String rawValue = board.communicate('r',"AI"+pin+"/");
 			return Integer.parseInt(rawValue.substring(0, rawValue.length()-1));			
 		}
@@ -140,9 +158,20 @@ public class Board {
 			this.pin = pin;
 			this.period = period;
 			this.duty = duty;			
-			
 			this.board.communicate('s',"SPWM"+pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");
-		}	
+			try {
+				Thread.sleep(safeTime+200);
+	    	}
+	    	catch (InterruptedException e) {
+	    		Log.e("PWM","Error in thread.sleep");
+	    	}
+		}
+		
+		public synchronized void changeDuty(int newDuty){
+			this.board.communicate('s',"SPWM"+pin+String.valueOf(period).length()+String.valueOf(newDuty).length()+period+newDuty+"/");
+		}
+		
+		
 	}
 	
 	public DigitalOutput createDigitalOutput(int pin){
@@ -166,5 +195,4 @@ public class Board {
 
 	
 }
-
 
