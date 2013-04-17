@@ -9,16 +9,15 @@ public class Board {
 	
 	private BluetoothComm communication = null;
 	public static final int MESSAGE_READ = 1;
-	private MainActivity context=null;
-	private final int safeTime=100;
+	private MainActivity context=null;	
 	
 	public Board(MainActivity context, String BTaddress){
 		this.context=context;
-		communication = new BluetoothComm(this,handler,BTaddress);	
+		communication = new BluetoothComm(this,null,BTaddress);	
 	}
 	
 	// The Handler that gets information back from the BluetoothChatService
-    private final Handler handler = new Handler() {
+    /*private final Handler handler = new Handler() {
     	@Override
         public void handleMessage(Message msg) {
            if(msg.what == MESSAGE_READ) {
@@ -27,7 +26,7 @@ public class Board {
                String message = new String(readBuf, 0, msg.arg1);           	   
            }
     	}
-    };
+    };*/
     
     private synchronized String communicate(char mode, String toSend){
     	if(mode == 's'){
@@ -69,21 +68,15 @@ public class Board {
 	      public DigitalOutput(Board board,int pin){
 	    	  this.board=board;
 	    	  this.pin=pin;
-	    	  board.communicate('s',"SDO"+pin+"/");
-	    	  try {
-				Thread.sleep(safeTime);
-	    	  }
-	    	  catch (InterruptedException e) {
-	    		  Log.e("DigitalOutput","Error in thread.sleep");
-	    	  }
+	    	  board.communicate('r',"SDO"+pin+"/");	    	  
 	      }
 	      
 	      public synchronized void write(boolean state){
 	    	  if(state == true){
-	    		  board.communicate('s',"DO"+pin+"H/");
+	    		  board.communicate('r',"DO"+pin+"H/");
 	    	  }
 	    	  else{
-	    		  board.communicate('s',"DO"+pin+"L/");
+	    		  board.communicate('r',"DO"+pin+"L/");
 	    	  }
 	      }
 	      
@@ -99,19 +92,14 @@ public class Board {
 	}
 	
 	public class DigitalInput{
-		Board board;
-		int pin;
+		private Board board;
+		private int pin;
 		
 		public DigitalInput(Board board, int pin){
 			this.board=board;
 			this.pin=pin;
-			board.communicate('s',"SDI"+pin+"/");
-			try {
-				Thread.sleep(safeTime);
-	    	}
-	    	catch (InterruptedException e) {
-	    		Log.e("DigitalInput","Error in thread.sleep");
-	    	}
+			board.communicate('r',"SDI"+pin+"/");
+			
 		}
 		
 		public synchronized boolean read(){
@@ -126,19 +114,14 @@ public class Board {
 	}
 	
 	public class AnalogInput{
-		Board board;
-		int pin;
+		private Board board;
+		private int pin;
 		
 		public AnalogInput(Board board, int pin){
 			this.board=board;
 			this.pin=pin;			
-			this.board.communicate('s',"SAI"+pin+"/");
-			try {
-				Thread.sleep(safeTime);
-	    	}
-	    	catch (InterruptedException e) {
-	    		Log.e("AnalogInput","Error in thread.sleep");
-	    	}
+			this.board.communicate('r',"SAI"+pin+"/");
+			
 		}
 		
 		public synchronized int read(){			
@@ -148,31 +131,28 @@ public class Board {
 	}
 	
 	public class PWM{
-		Board board;
-		int pin;
-		int period;
-		int duty;
+		private Board board;
+		private int pin;
+		private int period;
+		private int duty;
 		
 		public PWM (Board board, int pin, int period, int duty){
 			this.board = board;
 			this.pin = pin;
 			this.period = period;
 			this.duty = duty;			
-			this.board.communicate('s',"SPWM"+pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");
-			try {
-				Thread.sleep(safeTime+200);
-	    	}
-	    	catch (InterruptedException e) {
-	    		Log.e("PWM","Error in thread.sleep");
-	    	}
+			this.board.communicate('r',"SPWM"+pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
 		}
 		
-		public synchronized void changeDuty(int newDuty){
-			this.board.communicate('s',"SPWM"+pin+String.valueOf(period).length()+String.valueOf(newDuty).length()+period+newDuty+"/");
+		public synchronized void setDuty(int newDuty){
+			this.board.communicate('r',"PWM"+pin+"D"+String.valueOf(newDuty).length()+newDuty+"/");
 		}
 		
-		
+		public synchronized void setPeriod(int newPeriod){
+			this.board.communicate('r',"PWM"+pin+"P"+String.valueOf(newPeriod).length()+newPeriod+"/");
+		}	
 	}
+	
 	
 	public DigitalOutput createDigitalOutput(int pin){
 		return new DigitalOutput(this,pin);		

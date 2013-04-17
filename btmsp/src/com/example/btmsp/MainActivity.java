@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	private TextView dutyText;
 	private TextView button1Text;
 	private TextView button2Text;
+	private ProgressBar progressBar;
 	int i=0;
 	
 	@Override
@@ -43,17 +45,17 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		dutyText = (TextView)findViewById(R.id.textView1);
 		button1Text = (TextView)findViewById(R.id.textView2);
 		button2Text = (TextView)findViewById(R.id.textView5);
+		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         board = new Board(this,"20:13:01:23:01:57");		
         button1 = board.createDigitalInput(26);
         button2 = board.createDigitalInput(27);
 		led1 = board.createDigitalOutput(10);
 		led2 = board.createDigitalOutput(11);
 		pot = board.createAnalogInput(67);
-		pwm = board.createPWM(42,120000,500);		
+		pwm = board.createPWM(42,1000,500);		
 		new Thread(button1Thread).start();   
 		new Thread(button2Thread).start();
-		new Thread(potThread).start();
-		
+		new Thread(potThread).start();		
 	}
 
 	@Override
@@ -65,29 +67,28 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	
 	public void button1(View view) {
 	    // Is the toggle on?
-	    boolean on = ((ToggleButton) view).isChecked();
-	    
+	    boolean on = ((ToggleButton) view).isChecked();	    
 	    if (on) {
 	    	led1.write(true);
 	    } else {
 	    	led1.write(false);
-	    }
+	    }	    
 	}
 	
 	public void button2(View view) {
 	    // Is the toggle on?
-	    boolean on = ((ToggleButton) view).isChecked();
-	    
+	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);
 	    } else {
 	    	led2.write(false);
-	    }
+	    }	    
 	}
 	
 	public final Runnable button1Thread = new Thread(){
 		public void run(){			
-			while (true){				
+			while (true){
+				
 				if (button1.read()){
 					setTextButton1("on");					
 				}
@@ -125,7 +126,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	
 	public final Runnable potThread = new Thread(){
 		public void run(){			
-			while (true){					
+			while (true){				
 				setPotText(String.valueOf(pot.read()));		
 				try {
 					Thread.sleep(200);
@@ -160,26 +161,20 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		@Override
 		public void run() {
 			potText.setText(str);
+			progressBar.setProgress(Integer.parseInt(str));
 			}
 		});
 	}
     
     public void onDestroy() {
         super.onDestroy();
-        board.destroy();
+        board.destroy();        
     }
 
 	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-		
-		/*try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+	public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {		
 		dutyText.setText(String.valueOf(progress));
-		
+		pwm.setDuty(progress);
 	}
 
 	@Override
@@ -190,7 +185,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		pwm.changeDuty(Integer.parseInt(String.valueOf(dutyText.getText())));
+		
 		
 	}
     

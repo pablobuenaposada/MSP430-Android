@@ -49,6 +49,7 @@ public class BluetoothComm{
 	
 	public synchronized void send(String data){		
     	try {
+    		 //Log.e("sending",data);
 			BTout.write(data.getBytes());
 		} catch (IOException e) {
 			Log.d("ERROR", "Problem sending output");
@@ -59,14 +60,17 @@ public class BluetoothComm{
 		byte[] buffer = new byte[10];
 		int bytesRead;
 		String message="";
-		while (!message.contains("/")){				
+		
+		while (!message.contains("/")){
+			//Log.e("read","waiting for read");
 			try {
 				bytesRead = BTin.read(buffer);
 				message = message + new String(buffer).substring(0, bytesRead);
 			} catch (IOException e) {
 				Log.d("ERROR", "Problem reading input");
 			}
-		}	
+		}
+		 //Log.e("read",message);
 		return message;
 	}
 

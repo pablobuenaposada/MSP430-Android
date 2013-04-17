@@ -24,7 +24,8 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f08000a;
+        public static final int action_settings=0x7f08000b;
+        public static final int progressBar1=0x7f08000a;
         public static final int seekBar1=0x7f080005;
         public static final int textView1=0x7f080007;
         public static final int textView2=0x7f080001;

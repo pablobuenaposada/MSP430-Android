@@ -5,10 +5,9 @@
 #include <math.h>
 
 char command[20];
-
-int i=0;
+int charPos=0;
 int cmdRdy=0;
-char buf[5];
+
 
 void sendString(const char *string){
 	int index;
@@ -55,32 +54,33 @@ int main(void){
 
   while(1){
 	  if (cmdRdy == 1){
-		  cmdRdy=0;
 
 		  if(command[0] == 'S'){
 			  if(command[1] == 'D'){
-				  if(command[2] == 'O'){
+				  if(command[2] == 'O'){ //SETUP DIGITAL OUTPUT
 					  int port = char2Int(command[3]);
 					  int pin = char2Int(command[4])+1;
 
 					  if(port == 1){
 						  P1DIR |= (int)(pow(2,pin-1));
 						  P1SEL &=  ~(int)(pow(2,pin-1));
+						  sendString("/");
 					  }
 				  }
-				  else if(command[2] == 'I'){
+				  else if(command[2] == 'I'){ //SETUP DIGITAL INPUT
 					  int port = char2Int(command[3]);
 					  int pin = char2Int(command[4])+1;
 
 					  if(port == 2){
 						  P2DIR &= ~(int)(pow(2,pin-1));
 					  	  P2SEL &= ~(int)(pow(2,pin-1));
+					  	  sendString("/");
 					  }
 				  }
 			  }
 
 			  else if(command[1] == 'A'){
-				  if(command[2] == 'I'){
+				  if(command[2] == 'I'){ //SETUP ANALOG INPUT
 					  int port = char2Int(command[3]);
 			  		  int pin = char2Int(command[4]);
 
@@ -90,11 +90,13 @@ int main(void){
 			  				  ADC12CTL1 = ADC12SHP;
 			  				  ADC12MCTL0 = ADC12SREF_1 + ADC12INCH_7;
 			  				  ADC12CTL0 |= ADC12ENC;
+			  				  sendString("/");
 			  			  }
 			  		  }
 				  }
 			  }
-			  else if (command[1] == 'P' & command[2] == 'W' & command[3] == 'M'){
+
+			  else if (command[1] == 'P' & command[2] == 'W' & command[3] == 'M'){ //SETUP PWM
 				  int port = char2Int(command[4]);
 				  int pin = char2Int(command[5])+1;
 				  int lenPeriod = char2Int(command[6]);
@@ -119,21 +121,24 @@ int main(void){
 
 					  TB0CCTL2 = OUTMOD_7; // TA0CCR1 reset/set -- high voltage below count and
 				      TB0CTL = TASSEL_2 + MC_1;
+				      sendString("/");
 				  }
 			  }
 		  }
 
 		  else if(command[0] == 'D'){
-			  if(command[1] == 'O'){
+			  if(command[1] == 'O'){ //SET DIGITAL OUTPUT VALUE
 				  int port = char2Int(command[2]);
 				  int pin = char2Int(command[3])+1;
 
 				  if (port == 1){
 					  if (command[4] == 'H'){
 						  P1OUT |= (int)(pow(2,pin-1));
+						  sendString("/");
 					  }
 					  else if (command[4] == 'L'){
 						  P1OUT &=  ~(int)(pow(2,pin-1));
+						  sendString("/");
 					  }
 					  else if(command[4] == 'R'){
 
@@ -146,7 +151,7 @@ int main(void){
 					  }
 				  }
 			  }
-			  else if(command[1] == 'I'){
+			  else if(command[1] == 'I'){ //GET DIGITAL INPUT VALUE
 				  int port = char2Int(command[2]);
 				  int pin = char2Int(command[3])+1;
 
@@ -160,7 +165,8 @@ int main(void){
 				  }
 			  }
 		  }
-		  else if(command[0] == 'A'){
+
+		  else if(command[0] == 'A'){ //GET ANALOG INPUT VALUE
 			  if(command[1] == 'I'){
 				  int port = char2Int(command[2]);
 				  int pin = char2Int(command[3]);
@@ -178,7 +184,33 @@ int main(void){
 			  }
 		  }
 
-		  i=0;
+		  else if(command[0] == 'P' & command[1] == 'W' & command[2] == 'M'){ //SET PERIOD OR DUTY CYCLE OF PWM
+			  int port = char2Int(command[3]);
+			  int pin = char2Int(command[4])+1;
+			  int lenValue = char2Int(command[6]);
+			  int value = 0;
+			  int i;
+
+			  for(i=0; i<lenValue; i++){
+				  value += (char2Int(command[7+i])*pow(10,lenValue-1-i));
+			  }
+
+			  if (command[5] == 'P'){
+				  if(port == 4){
+					  TB0CCR0 = value; //PWM period
+					  sendString("/");
+				  }
+			  }
+			  else if(command[5] == 'D'){
+				  if(port == 4){
+					  TB0CCR2 = value; //PWM duty cycle, time cycle on vs. off
+					  sendString("/");
+				  }
+			  }
+		  }
+
+		  charPos=0;
+		  cmdRdy=0;
 
 	  }
 
@@ -198,17 +230,16 @@ __interrupt void USCI_A0_ISR(void){
 		case 0: break;                          // Vector 0 - no interrupt
 		case 2:
 			if (UCA0RXBUF != '/'){
-				command[i]=UCA0RXBUF;
-				i++;
+				command[charPos]=UCA0RXBUF;
+				charPos++;
 			}
 			else{
 				cmdRdy=1;
 			}
 			break;
-    case 4:
-    	break;
-    default: break;
-  }
+		case 4: break;
+		default: break;
+    }
 }
 
 
