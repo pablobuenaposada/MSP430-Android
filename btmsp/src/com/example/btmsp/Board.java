@@ -80,7 +80,7 @@ public class Board {
 	    	  }
 	      }
 	      
-	      public synchronized boolean read(){	    	  
+	      /*public synchronized boolean read(){	    	  
 	    	  
 	    	  if (board.communicate('r',"DO"+pin+"R/").contains("1/")){
 	    		  return true;	    		  
@@ -88,7 +88,7 @@ public class Board {
 	    	  else{
 	    		  return false;
 	    	  }
-	      }
+	      }*/
 	}
 	
 	public class DigitalInput{
@@ -151,6 +151,23 @@ public class Board {
 		public synchronized void setPeriod(int newPeriod){
 			this.board.communicate('r',"PWM"+pin+"P"+String.valueOf(newPeriod).length()+newPeriod+"/");
 		}	
+	}
+	
+	public class OfflineTask{
+		private Board board;
+		private int pin;
+		private int countLimit;
+		private char mode;
+		
+		public OfflineTask(Board board, char mode, int pin, int countLimit){
+			this.board = board;
+			this.mode = mode;
+			this.pin = mode;
+			this.countLimit = countLimit;
+			this.board.communicate('r',"SOT"+);			
+
+		}	
+		 
 	}
 	
 	

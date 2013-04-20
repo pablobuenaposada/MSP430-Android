@@ -3,11 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "resources.h"
 
 char command[20];
 int charPos=0;
 int cmdRdy=0;
-
+int offlineArray[];
+int offlineFlag = 0;
+int offlinePos = 0;
+int offlinePort;
+int offlinePin;
 
 void sendString(const char *string){
 	int index;
@@ -59,23 +64,15 @@ int main(void){
 			  if(command[1] == 'D'){
 				  if(command[2] == 'O'){ //SETUP DIGITAL OUTPUT
 					  int port = char2Int(command[3]);
-					  int pin = char2Int(command[4])+1;
-
-					  if(port == 1){
-						  P1DIR |= (int)(pow(2,pin-1));
-						  P1SEL &=  ~(int)(pow(2,pin-1));
-						  sendString("/");
-					  }
+					  int pin = char2Int(command[4]);
+					  setupDigitalOutput(port,pin);
+					  sendString("/");
 				  }
 				  else if(command[2] == 'I'){ //SETUP DIGITAL INPUT
 					  int port = char2Int(command[3]);
-					  int pin = char2Int(command[4])+1;
-
-					  if(port == 2){
-						  P2DIR &= ~(int)(pow(2,pin-1));
-					  	  P2SEL &= ~(int)(pow(2,pin-1));
-					  	  sendString("/");
-					  }
+					  int pin = char2Int(command[4]);
+					  setupDigitalInput(port,pin);
+					  sendString("/");
 				  }
 			  }
 
@@ -83,22 +80,14 @@ int main(void){
 				  if(command[2] == 'I'){ //SETUP ANALOG INPUT
 					  int port = char2Int(command[3]);
 			  		  int pin = char2Int(command[4]);
-
-			  		  if(port == 6){
-			  			  if (pin == 7){
-			  				  ADC12CTL0 = ADC12ON + ADC12SHT0_2;
-			  				  ADC12CTL1 = ADC12SHP;
-			  				  ADC12MCTL0 = ADC12SREF_1 + ADC12INCH_7;
-			  				  ADC12CTL0 |= ADC12ENC;
-			  				  sendString("/");
-			  			  }
-			  		  }
+			  		  setupAnalogInput(port,pin);
+			  		  sendString("/");
 				  }
 			  }
 
 			  else if (command[1] == 'P' & command[2] == 'W' & command[3] == 'M'){ //SETUP PWM
 				  int port = char2Int(command[4]);
-				  int pin = char2Int(command[5])+1;
+				  int pin = char2Int(command[5]);
 				  int lenPeriod = char2Int(command[6]);
 				  int lenDuty = char2Int(command[7]);
 				  int i=0;
@@ -112,16 +101,34 @@ int main(void){
 					  duty += (char2Int(command[8+lenPeriod+i])*pow(10,lenDuty-1-i));
 				  }
 
-				  if(port == 4){
-					  P4DIR |= (int)(pow(2,pin-1));
-					  P4SEL |= (int)(pow(2,pin-1));
+				  setupPWM(port,pin,period,duty);
+				  sendString("/");
+			  }
 
-					  TB0CCR0 = period; //PWM period
-			   	      TB0CCR2 = duty; //PWM duty cycle, time cycle on vs. off
+			  else if(command[1] == 'O' & command[2] == 'T'){
+				  if(command[3] == 'D' & command[4] == 'I'){
+					  int port = char2Int(command[5]);
+					  int pin = char2Int(command[6]);
+					  setupDigitalInput(port,pin);
 
-					  TB0CCTL2 = OUTMOD_7; // TA0CCR1 reset/set -- high voltage below count and
-				      TB0CTL = TASSEL_2 + MC_1;
-				      sendString("/");
+					  int arraySize = char2Int(command[7]);
+					  offlineArray[arraySize];
+					  setupTimer(12000);
+					  offlinePort = port;
+					  offlinePin = pin;
+					  sendString("/");
+				  }
+				  else if(command[3] == 'A' & command[4] == 'I'){
+					  int port = char2Int(command[5]);
+					  int pin = char2Int(command[6]);
+					  setupAnalogInput(port,pin);
+
+					  int arraySize = char2Int(command[7]);
+					  offlineArray[arraySize];
+					  setupTimer(12000);
+					  offlinePort = port;
+					  offlinePin = pin;
+					  sendString("/");
 				  }
 			  }
 		  }
@@ -129,39 +136,21 @@ int main(void){
 		  else if(command[0] == 'D'){
 			  if(command[1] == 'O'){ //SET DIGITAL OUTPUT VALUE
 				  int port = char2Int(command[2]);
-				  int pin = char2Int(command[3])+1;
+				  int pin = char2Int(command[3]);
 
-				  if (port == 1){
-					  if (command[4] == 'H'){
-						  P1OUT |= (int)(pow(2,pin-1));
-						  sendString("/");
-					  }
-					  else if (command[4] == 'L'){
-						  P1OUT &=  ~(int)(pow(2,pin-1));
-						  sendString("/");
-					  }
-					  else if(command[4] == 'R'){
-
-						  if((int)(P1OUT & (int)(pow(2,pin-1))) > 0){
-							  sendString("1/");
-						  }
-						  else{
-							  sendString("0/");
-						  }
-					  }
-				  }
+				  setDigitalOutput(port,pin,command[4]);
+				  sendString("/");
 			  }
 			  else if(command[1] == 'I'){ //GET DIGITAL INPUT VALUE
 				  int port = char2Int(command[2]);
-				  int pin = char2Int(command[3])+1;
+				  int pin = char2Int(command[3]);
 
-				  if (port == 2){
-					  if((int)(P2IN & (int)(pow(2,pin-1))) > 0){
-						  sendString("1/");
-					  }
-					  else{
-						  sendString("0/");
-					  }
+				  int value = getDigitalInput(port,pin);
+				  if (value == 1){
+					  sendString("1/");
+				  }
+				  else{
+					  sendString("0/");
 				  }
 			  }
 		  }
@@ -171,22 +160,16 @@ int main(void){
 				  int port = char2Int(command[2]);
 				  int pin = char2Int(command[3]);
 
-				  if(port == 6){
-					  if (pin == 7){
-						  char adcValue[5];
-						  ADC12CTL0 |= ADC12SC;// Start conversions
-						  while (!(ADC12IFG & 0x0001));
-						  sprintf(adcValue,"%d",(int)ADC12MEM0);
-						  strcat(adcValue,"/");
-						  sendString(adcValue);
-					  }
-				  }
+				  char adcValue[5];
+				  sprintf(adcValue,"%d",getAnalogInput(port,pin));
+				  strcat(adcValue,"/");
+				  sendString(adcValue);
 			  }
 		  }
 
 		  else if(command[0] == 'P' & command[1] == 'W' & command[2] == 'M'){ //SET PERIOD OR DUTY CYCLE OF PWM
 			  int port = char2Int(command[3]);
-			  int pin = char2Int(command[4])+1;
+			  int pin = char2Int(command[4]);
 			  int lenValue = char2Int(command[6]);
 			  int value = 0;
 			  int i;
@@ -196,16 +179,12 @@ int main(void){
 			  }
 
 			  if (command[5] == 'P'){
-				  if(port == 4){
-					  TB0CCR0 = value; //PWM period
-					  sendString("/");
-				  }
+				  setPWMPeriod(port,pin,value);
+				  sendString("/");
 			  }
 			  else if(command[5] == 'D'){
-				  if(port == 4){
-					  TB0CCR2 = value; //PWM duty cycle, time cycle on vs. off
-					  sendString("/");
-				  }
+				  setPWMDuty(port,pin,value);
+				  sendString("/");
 			  }
 		  }
 
@@ -218,9 +197,26 @@ int main(void){
 
 
 
-
-
 }
+
+
+
+
+
+#pragma vector=TIMER0_A0_VECTOR
+	__interrupt void Timer0_A0 (void) {		// Timer0 A0 interrupt service routine
+
+		if(offlineFlag == 1){
+			int value = getDigitalInput(offlinePort,offlinePin);
+			offlineArray[offlinePos] = value;
+			offlinePos = offlinePos +1;
+		}
+}
+
+
+
+
+
 
 
 #pragma vector=USCI_A0_VECTOR
@@ -241,5 +237,3 @@ __interrupt void USCI_A0_ISR(void){
 		default: break;
     }
 }
-
-

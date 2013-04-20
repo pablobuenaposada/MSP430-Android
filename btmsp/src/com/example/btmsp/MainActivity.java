@@ -184,8 +184,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	}
 
 	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-		
+	public void onStopTrackingTouch(SeekBar seekBar) {		
 		
 	}
     
