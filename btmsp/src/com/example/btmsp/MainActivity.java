@@ -79,12 +79,14 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	    	led1.write(true);
 	    } else {
 	    	led1.write(false);
-	    }
+	    }	    
+	    
 	    ArrayList<Integer> a = ot.read();
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
 	    	b = b + a.get(i).toString();
 	    }
+	    b=b+"total"+a.size();
 	    list.setText(b);
 	}
 	

@@ -15,7 +15,8 @@ public class Board {
 	
 	public Board(MainActivity context, String BTaddress){
 		this.context=context;
-		communication = new BluetoothComm(this,null,BTaddress);	
+		communication = new BluetoothComm(this,null,BTaddress);
+		communicate('r',"N"); //notify that we are a new connection
 	}
 	
 	// The Handler that gets information back from the BluetoothChatService
@@ -175,15 +176,13 @@ public class Board {
 		
 		public synchronized  ArrayList<Integer> read(){
 			String rawList = this.board.communicate('r', "OT/");			
-			Log.e("bbb", "a");
-			String[] splitList = new String[2]; //rawList.split("\\.");
-			splitList[0]="a";
-			splitList[1]="b";
-			Log.e("AAA", "b");
+			
+			String[] splitList = rawList.split("\\.");			
 			ArrayList<Integer> list = new ArrayList<Integer>();
-			for(int i=0; i<splitList.length; i++){
+			
+			for(int i=0; i<splitList.length-1; i++){
 				list.add(Integer.parseInt(splitList[i]));
-			}
+			}			
 			return list;
 		}
 		 

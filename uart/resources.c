@@ -106,5 +106,5 @@ void setupTimer(int countLimit){
 }
 
 void stopTimer(){
-	TA0CCTL0 = 0x00;
+	TA0CCTL0 = ~CCIE;
 }

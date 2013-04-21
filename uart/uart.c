@@ -14,7 +14,7 @@ int offlineFlag = 0;
 int offlinePos = 0;
 int offlinePort;
 int offlinePin;
-
+int commandTimeout = 0;
 
 void sendString(const char *string){
 	int index;
@@ -53,6 +53,7 @@ int main(void){
   UCA0MCTL = 0x06;                          // Modulation
   UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
   UCA0IE |= UCRXIE;                // Enable USCI_A0 TX/RX interrupt
+
   __bis_SR_register(SCG0);       // Enter LPM3 w/ interrupts enabled
   _enable_interrupt();
   __no_operation();                         // For debugger
@@ -60,22 +61,31 @@ int main(void){
   setupDigitalOutput(1,0);
 
 
+
+
   while(1){
 	  if (cmdRdy == 1){
 
-		  if(command[0] == 'S'){
+		  if(command[0] == 'N'){
+			  memset(command, 0, 30);
+			  charPos=0;
+			  cmdRdy=0;
+			  sendString("/");
+		  }
+
+		  else if(command[0] == 'S'){
 			  if(command[1] == 'D'){
 				  if(command[2] == 'O'){ //SETUP DIGITAL OUTPUT
 					  int port = char2Int(command[3]);
 					  int pin = char2Int(command[4]);
 					  setupDigitalOutput(port,pin);
-					  sendString("/");
+					  //sendString("/");
 				  }
 				  else if(command[2] == 'I'){ //SETUP DIGITAL INPUT
 					  int port = char2Int(command[3]);
 					  int pin = char2Int(command[4]);
 					  setupDigitalInput(port,pin);
-					  sendString("/");
+					  //sendString("/");
 				  }
 			  }
 
@@ -84,7 +94,7 @@ int main(void){
 					  int port = char2Int(command[3]);
 			  		  int pin = char2Int(command[4]);
 			  		  setupAnalogInput(port,pin);
-			  		  sendString("/");
+			  		  //sendString("/");
 				  }
 			  }
 
@@ -105,7 +115,7 @@ int main(void){
 				  }
 
 				  setupPWM(port,pin,period,duty);
-				  sendString("/");
+				  //sendString("/");
 			  }
 
 			  else if(command[1] == 'O' & command[2] == 'T'){
@@ -129,7 +139,7 @@ int main(void){
 					  offlinePin = pin;
 					  offlineFlag=1;
 					  setupTimer(countLimit);
-					  sendString("/");
+					  //sendString("/");
 				  }
 				  else if(command[3] == 'A' & command[4] == 'I'){ //SET OFFLINE TASK ANALOG INPUT
 					  int port = char2Int(command[5]);
@@ -141,7 +151,7 @@ int main(void){
 					  setupTimer(12000);
 					  offlinePort = port;
 					  offlinePin = pin;
-					  sendString("/");
+					  //sendString("/");
 				  }
 			  }
 		  }
@@ -152,7 +162,7 @@ int main(void){
 				  int pin = char2Int(command[3]);
 
 				  setDigitalOutput(port,pin,command[4]);
-				  sendString("/");
+				  //sendString("/");
 			  }
 			  else if(command[1] == 'I'){ //GET DIGITAL INPUT VALUE
 				  int port = char2Int(command[2]);
@@ -160,10 +170,10 @@ int main(void){
 
 				  int value = getDigitalInput(port,pin);
 				  if (value == 1){
-					  sendString("1/");
+					  sendString("1");
 				  }
 				  else{
-					  sendString("0/");
+					  sendString("0");
 				  }
 			  }
 		  }
@@ -175,7 +185,7 @@ int main(void){
 
 				  char adcValue[5];
 				  sprintf(adcValue,"%d",getAnalogInput(port,pin));
-				  strcat(adcValue,"/");
+				  //strcat(adcValue,"/");
 				  sendString(adcValue);
 			  }
 		  }
@@ -193,11 +203,11 @@ int main(void){
 
 			  if (command[5] == 'P'){
 				  setPWMPeriod(port,pin,value);
-				  sendString("/");
+				  //sendString("/");
 			  }
 			  else if(command[5] == 'D'){
 				  setPWMDuty(port,pin,value);
-				  sendString("/");
+				  //sendString("/");
 			  }
 		  }
 
@@ -209,11 +219,14 @@ int main(void){
 				  sendString(c);
 				  sendString(".");
 			  }
-			  sendString("/");
+			  //sendString("/");
 		  }
-
+		  memset(command, 0, 30);
 		  charPos=0;
 		  cmdRdy=0;
+		  sendString("/");
+	  }
+	  else{
 
 	  }
 
@@ -239,7 +252,7 @@ int main(void){
 		else if(offlinePos >= offlineSize){
 			offlineFlag = 0;
 			offlinePos = 0;
-			//stopTimer();
+			stopTimer();
 		}
 }
 
@@ -251,19 +264,28 @@ int main(void){
 
 #pragma vector=USCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void){
-
+	TA0CCTL0 = ~CCIE;
     switch(__even_in_range(UCA0IV,4)){
 		case 0: break;                          // Vector 0 - no interrupt
 		case 2:
-			if (UCA0RXBUF != '/'){
+
+			if(UCA0RXBUF == 'N'){
+				charPos=0;
+				command[charPos]=UCA0RXBUF;
+				cmdRdy=1;
+			}
+			else if (UCA0RXBUF != '/'){
 				command[charPos]=UCA0RXBUF;
 				charPos++;
 			}
 			else{
+				charPos=0;
 				cmdRdy=1;
 			}
+
 			break;
 		case 4: break;
 		default: break;
     }
+    TA0CCTL0 = CCIE;
 }
