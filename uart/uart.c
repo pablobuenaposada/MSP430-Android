@@ -5,14 +5,16 @@
 #include <math.h>
 #include "resources.h"
 
-char command[20];
+char command[30];
 int charPos=0;
 int cmdRdy=0;
-int offlineArray[];
+int offlineSize;
+int offlineArray[100];
 int offlineFlag = 0;
 int offlinePos = 0;
 int offlinePort;
 int offlinePin;
+
 
 void sendString(const char *string){
 	int index;
@@ -55,6 +57,7 @@ int main(void){
   _enable_interrupt();
   __no_operation();                         // For debugger
 
+  setupDigitalOutput(1,0);
 
 
   while(1){
@@ -106,25 +109,35 @@ int main(void){
 			  }
 
 			  else if(command[1] == 'O' & command[2] == 'T'){
-				  if(command[3] == 'D' & command[4] == 'I'){
+				  if(command[3] == 'D' & command[4] == 'I'){ //SET OFFLINE TASK DIGITAL INPUT
 					  int port = char2Int(command[5]);
 					  int pin = char2Int(command[6]);
 					  setupDigitalInput(port,pin);
 
-					  int arraySize = char2Int(command[7]);
-					  offlineArray[arraySize];
-					  setupTimer(12000);
+					  int countLimit = 0;
+					  int i=0;
+					  for(i=0; i<5; i++){
+						  countLimit += (char2Int(command[7+i])*pow(10,5-1-i));
+					  }
+
+					  offlineSize=0;
+					  for(i=0; i<4; i++){
+						  offlineSize += (char2Int(command[12+i])*pow(10,4-1-i));
+					  }
+
 					  offlinePort = port;
 					  offlinePin = pin;
+					  offlineFlag=1;
+					  setupTimer(countLimit);
 					  sendString("/");
 				  }
-				  else if(command[3] == 'A' & command[4] == 'I'){
+				  else if(command[3] == 'A' & command[4] == 'I'){ //SET OFFLINE TASK ANALOG INPUT
 					  int port = char2Int(command[5]);
 					  int pin = char2Int(command[6]);
 					  setupAnalogInput(port,pin);
 
 					  int arraySize = char2Int(command[7]);
-					  offlineArray[arraySize];
+
 					  setupTimer(12000);
 					  offlinePort = port;
 					  offlinePin = pin;
@@ -188,6 +201,17 @@ int main(void){
 			  }
 		  }
 
+		  else if(command[0] == 'O' & command[1] == 'T'){ //GET OFFLINE TASK RESULTS
+			  int i;
+			  for(i=0; i < offlineSize; i++){
+				  char c[20];
+				  sprintf(c, "%d",offlineArray[i]);
+				  sendString(c);
+				  sendString(".");
+			  }
+			  sendString("/");
+		  }
+
 		  charPos=0;
 		  cmdRdy=0;
 
@@ -206,10 +230,16 @@ int main(void){
 #pragma vector=TIMER0_A0_VECTOR
 	__interrupt void Timer0_A0 (void) {		// Timer0 A0 interrupt service routine
 
-		if(offlineFlag == 1){
+		if(offlineFlag == 1 & (offlinePos < offlineSize)){
+			P1OUT ^= BIT0;
 			int value = getDigitalInput(offlinePort,offlinePin);
 			offlineArray[offlinePos] = value;
-			offlinePos = offlinePos +1;
+			offlinePos += 1;
+		}
+		else if(offlinePos >= offlineSize){
+			offlineFlag = 0;
+			offlinePos = 0;
+			//stopTimer();
 		}
 }
 

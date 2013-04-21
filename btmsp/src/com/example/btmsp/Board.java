@@ -1,5 +1,7 @@
 package com.example.btmsp;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -158,18 +160,34 @@ public class Board {
 		private int pin;
 		private int countLimit;
 		private char mode;
+		private int numSamples;
 		
-		public OfflineTask(Board board, char mode, int pin, int countLimit){
+		public OfflineTask(Board board, char mode, int pin, int countLimit, int numSamples){
 			this.board = board;
 			this.mode = mode;
-			this.pin = mode;
+			this.pin = pin;
 			this.countLimit = countLimit;
-			this.board.communicate('r',"SOT"+);			
-
-		}	
+			this.numSamples = numSamples;
+			if (mode == 'd'){
+				this.board.communicate('r',"SOTDI"+pin+countLimit+"00"+numSamples+"/");
+			}			
+		}
+		
+		public synchronized  ArrayList<Integer> read(){
+			String rawList = this.board.communicate('r', "OT/");			
+			Log.e("bbb", "a");
+			String[] splitList = new String[2]; //rawList.split("\\.");
+			splitList[0]="a";
+			splitList[1]="b";
+			Log.e("AAA", "b");
+			ArrayList<Integer> list = new ArrayList<Integer>();
+			for(int i=0; i<splitList.length; i++){
+				list.add(Integer.parseInt(splitList[i]));
+			}
+			return list;
+		}
 		 
-	}
-	
+	}	
 	
 	public DigitalOutput createDigitalOutput(int pin){
 		return new DigitalOutput(this,pin);		
@@ -185,6 +203,10 @@ public class Board {
 	
 	public PWM createPWM(int pin, int period, int duty){
 		return new PWM(this,pin,period,duty);
+	}
+	
+	public OfflineTask createOfflineTask(int pin, char mode, int countLimit, int numSamples){
+		return new OfflineTask(this,mode,pin,countLimit,numSamples);
 	}
 	
 	

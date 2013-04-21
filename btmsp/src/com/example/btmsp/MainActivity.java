@@ -1,8 +1,11 @@
 package com.example.btmsp;
 
+import java.util.ArrayList;
+
 import com.example.btmsp.Board.AnalogInput;
 import com.example.btmsp.Board.DigitalInput;
 import com.example.btmsp.Board.DigitalOutput;
+import com.example.btmsp.Board.OfflineTask;
 import com.example.btmsp.Board.PWM;
 
 import android.app.Activity;
@@ -32,7 +35,9 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	private TextView dutyText;
 	private TextView button1Text;
 	private TextView button2Text;
+	private TextView list;
 	private ProgressBar progressBar;
+	private OfflineTask ot;
 	int i=0;
 	
 	@Override
@@ -45,6 +50,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		dutyText = (TextView)findViewById(R.id.textView1);
 		button1Text = (TextView)findViewById(R.id.textView2);
 		button2Text = (TextView)findViewById(R.id.textView5);
+		list = (TextView)findViewById(R.id.textView8);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         board = new Board(this,"20:13:01:23:01:57");		
         button1 = board.createDigitalInput(26);
@@ -52,7 +58,8 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		led1 = board.createDigitalOutput(10);
 		led2 = board.createDigitalOutput(11);
 		pot = board.createAnalogInput(67);
-		pwm = board.createPWM(42,1000,500);		
+		pwm = board.createPWM(42,1000,500);
+		ot = board.createOfflineTask(26,'d',30000,30);
 		new Thread(button1Thread).start();   
 		new Thread(button2Thread).start();
 		new Thread(potThread).start();		
@@ -72,7 +79,13 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	    	led1.write(true);
 	    } else {
 	    	led1.write(false);
-	    }	    
+	    }
+	    ArrayList<Integer> a = ot.read();
+	    String b = "";
+	    for(int i=0; i < a.size(); i++){
+	    	b = b + a.get(i).toString();
+	    }
+	    list.setText(b);
 	}
 	
 	public void button2(View view) {

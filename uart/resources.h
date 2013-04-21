@@ -15,3 +15,4 @@ void setPWMPeriod(int port, int pin, int period);
 void setPWMDuty(int port, int pin, int duty);
 
 void setupTimer(int countLimit);
+void stopTimer();

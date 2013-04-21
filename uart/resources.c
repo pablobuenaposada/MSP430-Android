@@ -74,9 +74,14 @@ int getDigitalInput(int port, int pin){
 int getAnalogInput(int port, int pin){
 	if(port == 6){
 		if (pin == 7){
-			ADC12CTL0 |= ADC12SC;// Start conversions
-			while (!(ADC12IFG & 0x0001));
-			return (int)ADC12MEM0;
+			int i;
+			int sum=0;
+			for(i=0; i<8; i++){
+				ADC12CTL0 |= ADC12SC;// Start conversions
+				while (!(ADC12IFG & 0x0001));
+				sum += (int)ADC12MEM0;
+			}
+			return sum >> 3;
 		}
 	}
 }
@@ -95,7 +100,11 @@ void setPWMDuty(int port, int pin, int duty){
 }
 
 void setupTimer(int countLimit){
-	TA0CCR0 = countLimit;					// Count limit (16 bit)
-	TA0CCTL0 = 0x10;					// Enable counter interrupts, bit 4=1
+	TA0CCR0 = countLimit;				// Count limit (16 bit)
+	TA0CCTL0 = CCIE;					// Enable counter interrupts, bit 4=1
 	TA0CTL = TASSEL_1 + MC_1; 			// Timer A 0 with ACLK @ 12KHz, count UP
+}
+
+void stopTimer(){
+	TA0CCTL0 = 0x00;
 }
