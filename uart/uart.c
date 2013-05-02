@@ -6,15 +6,8 @@
 #include "resources.h"
 
 char command[30];
-int charPos=0;
+int cmdPos=0;
 int cmdRdy=0;
-int offlineSize;
-int offlineArray[100];
-int offlineFlag = 0;
-int offlinePos = 0;
-int offlinePort;
-int offlinePin;
-int commandTimeout = 0;
 
 void sendString(const char *string){
 	int index;
@@ -58,19 +51,10 @@ int main(void){
   _enable_interrupt();
   __no_operation();                         // For debugger
 
-  setupDigitalOutput(1,0);
-
-
-
-
   while(1){
 	  if (cmdRdy == 1){
 
-		  if(command[0] == 'N'){
-			  memset(command, 0, 30);
-			  charPos=0;
-			  cmdRdy=0;
-			  sendString("/");
+		  if(command[0] == 'N'){ //the device notify us that it established a new connection
 		  }
 
 		  else if(command[0] == 'S'){
@@ -79,13 +63,11 @@ int main(void){
 					  int port = char2Int(command[3]);
 					  int pin = char2Int(command[4]);
 					  setupDigitalOutput(port,pin);
-					  //sendString("/");
 				  }
 				  else if(command[2] == 'I'){ //SETUP DIGITAL INPUT
 					  int port = char2Int(command[3]);
 					  int pin = char2Int(command[4]);
 					  setupDigitalInput(port,pin);
-					  //sendString("/");
 				  }
 			  }
 
@@ -94,7 +76,6 @@ int main(void){
 					  int port = char2Int(command[3]);
 			  		  int pin = char2Int(command[4]);
 			  		  setupAnalogInput(port,pin);
-			  		  //sendString("/");
 				  }
 			  }
 
@@ -115,14 +96,12 @@ int main(void){
 				  }
 
 				  setupPWM(port,pin,period,duty);
-				  //sendString("/");
 			  }
 
 			  else if(command[1] == 'O' & command[2] == 'T'){
 				  if(command[3] == 'D' & command[4] == 'I'){ //SET OFFLINE TASK DIGITAL INPUT
 					  int port = char2Int(command[5]);
 					  int pin = char2Int(command[6]);
-					  setupDigitalInput(port,pin);
 
 					  int countLimit = 0;
 					  int i=0;
@@ -130,28 +109,30 @@ int main(void){
 						  countLimit += (char2Int(command[7+i])*pow(10,5-1-i));
 					  }
 
-					  offlineSize=0;
+					  int offlineSize=0;
 					  for(i=0; i<4; i++){
 						  offlineSize += (char2Int(command[12+i])*pow(10,4-1-i));
 					  }
 
-					  offlinePort = port;
-					  offlinePin = pin;
-					  offlineFlag=1;
-					  setupTimer(countLimit);
-					  //sendString("/");
+					  setupOfflineTask('D',port,pin,countLimit,offlineSize);
+
 				  }
 				  else if(command[3] == 'A' & command[4] == 'I'){ //SET OFFLINE TASK ANALOG INPUT
 					  int port = char2Int(command[5]);
 					  int pin = char2Int(command[6]);
-					  setupAnalogInput(port,pin);
 
-					  int arraySize = char2Int(command[7]);
+					  int countLimit = 0;
+					  int i=0;
+					  for(i=0; i<5; i++){
+						  countLimit += (char2Int(command[7+i])*pow(10,5-1-i));
+					  }
 
-					  setupTimer(12000);
-					  offlinePort = port;
-					  offlinePin = pin;
-					  //sendString("/");
+					  int offlineSize=0;
+					  for(i=0; i<4; i++){
+						  offlineSize += (char2Int(command[12+i])*pow(10,4-1-i));
+					  }
+
+					  setupOfflineTask('I',port,pin,countLimit,offlineSize);
 				  }
 			  }
 		  }
@@ -162,7 +143,6 @@ int main(void){
 				  int pin = char2Int(command[3]);
 
 				  setDigitalOutput(port,pin,command[4]);
-				  //sendString("/");
 			  }
 			  else if(command[1] == 'I'){ //GET DIGITAL INPUT VALUE
 				  int port = char2Int(command[2]);
@@ -183,9 +163,8 @@ int main(void){
 				  int port = char2Int(command[2]);
 				  int pin = char2Int(command[3]);
 
-				  char adcValue[5];
+				  char adcValue[4];
 				  sprintf(adcValue,"%d",getAnalogInput(port,pin));
-				  //strcat(adcValue,"/");
 				  sendString(adcValue);
 			  }
 		  }
@@ -203,38 +182,35 @@ int main(void){
 
 			  if (command[5] == 'P'){
 				  setPWMPeriod(port,pin,value);
-				  //sendString("/");
 			  }
 			  else if(command[5] == 'D'){
 				  setPWMDuty(port,pin,value);
-				  //sendString("/");
 			  }
 		  }
 
 		  else if(command[0] == 'O' & command[1] == 'T'){ //GET OFFLINE TASK RESULTS
+
+			  int samples = getOfflineTaskSize();
+			  int *offlineArray = getOfflineTask();
 			  int i;
-			  for(i=0; i < offlineSize; i++){
-				  char c[20];
+			  for(i=0; i < samples; i++){
+				  char c[4];
 				  sprintf(c, "%d",offlineArray[i]);
 				  sendString(c);
 				  sendString(".");
 			  }
-			  //sendString("/");
 		  }
-		  memset(command, 0, 30);
-		  charPos=0;
-		  cmdRdy=0;
-		  sendString("/");
-	  }
-	  else{
 
+		  memset(command, 0, 30); //clean command because it has been processed
+		  cmdPos=0; //starting point of the command pointer
+		  cmdRdy=0; //no command ready to be processed
+		  sendString("/"); //end of output message
 	  }
 
-  }
 
+  } //end while
 
-
-}
+} //end main
 
 
 
@@ -242,44 +218,27 @@ int main(void){
 
 #pragma vector=TIMER0_A0_VECTOR
 	__interrupt void Timer0_A0 (void) {		// Timer0 A0 interrupt service routine
-
-		if(offlineFlag == 1 & (offlinePos < offlineSize)){
-			P1OUT ^= BIT0;
-			int value = getDigitalInput(offlinePort,offlinePin);
-			offlineArray[offlinePos] = value;
-			offlinePos += 1;
-		}
-		else if(offlinePos >= offlineSize){
-			offlineFlag = 0;
-			offlinePos = 0;
-			stopTimer();
-		}
+		doOfflineTask();
 }
-
-
-
-
-
-
 
 #pragma vector=USCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void){
-	TA0CCTL0 = ~CCIE;
+	//TA0CCTL0 = ~CCIE;
     switch(__even_in_range(UCA0IV,4)){
 		case 0: break;                          // Vector 0 - no interrupt
 		case 2:
 
 			if(UCA0RXBUF == 'N'){
-				charPos=0;
-				command[charPos]=UCA0RXBUF;
+				cmdPos=0;
+				command[cmdPos]=UCA0RXBUF;
 				cmdRdy=1;
 			}
 			else if (UCA0RXBUF != '/'){
-				command[charPos]=UCA0RXBUF;
-				charPos++;
+				command[cmdPos]=UCA0RXBUF;
+				cmdPos++;
 			}
 			else{
-				charPos=0;
+				cmdPos=0;
 				cmdRdy=1;
 			}
 
@@ -287,5 +246,5 @@ __interrupt void USCI_A0_ISR(void){
 		case 4: break;
 		default: break;
     }
-    TA0CCTL0 = CCIE;
+    //TA0CCTL0 = CCIE;
 }

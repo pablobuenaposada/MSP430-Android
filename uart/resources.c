@@ -1,6 +1,29 @@
 #include <msp430.h>
 #include <math.h>
 
+/*variable definitions for offline task mode*/
+int offlineSize;
+int offlineArray[100];
+//int offlineFlag = 0;
+int offlinePos = 0;
+int offlinePort;
+int offlinePin;
+char offlineMode;
+unsigned int offlineCountLimit;
+unsigned int minElapsed=0;
+unsigned int secondsElapsed=0;
+/*------------------------------------------*/
+
+void setupTimerA0(int countLimit){
+	TA0CCR0 = countLimit;				// Count limit (16 bit)
+	TA0CCTL0 = CCIE;					// Enable counter interrupts, bit 4=1
+	TA0CTL = TASSEL_1 + MC_1; 			// Timer A 0 with ACLK @ 12KHz, count UP
+}
+
+void stopTimerA0(){
+	TA0CCTL0 = ~CCIE;
+}
+
 void setupDigitalOutput(int port, int pin){
 	pin=pin+1;
 	if(port == 1){
@@ -44,6 +67,24 @@ void setupPWM(int port, int pin, int period, int duty){
 	}
 }
 
+void setupOfflineTask(char mode,int port,int pin,int countLimit,int samples){
+
+	if(mode == 'D'){
+		setupDigitalInput(port,pin);
+	}
+	else if(mode == 'A'){
+		setupAnalogInput(port,pin);
+	}
+	offlineMode = mode;
+	offlinePort = port;
+	offlinePin = pin;
+	//offlineFlag=1;
+	offlinePos=0;
+	offlineSize=samples;
+	offlineCountLimit = countLimit;
+	setupTimerA0(32767);
+}
+
 void setDigitalOutput(int port, int pin, char value){
 	pin=pin+1;
 	if (port == 1){
@@ -84,6 +125,7 @@ int getAnalogInput(int port, int pin){
 			return sum >> 3;
 		}
 	}
+	return 0; //if any problem occurs
 }
 
 void setPWMPeriod(int port, int pin, int period){
@@ -99,12 +141,37 @@ void setPWMDuty(int port, int pin, int duty){
 	}
 }
 
-void setupTimer(int countLimit){
-	TA0CCR0 = countLimit;				// Count limit (16 bit)
-	TA0CCTL0 = CCIE;					// Enable counter interrupts, bit 4=1
-	TA0CTL = TASSEL_1 + MC_1; 			// Timer A 0 with ACLK @ 12KHz, count UP
+void doOfflineTask(){
+
+	if(secondsElapsed < 60){
+		secondsElapsed += 1;
+	}
+	else{
+		secondsElapsed = 0;
+		minElapsed += 1;
+		if(minElapsed >= offlineCountLimit & (offlinePos < offlineSize)){
+			P1OUT ^= BIT0;
+			int value;
+			if (offlineMode == 'D'){
+				value = getDigitalInput(offlinePort,offlinePin);
+			}
+			else{
+				value = getAnalogInput(offlinePort,offlinePin);
+			}
+			offlineArray[offlinePos] = value;
+			offlinePos += 1;
+		}
+		else if(minElapsed >= offlineCountLimit & (offlinePos >= offlineSize)){
+			stopTimerA0();
+		}
+	}
 }
 
-void stopTimer(){
-	TA0CCTL0 = ~CCIE;
+int *getOfflineTask(){
+	return offlineArray;
 }
+
+int getOfflineTaskSize(){
+	return offlinePos;
+}
+

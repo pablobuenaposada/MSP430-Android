@@ -59,7 +59,8 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		led2 = board.createDigitalOutput(11);
 		pot = board.createAnalogInput(67);
 		pwm = board.createPWM(42,1000,500);
-		ot = board.createOfflineTask(26,'d',30000,30);
+		//ot = board.createOfflineTask(26,'d',30000,30);
+		ot = board.createOfflineTask(67,'a',1,3);
 		new Thread(button1Thread).start();   
 		new Thread(button2Thread).start();
 		new Thread(potThread).start();		

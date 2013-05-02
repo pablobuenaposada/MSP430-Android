@@ -128,8 +128,13 @@ public class Board {
 		}
 		
 		public synchronized int read(){			
-			String rawValue = board.communicate('r',"AI"+pin+"/");
-			return Integer.parseInt(rawValue.substring(0, rawValue.length()-1));			
+			String rawValue = board.communicate('r',"AI"+pin+"/");			
+			try{
+				return Integer.parseInt(rawValue.substring(0, rawValue.length()-1));			
+			}
+			catch(Exception e){
+				return -1;
+			}
 		}
 	}
 	
@@ -159,19 +164,33 @@ public class Board {
 	public class OfflineTask{
 		private Board board;
 		private int pin;
-		private int countLimit;
+		private int min;
 		private char mode;
 		private int numSamples;
 		
-		public OfflineTask(Board board, char mode, int pin, int countLimit, int numSamples){
+		public OfflineTask(Board board, char mode, int pin, int min, int numSamples){
 			this.board = board;
 			this.mode = mode;
 			this.pin = pin;
-			this.countLimit = countLimit;
+			this.min = min;
 			this.numSamples = numSamples;
+			String minZeros="";
+			String samplesZeros="";
+			
+			for(int i=0; i<4-Integer.toString(min).length(); i++){
+				minZeros.concat("0");
+			}
+			
+			for(int i=0; i<5-Integer.toString(numSamples).length(); i++){
+				samplesZeros.concat("0");
+			}
+			
 			if (mode == 'd'){
-				this.board.communicate('r',"SOTDI"+pin+countLimit+"00"+numSamples+"/");
-			}			
+				this.board.communicate('r',"SOTDI"+pin+String.format("%05d", min)+String.format("%04d",numSamples)+"/");
+			}
+			else if(mode == 'a'){
+				this.board.communicate('r',"SOTAI"+pin+String.format("%05d", min)+String.format("%04d",numSamples)+"/");
+			}
 		}
 		
 		public synchronized  ArrayList<Integer> read(){
