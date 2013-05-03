@@ -52,8 +52,9 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		button2Text = (TextView)findViewById(R.id.textView5);
 		list = (TextView)findViewById(R.id.textView8);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-        board = new Board(this,"20:13:01:23:01:57");		
-        button1 = board.createDigitalInput(26);
+        //board = new Board(this,"20:13:01:23:01:57");		
+		board = new Board(this,"20:13:01:24:01:46"); //a 19200bauds
+		button1 = board.createDigitalInput(26);
         button2 = board.createDigitalInput(27);
 		led1 = board.createDigitalOutput(10);
 		led2 = board.createDigitalOutput(11);
