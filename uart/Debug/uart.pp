@@ -15,6 +15,7 @@ uart.obj: C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/yvals.h
 uart.obj: C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/stdarg.h
 uart.obj: C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/_lock.h
 uart.obj: ../resources.h
+uart.obj: ../config.h
 
 ../uart.c: 
 C:/ti/ccsv5/ccs_base/msp430/include/msp430.h: 
@@ -31,3 +32,4 @@ C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/yvals.h:
 C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/stdarg.h: 
 C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/_lock.h: 
 ../resources.h: 
+../config.h: 

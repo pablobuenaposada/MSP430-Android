@@ -14,7 +14,6 @@ int getAnalogInput(int port, int pin);
 void setPWMPeriod(int port, int pin, int period);
 void setPWMDuty(int port, int pin, int duty);
 
-
 void setupOfflineTask(char mode, int port, int pin, int countLimit, int samples);
 void doOfflineTask();
 int *getOfflineTask();

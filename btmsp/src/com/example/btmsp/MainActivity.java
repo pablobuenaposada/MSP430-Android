@@ -10,15 +10,12 @@ import com.example.btmsp.Board.PWM;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity implements OnSeekBarChangeListener {
@@ -62,6 +59,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		pwm = board.createPWM(42,1000,500);
 		//ot = board.createOfflineTask(26,'d',30000,30);
 		ot = board.createOfflineTask(67,'a',1,3);
+		
 		new Thread(button1Thread).start();   
 		new Thread(button2Thread).start();
 		new Thread(potThread).start();		
@@ -94,6 +92,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	
 	public void button2(View view) {
 	    // Is the toggle on?
+		ot.start();
 	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);

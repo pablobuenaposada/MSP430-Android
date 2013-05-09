@@ -1,43 +1,30 @@
 package com.example.btmsp;
 
 import java.util.ArrayList;
-
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
 public class Board {
 	
-	private BluetoothComm communication = null;
-	public static final int MESSAGE_READ = 1;
-	private MainActivity context=null;	
+	private BluetoothComm communication = null;	
+	private MainActivity context = null;	
 	
 	public Board(MainActivity context, String BTaddress){
 		this.context=context;
-		communication = new BluetoothComm(this,null,BTaddress);
-		communicate('r',"N"); //notify that we are a new connection
-	}
-	
-	// The Handler that gets information back from the BluetoothChatService
-    /*private final Handler handler = new Handler() {
-    	@Override
-        public void handleMessage(Message msg) {
-           if(msg.what == MESSAGE_READ) {
-        	   byte[] readBuf = (byte[]) msg.obj;
-               // construct a string from the valid bytes in the buffer
-               String message = new String(readBuf, 0, msg.arg1);           	   
-           }
-    	}
-    };*/
+		communication = new BluetoothComm(this,BTaddress);
+		communicate('r',"N/"); //notify that we are a new connection
+	}	
     
     private synchronized String communicate(char mode, String toSend){
     	if(mode == 's'){
     		send(toSend);
     		return null;
     	}
-    	else if(mode == 'r'){
-    		return read(toSend);    		
+    	else if(mode == 'r'){    		
+			try {
+				return read(toSend);
+			} catch (TimeoutException e) {
+				return "/";
+			}			  		
     	}
     	return null;
     }
@@ -46,7 +33,7 @@ public class Board {
     	communication.send(data);
     }
     
-    private synchronized String read(String toSend){
+    private synchronized String read(String toSend) throws TimeoutException{
     	send(toSend);
     	return communication.read();
     }
@@ -81,17 +68,7 @@ public class Board {
 	    	  else{
 	    		  board.communicate('r',"DO"+pin+"L/");
 	    	  }
-	      }
-	      
-	      /*public synchronized boolean read(){	    	  
-	    	  
-	    	  if (board.communicate('r',"DO"+pin+"R/").contains("1/")){
-	    		  return true;	    		  
-	    	  }
-	    	  else{
-	    		  return false;
-	    	  }
-	      }*/
+	      }      
 	}
 	
 	public class DigitalInput{
@@ -101,12 +78,10 @@ public class Board {
 		public DigitalInput(Board board, int pin){
 			this.board=board;
 			this.pin=pin;
-			board.communicate('r',"SDI"+pin+"/");
-			
+			board.communicate('r',"SDI"+pin+"/");			
 		}
 		
-		public synchronized boolean read(){
-			
+		public synchronized boolean read(){			
 			if (board.communicate('r',"DI"+pin+"/").contains("1/")){
 				return true;	    		  
 	    	}
@@ -123,8 +98,7 @@ public class Board {
 		public AnalogInput(Board board, int pin){
 			this.board=board;
 			this.pin=pin;			
-			this.board.communicate('r',"SAI"+pin+"/");
-			
+			this.board.communicate('r',"SAI"+pin+"/");			
 		}
 		
 		public synchronized int read(){			
@@ -141,14 +115,14 @@ public class Board {
 	public class PWM{
 		private Board board;
 		private int pin;
-		private int period;
-		private int duty;
+		//private int period;
+		//private int duty;
 		
 		public PWM (Board board, int pin, int period, int duty){
 			this.board = board;
 			this.pin = pin;
-			this.period = period;
-			this.duty = duty;			
+			//this.period = period;
+			//this.duty = duty;			
 			this.board.communicate('r',"SPWM"+pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
 		}
 		
@@ -174,6 +148,9 @@ public class Board {
 			this.pin = pin;
 			this.min = min;
 			this.numSamples = numSamples;
+		}
+		
+		public synchronized void start(){			
 			String minZeros="";
 			String samplesZeros="";
 			
@@ -223,13 +200,8 @@ public class Board {
 		return new PWM(this,pin,period,duty);
 	}
 	
-	public OfflineTask createOfflineTask(int pin, char mode, int countLimit, int numSamples){
-		return new OfflineTask(this,mode,pin,countLimit,numSamples);
-	}
-	
-	
-	
-
-	
+	public OfflineTask createOfflineTask(int pin, char mode, int min, int numSamples){
+		return new OfflineTask(this,mode,pin,min,numSamples);
+	}	
 }
 

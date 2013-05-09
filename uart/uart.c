@@ -4,10 +4,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include "resources.h"
+#include "config.h"
 
 char command[30];
 int cmdPos=0;
 int cmdRdy=0;
+#define CMD_TIMEOUT 10000
+int cmdTime=0;
 
 void sendString(const char *string){
 	int index;
@@ -28,24 +31,15 @@ int main(void){
   WDTCTL = WDTPW+WDTHOLD;                   // Stop watchdog timer
   P7SEL |= 0x03;                            // Port select XT1
 
-  do
-  {
+  do{
     UCSCTL7 &= ~(XT2OFFG + XT1LFOFFG + DCOFFG);
                                             // Clear XT2,XT1,DCO fault flags
     SFRIFG1 &= ~OFIFG;                      // Clear fault flags
     __delay_cycles(100000);                 // Delay for Osc to stabilize
   }while (SFRIFG1&OFIFG);                   // Test oscillator fault flag
 
-  P1OUT = 0x000;                            // P1.0/1 setup for LED output
-  P3SEL |= BIT4+BIT5;                       // P3.4,5 UART option select
-
-  UCA0CTL1 |= UCSWRST;                      // **Put state machine in reset**
-  UCA0CTL1 |= UCSSEL_2;                     // CLK = ACLK
-  UCA0BR0 = 52;                           // 32k/9600 - 3.41
-  UCA0BR1 = 0;                           //
-  UCA0MCTL =UCBRS0;                          // Modulation
-  UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
-  UCA0IE |= UCRXIE;                // Enable USCI_A0 TX/RX interrupt
+  initUart();
+  setUart19200bauds();
 
   __bis_SR_register(SCG0);       // Enter LPM3 w/ interrupts enabled
   _enable_interrupt();
@@ -55,8 +49,9 @@ int main(void){
 	  if (cmdRdy == 1){
 
 		  if(command[0] == 'N'){ //the device notify us that it established a new connection
-		  }
 
+
+		  }
 		  else if(command[0] == 'S'){
 			  if(command[1] == 'D'){
 				  if(command[2] == 'O'){ //SETUP DIGITAL OUTPUT
@@ -202,9 +197,21 @@ int main(void){
 		  }
 
 		  memset(command, 0, 30); //clean command because it has been processed
+		  cmdTime = 0;
 		  cmdPos=0; //starting point of the command pointer
 		  cmdRdy=0; //no command ready to be processed
 		  sendString("/"); //end of output message
+	  }
+	  else{
+		  if(cmdTime > CMD_TIMEOUT){
+			  cmdTime = 0;
+			  memset(command, 0, 30); //clean command because it has been processed
+			  cmdPos=0; //starting point of the command pointer
+			  cmdRdy=0; //no command ready to be processed
+		  }
+		  else{
+			  cmdTime +=1;
+		  }
 	  }
 
 
@@ -223,17 +230,11 @@ int main(void){
 
 #pragma vector=USCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void){
-	//TA0CCTL0 = ~CCIE;
-    switch(__even_in_range(UCA0IV,4)){
-		case 0: break;                          // Vector 0 - no interrupt
-		case 2:
 
-			if(UCA0RXBUF == 'N'){
-				cmdPos=0;
-				command[cmdPos]=UCA0RXBUF;
-				cmdRdy=1;
-			}
-			else if (UCA0RXBUF != '/'){
+    switch(__even_in_range(UCA0IV,4)){
+		case 2:
+			cmdTime = 0;
+			if (UCA0RXBUF != '/'){
 				command[cmdPos]=UCA0RXBUF;
 				cmdPos++;
 			}
@@ -241,10 +242,7 @@ __interrupt void USCI_A0_ISR(void){
 				cmdPos=0;
 				cmdRdy=1;
 			}
-
 			break;
-		case 4: break;
 		default: break;
     }
-    //TA0CCTL0 = CCIE;
 }
