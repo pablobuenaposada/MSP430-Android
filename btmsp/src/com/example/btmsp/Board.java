@@ -1,16 +1,13 @@
 package com.example.btmsp;
 
 import java.util.ArrayList;
-import android.content.Intent;
 
 public class Board {
 	
 	private BluetoothComm communication = null;	
-	private MainActivity context = null;	
 	
-	public Board(MainActivity context, String BTaddress){
-		this.context=context;
-		communication = new BluetoothComm(this,BTaddress);
+	public Board(String BTaddress) throws BluetoothDisabled, NoBluetoothSupported{		
+		communication = new BluetoothComm(BTaddress);
 		communicate('r',"N/"); //notify that we are a new connection
 	}	
     
@@ -42,14 +39,9 @@ public class Board {
 		communication.destroy();		
 	}	
 
-	public void noBluetoothSupported() {
-		context.finish();		
-	}
+	
 
-	public void askEnableBluetooth() {
-		Intent enableIntent = new Intent(android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        context.startActivityForResult(enableIntent, 2);		
-	}
+	
 	
 	public class DigitalOutput{
 	      private int pin;

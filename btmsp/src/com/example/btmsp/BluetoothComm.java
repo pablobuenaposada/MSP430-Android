@@ -17,16 +17,15 @@ public class BluetoothComm{
     private OutputStream BTout = null;   
     private BluetoothSocket BTsocket = null;
 	
-	public BluetoothComm(Board board,String address){		
+	public BluetoothComm(String address) throws BluetoothDisabled, NoBluetoothSupported{		
 		BluetoothAdapter BluetoothAdapter = android.bluetooth.BluetoothAdapter.getDefaultAdapter();
 		
         // If the adapter is null, then Bluetooth is not supported
         if (BluetoothAdapter == null) {            
-            board.noBluetoothSupported();
-            return;
+            throw new NoBluetoothSupported();
         }        
         else if (!BluetoothAdapter.isEnabled()) {
-        	board.askEnableBluetooth();                   
+        	throw new BluetoothDisabled();                
         }
         
         BluetoothDevice remoteDevice = BluetoothAdapter.getRemoteDevice(address);
@@ -77,7 +76,9 @@ public class BluetoothComm{
 	
 	public void destroy(){
 		try {
-			BTsocket.close();
+			if (BTsocket != null){
+				BTsocket.close();
+			}
 		} catch (IOException e) {
 			Log.e("ERROR", "Problem closing bluetooth socket");
 		}
@@ -91,3 +92,14 @@ class TimeoutException extends Exception{
 	}
 }
 
+class BluetoothDisabled extends Exception{
+	public BluetoothDisabled(){
+		
+	}
+}
+
+class NoBluetoothSupported extends Exception{
+	public NoBluetoothSupported(){
+		
+	}
+}
