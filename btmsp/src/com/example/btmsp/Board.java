@@ -37,11 +37,7 @@ public class Board {
 
 	public void destroy() {
 		communication.destroy();		
-	}	
-
-	
-
-	
+	}		
 	
 	public class DigitalOutput{
 	      private int pin;
@@ -174,7 +170,25 @@ public class Board {
 			return list;
 		}
 		 
-	}	
+	}
+	
+	public class Serial{
+		private Board board;
+	
+		public Serial(Board board){
+			this.board = board;
+			this.board.communicate('r',"SUARTA3/");
+		}
+		
+		public synchronized void send(String tx){
+			this.board.communicate('r',"UARTA3T"+tx+"/");			
+		}
+		
+		public synchronized String read(){
+			String received = this.board.communicate('r',"UARTA3R/");
+			return received.substring(0, received.length()-1);
+		}
+	}
 	
 	public DigitalOutput createDigitalOutput(int pin){
 		return new DigitalOutput(this,pin);		
@@ -194,6 +208,10 @@ public class Board {
 	
 	public OfflineTask createOfflineTask(int pin, char mode, int min, int numSamples){
 		return new OfflineTask(this,mode,pin,min,numSamples);
-	}	
+	}
+	
+	public Serial createSerial(){
+		return new Serial(this);
+	}
 }
 

@@ -9,31 +9,37 @@ CMD_SRCS += \
 C_SRCS += \
 ../config.c \
 ../resources.c \
+../serial.c \
 ../uart.c 
 
 OBJS += \
 ./config.obj \
 ./resources.obj \
+./serial.obj \
 ./uart.obj 
 
 C_DEPS += \
 ./config.pp \
 ./resources.pp \
+./serial.pp \
 ./uart.pp 
 
 C_DEPS__QUOTED += \
 "config.pp" \
 "resources.pp" \
+"serial.pp" \
 "uart.pp" 
 
 OBJS__QUOTED += \
 "config.obj" \
 "resources.obj" \
+"serial.obj" \
 "uart.obj" 
 
 C_SRCS__QUOTED += \
 "../config.c" \
 "../resources.c" \
+"../serial.c" \
 "../uart.c" 
 
 

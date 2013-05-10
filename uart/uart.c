@@ -6,6 +6,7 @@
 #include "resources.h"
 #include "config.h"
 
+
 char command[30];
 int cmdPos=0;
 int cmdRdy=0;
@@ -38,6 +39,8 @@ int main(void){
     __delay_cycles(100000);                 // Delay for Osc to stabilize
   }while (SFRIFG1&OFIFG);                   // Test oscillator fault flag
 
+
+
   initUart();
   setUart19200bauds();
 
@@ -46,10 +49,11 @@ int main(void){
   __no_operation();                         // For debugger
 
   while(1){
+
+
 	  if (cmdRdy == 1){
 
 		  if(command[0] == 'N'){ //the device notify us that it established a new connection
-
 
 		  }
 		  else if(command[0] == 'S'){
@@ -130,6 +134,11 @@ int main(void){
 					  setupOfflineTask('I',port,pin,countLimit,offlineSize);
 				  }
 			  }
+			  else if(command[1] == 'U' & command[2] == 'A' & command[3] == 'R' & command[4] == 'T'){
+				  if(command[5] == 'A' & command[6] == '3'){
+					  setupUart9600A3();
+				  }
+			  }
 		  }
 
 		  else if(command[0] == 'D'){
@@ -196,6 +205,36 @@ int main(void){
 			  }
 		  }
 
+		  else if(command[0] == 'U' & command[1] == 'A' & command[2] == 'R' & command[3] == 'T'){
+			  if(command[4] == 'A' & command[5] == '3'){
+				  if(command[6] == 'T'){
+
+					  int i=7;
+
+
+					  while(command[i] != '/'){
+						  char tx[1];
+						  sprintf(tx, "%c",command[i]);
+						  txA3(tx);
+						  i++;
+					  }
+
+				  }
+				  else if(command[6] == 'R'){
+
+					  int size = getA3ReceivedSize();
+					  char *recieved = rxA3(size);
+					  int i;
+					  for(i=0; i < size; i++){
+						  char c[1];
+						  sprintf(c, "%c",recieved[i]);
+						  sendString(c);
+					  }
+
+				  }
+			  }
+		  }
+
 		  memset(command, 0, 30); //clean command because it has been processed
 		  cmdTime = 0;
 		  cmdPos=0; //starting point of the command pointer
@@ -239,6 +278,7 @@ __interrupt void USCI_A0_ISR(void){
 				cmdPos++;
 			}
 			else{
+				command[cmdPos]=UCA0RXBUF;
 				cmdPos=0;
 				cmdRdy=1;
 			}

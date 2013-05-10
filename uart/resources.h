@@ -18,3 +18,10 @@ void setupOfflineTask(char mode, int port, int pin, int countLimit, int samples)
 void doOfflineTask();
 int *getOfflineTask();
 int getOfflineTaskSize();
+
+void setupUart9600A3();
+void txA3(const char *string);
+char *rxA3(int size);
+int getA3ReceivedSize();
+
+

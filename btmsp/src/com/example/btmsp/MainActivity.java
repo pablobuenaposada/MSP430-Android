@@ -7,6 +7,7 @@ import com.example.btmsp.Board.DigitalInput;
 import com.example.btmsp.Board.DigitalOutput;
 import com.example.btmsp.Board.OfflineTask;
 import com.example.btmsp.Board.PWM;
+import com.example.btmsp.Board.Serial;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -39,6 +40,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	private boton1 boton1Thread;
 	private boton2 boton2Thread;
 	private pot potThread;
+	private Serial serial;
 	int i=0;
 	
 	@Override
@@ -72,7 +74,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		pwm = board.createPWM(42,1000,500);
 		//ot = board.createOfflineTask(26,'d',30000,30);
 		ot = board.createOfflineTask(67,'a',1,3);
-		
+		serial = board.createSerial();
 		boton1Thread = new boton1();
 		boton1Thread.execute();
 		boton2Thread = new boton2();
@@ -98,24 +100,26 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	    	led1.write(false);
 	    }	    
 	    
-	    ArrayList<Integer> a = ot.read();
+	    /*ArrayList<Integer> a = ot.read();
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
 	    	b = b + a.get(i).toString();
 	    }
 	    b=b+"total"+a.size();
-	    list.setText(b);
+	    list.setText(b);*/
+	    serial.send("hola");
 	}
 	
 	public void button2(View view) {
 	    // Is the toggle on?
-		ot.start();
+		//ot.start();
 	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);
 	    } else {
 	    	led2.write(false);
-	    }	    
+	    }
+	    list.setText(serial.read());
 	}	
 	
 	private void setTextButton1(final String str) {

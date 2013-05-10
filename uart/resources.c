@@ -1,5 +1,7 @@
 #include <msp430.h>
 #include <math.h>
+#include <string.h> //for the strlen() function
+
 
 /*variable definitions for offline task mode*/
 int offlineSize;
@@ -13,6 +15,8 @@ unsigned int offlineCountLimit;
 unsigned int minElapsed=0;
 unsigned int secondsElapsed=0;
 /*------------------------------------------*/
+char command3[30];
+int cmdPos3=0;
 
 void setupTimerA0(int countLimit){
 	TA0CCR0 = countLimit;				// Count limit (16 bit)
@@ -173,5 +177,52 @@ int *getOfflineTask(){
 
 int getOfflineTaskSize(){
 	return offlinePos;
+}
+
+void setupUart9600A3(){
+	P10SEL |= BIT4+BIT5;                       // P10.4,5 UART option select
+	UCA3CTL1 |= UCSWRST; // **Put state machine in reset**
+	UCA3CTL1 |= UCSSEL_1; // CLK = ACLK
+	UCA3BR0 = 0x03; // 32k/9600 - 3.41
+	UCA3BR1 = 0x00; //
+	UCA3MCTL = 0x06; // Modulation
+	UCA3CTL1 &= ~UCSWRST; // **Initialize USCI state machine**
+	UCA3IE |= UCRXIE; // Enable USCI_A0 TX/RX interrupt
+}
+
+void txA3(const char *string){
+	int index;
+	for(index=0; index < strlen(string); index++){
+		UCA3TXBUF = string[index];
+		while (!(UCA3IFG & UCTXIFG));  // USCI_A0 TX buffer ready?
+	}
+}
+
+char *rxA3(int size){
+	//char *aux = command3;
+	//memset(command3, 0, 30); //clean command because it has been processed
+
+	const char* commandPointer = command3;
+	char *received = (char*) malloc(size);
+	strncpy(received, commandPointer, size);
+	cmdPos3=0;
+	return received;
+}
+
+int getA3ReceivedSize(){
+	return cmdPos3;
+}
+
+#pragma vector=USCI_A3_VECTOR
+__interrupt void USCI_A3_ISR(void){
+    switch(__even_in_range(UCA3IV,4)){
+		case 2:
+			if(cmdPos3 < 30){
+				command3[cmdPos3]=UCA3RXBUF;
+				cmdPos3++;
+			}
+			break;
+		default: break;
+    }
 }
 
