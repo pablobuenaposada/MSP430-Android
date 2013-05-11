@@ -39,34 +39,62 @@ public class Board {
 		communication.destroy();		
 	}		
 	
-	public class DigitalOutput{
-	      private int pin;
-	      private Board board;
+	public static class DigitalOutput{	    
+	    private int pin;
+	    private Board board;
+	    
+	    public enum Pin{
+	    	_10(10),_11(11);
+	    	
+	    	private int pin;
+	    	
+	    	Pin(int pin){
+	    		this.pin=pin;
+	    	}
+	    	
+	    	public int getPin(){
+	    		return this.pin;
+	    	}
+	    }
 	      
-	      public DigitalOutput(Board board,int pin){
-	    	  this.board=board;
-	    	  this.pin=pin;
-	    	  board.communicate('r',"SDO"+pin+"/");	    	  
-	      }
+	    public DigitalOutput(Board board,com.example.btmsp.Board.DigitalOutput.Pin pin){
+	    	this.board=board;
+	    	this.pin=pin.getPin();
+	    	board.communicate('r',"SDO"+this.pin+"/");	    	  
+	    }
 	      
-	      public synchronized void write(boolean state){
-	    	  if(state == true){
-	    		  board.communicate('r',"DO"+pin+"H/");
-	    	  }
-	    	  else{
-	    		  board.communicate('r',"DO"+pin+"L/");
-	    	  }
-	      }      
+	    public synchronized void write(boolean state){
+	    	if(state == true){
+	    		board.communicate('r',"DO"+pin+"H/");
+	    	}
+	    	else{
+	    		board.communicate('r',"DO"+pin+"L/");
+	    	}
+	    }      
 	}
 	
-	public class DigitalInput{
+	public static class DigitalInput{
 		private Board board;
 		private int pin;
 		
-		public DigitalInput(Board board, int pin){
+		public enum Pin{
+	    	_26(26),_27(27);
+	    	
+	    	private int pin;
+	    	
+	    	Pin(int pin){
+	    		this.pin=pin;
+	    	}
+	    	
+	    	public int getPin(){
+	    		return this.pin;
+	    	}
+	    }
+		
+		public DigitalInput(Board board, com.example.btmsp.Board.DigitalInput.Pin pin){
 			this.board=board;
-			this.pin=pin;
-			board.communicate('r',"SDI"+pin+"/");			
+			this.pin=pin.getPin();
+			board.communicate('r',"SDI"+this.pin+"/");			
 		}
 		
 		public synchronized boolean read(){			
@@ -79,14 +107,28 @@ public class Board {
 		}
 	}
 	
-	public class AnalogInput{
+	public static class AnalogInput{
 		private Board board;
 		private int pin;
 		
-		public AnalogInput(Board board, int pin){
+		public enum Pin{
+	    	_67(67);
+	    	
+	    	private int pin;
+	    	
+	    	Pin(int pin){
+	    		this.pin=pin;
+	    	}
+	    	
+	    	public int getPin(){
+	    		return this.pin;
+	    	}
+	    }
+		
+		public AnalogInput(Board board, com.example.btmsp.Board.AnalogInput.Pin pin){
 			this.board=board;
-			this.pin=pin;			
-			this.board.communicate('r',"SAI"+pin+"/");			
+			this.pin=pin.getPin();			
+			this.board.communicate('r',"SAI"+this.pin+"/");			
 		}
 		
 		public synchronized int read(){			
@@ -100,18 +142,32 @@ public class Board {
 		}
 	}
 	
-	public class PWM{
+	public static class PWM{
 		private Board board;
 		private int pin;
 		//private int period;
 		//private int duty;
 		
-		public PWM (Board board, int pin, int period, int duty){
+		public enum Pin{
+	    	_42(42);
+	    	
+	    	private int pin;
+	    	
+	    	Pin(int pin){
+	    		this.pin=pin;
+	    	}
+	    	
+	    	public int getPin(){
+	    		return this.pin;
+	    	}
+	    }
+		
+		public PWM (Board board, com.example.btmsp.Board.PWM.Pin pin, int period, int duty){
 			this.board = board;
-			this.pin = pin;
+			this.pin = pin.getPin();
 			//this.period = period;
 			//this.duty = duty;			
-			this.board.communicate('r',"SPWM"+pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
+			this.board.communicate('r',"SPWM"+this.pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
 		}
 		
 		public synchronized void setDuty(int newDuty){
@@ -123,17 +179,35 @@ public class Board {
 		}	
 	}
 	
-	public class OfflineTask{
+	public static class OfflineTask{
 		private Board board;
 		private int pin;
 		private int min;
-		private char mode;
+		private Mode mode;
 		private int numSamples;
 		
-		public OfflineTask(Board board, char mode, int pin, int min, int numSamples){
+		public enum Pin{
+	    	_67(67);
+	    	
+	    	private int pin;
+	    	
+	    	Pin(int pin){
+	    		this.pin=pin;
+	    	}
+	    	
+	    	public int getPin(){
+	    		return this.pin;
+	    	}
+	    }
+		
+		public enum Mode{
+			DIGITAL,ANALOG;			
+		}
+		
+		public OfflineTask(Board board, Mode mode, com.example.btmsp.Board.OfflineTask.Pin pin, int min, int numSamples){
 			this.board = board;
 			this.mode = mode;
-			this.pin = pin;
+			this.pin = pin.getPin();
 			this.min = min;
 			this.numSamples = numSamples;
 		}
@@ -150,10 +224,10 @@ public class Board {
 				samplesZeros.concat("0");
 			}
 			
-			if (mode == 'd'){
+			if (mode.equals(OfflineTask.Mode.DIGITAL)){
 				this.board.communicate('r',"SOTDI"+pin+String.format("%05d", min)+String.format("%04d",numSamples)+"/");
 			}
-			else if(mode == 'a'){
+			else if(mode.equals(OfflineTask.Mode.ANALOG)){
 				this.board.communicate('r',"SOTAI"+pin+String.format("%05d", min)+String.format("%04d",numSamples)+"/");
 			}
 		}
@@ -190,23 +264,23 @@ public class Board {
 		}
 	}
 	
-	public DigitalOutput createDigitalOutput(int pin){
+	public DigitalOutput createDigitalOutput(DigitalOutput.Pin pin){
 		return new DigitalOutput(this,pin);		
 	}
 	
-	public DigitalInput createDigitalInput(int pin){
+	public DigitalInput createDigitalInput(DigitalInput.Pin pin){
 		return new DigitalInput(this,pin);
 	}
 	
-	public AnalogInput createAnalogInput(int pin){
+	public AnalogInput createAnalogInput(AnalogInput.Pin pin){
 		return new AnalogInput(this,pin);
 	}
 	
-	public PWM createPWM(int pin, int period, int duty){
+	public PWM createPWM(PWM.Pin pin, int period, int duty){
 		return new PWM(this,pin,period,duty);
 	}
 	
-	public OfflineTask createOfflineTask(int pin, char mode, int min, int numSamples){
+	public OfflineTask createOfflineTask(OfflineTask.Pin pin, OfflineTask.Mode mode, int min, int numSamples){
 		return new OfflineTask(this,mode,pin,min,numSamples);
 	}
 	

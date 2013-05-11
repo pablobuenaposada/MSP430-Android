@@ -66,14 +66,14 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		catch (NoBluetoothSupported e) {			
 		}
 		
-		button1 = board.createDigitalInput(26);
-        button2 = board.createDigitalInput(27);
-		led1 = board.createDigitalOutput(10);
-		led2 = board.createDigitalOutput(11);
-		pot = board.createAnalogInput(67);
-		pwm = board.createPWM(42,1000,500);
+		button1 = board.createDigitalInput(DigitalInput.Pin._26);
+        button2 = board.createDigitalInput(DigitalInput.Pin._27);
+		led1 = board.createDigitalOutput(DigitalOutput.Pin._10);
+		led2 = board.createDigitalOutput(DigitalOutput.Pin._11);
+		pot = board.createAnalogInput(AnalogInput.Pin._67);
+		pwm = board.createPWM(PWM.Pin._42,1000,500);
 		//ot = board.createOfflineTask(26,'d',30000,30);
-		ot = board.createOfflineTask(67,'a',1,3);
+		ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,1,3);
 		serial = board.createSerial();
 		boton1Thread = new boton1();
 		boton1Thread.execute();
@@ -100,26 +100,26 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	    	led1.write(false);
 	    }	    
 	    
-	    /*ArrayList<Integer> a = ot.read();
+	    ArrayList<Integer> a = ot.read();
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
 	    	b = b + a.get(i).toString();
 	    }
 	    b=b+"total"+a.size();
-	    list.setText(b);*/
-	    serial.send("hola");
+	    list.setText(b);
+	    //serial.send("hola");
 	}
 	
 	public void button2(View view) {
 	    // Is the toggle on?
-		//ot.start();
+		ot.start();
 	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);
 	    } else {
 	    	led2.write(false);
 	    }
-	    list.setText(serial.read());
+	    //list.setText(serial.read());
 	}	
 	
 	private void setTextButton1(final String str) {
