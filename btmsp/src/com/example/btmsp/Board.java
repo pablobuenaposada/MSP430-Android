@@ -144,12 +144,10 @@ public class Board {
 	
 	public static class PWM{
 		private Board board;
-		private int pin;
-		//private int period;
-		//private int duty;
+		private int pin;		
 		
 		public enum Pin{
-	    	_42(42);
+	    	_41(41),_42(42),_43(43),_45(45),_46(46);
 	    	
 	    	private int pin;
 	    	
@@ -162,11 +160,10 @@ public class Board {
 	    	}
 	    }
 		
-		public PWM (Board board, com.example.btmsp.Board.PWM.Pin pin, int period, int duty){
+		private PWM (Board board, com.example.btmsp.Board.PWM.Pin pin, int period, int duty){
 			this.board = board;
 			this.pin = pin.getPin();
-			//this.period = period;
-			//this.duty = duty;			
+						
 			this.board.communicate('r',"SPWM"+this.pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
 		}
 		
@@ -176,14 +173,15 @@ public class Board {
 		
 		public synchronized void setPeriod(int newPeriod){
 			this.board.communicate('r',"PWM"+pin+"P"+String.valueOf(newPeriod).length()+newPeriod+"/");
-		}	
+		}		
 	}
 	
 	public static class OfflineTask{
 		private Board board;
 		private int pin;
-		private int min;
+		private int period;
 		private Mode mode;
+		private Units units;
 		private int numSamples;
 		
 		public enum Pin{
@@ -204,31 +202,43 @@ public class Board {
 			DIGITAL,ANALOG;			
 		}
 		
-		public OfflineTask(Board board, Mode mode, com.example.btmsp.Board.OfflineTask.Pin pin, int min, int numSamples){
+		public enum Units{
+			MILLISECONDS,MINUTES,SECONDS;			
+		}	
+				
+		public OfflineTask(Board board, Mode mode, com.example.btmsp.Board.OfflineTask.Pin pin, com.example.btmsp.Board.OfflineTask.Units units, int period, int numSamples){
 			this.board = board;
 			this.mode = mode;
+			this.units = units;
 			this.pin = pin.getPin();
-			this.min = min;
+			this.period = period;
 			this.numSamples = numSamples;
 		}
 		
 		public synchronized void start(){			
-			String minZeros="";
-			String samplesZeros="";
-			
-			for(int i=0; i<4-Integer.toString(min).length(); i++){
-				minZeros.concat("0");
-			}
-			
-			for(int i=0; i<5-Integer.toString(numSamples).length(); i++){
-				samplesZeros.concat("0");
-			}
 			
 			if (mode.equals(OfflineTask.Mode.DIGITAL)){
-				this.board.communicate('r',"SOTDI"+pin+String.format("%05d", min)+String.format("%04d",numSamples)+"/");
+				if (units.equals(OfflineTask.Units.MINUTES)){
+					this.board.communicate('r',"SOTDI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				}
+				else if (units.equals(OfflineTask.Units.MILLISECONDS)){
+					this.board.communicate('r',"SOTDI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				}
+				else if (units.equals(OfflineTask.Units.SECONDS)){
+					this.board.communicate('r',"SOTDI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				}
+				
 			}
 			else if(mode.equals(OfflineTask.Mode.ANALOG)){
-				this.board.communicate('r',"SOTAI"+pin+String.format("%05d", min)+String.format("%04d",numSamples)+"/");
+				if (units.equals(OfflineTask.Units.MINUTES)){
+					this.board.communicate('r',"SOTAI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				}
+				else if (units.equals(OfflineTask.Units.MILLISECONDS)){
+					this.board.communicate('r',"SOTAI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				}	
+				else if (units.equals(OfflineTask.Units.SECONDS)){
+					this.board.communicate('r',"SOTAI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				}
 			}
 		}
 		
@@ -280,8 +290,8 @@ public class Board {
 		return new PWM(this,pin,period,duty);
 	}
 	
-	public OfflineTask createOfflineTask(OfflineTask.Pin pin, OfflineTask.Mode mode, int min, int numSamples){
-		return new OfflineTask(this,mode,pin,min,numSamples);
+	public OfflineTask createOfflineTask(OfflineTask.Pin pin, OfflineTask.Mode mode, OfflineTask.Units units, int period, int numSamples){
+		return new OfflineTask(this,mode,pin,units,period,numSamples);
 	}
 	
 	public Serial createSerial(){

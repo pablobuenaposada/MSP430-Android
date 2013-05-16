@@ -7,6 +7,7 @@ import com.example.btmsp.Board.DigitalInput;
 import com.example.btmsp.Board.DigitalOutput;
 import com.example.btmsp.Board.OfflineTask;
 import com.example.btmsp.Board.PWM;
+
 import com.example.btmsp.Board.Serial;
 
 import android.app.Activity;
@@ -38,7 +39,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	private TextView list;
 	private ProgressBar progressBar;
 	private ProgressBar progressBar2;
-	//private OfflineTask ot;
+	private OfflineTask ot;
 	private boton1 boton1Thread;
 	private boton2 boton2Thread;
 	private pot potThread;
@@ -59,7 +60,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		list = (TextView)findViewById(R.id.textView8);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		progressBar2 = (ProgressBar) findViewById(R.id.ProgressBar01);
-        		
+       
 		try {
 			//board = new Board(this,"20:13:01:23:01:57"); 
 			board = new Board("20:13:01:24:01:46"); //a 19200bauds
@@ -77,8 +78,10 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		pot = board.createAnalogInput(AnalogInput.Pin._74);
 		pot2 = board.createAnalogInput(AnalogInput.Pin._67);
 		pwm = board.createPWM(PWM.Pin._42,1000,500);
+		
+		
 		//ot = board.createOfflineTask(26,'d',30000,30);
-		//ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,1,3);
+		ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.MILLISECONDS,1000,3);
 		serial = board.createSerial();
 		boton1Thread = new boton1();
 		boton1Thread.execute();
@@ -108,19 +111,19 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	    	led1.write(false);
 	    }	    
 	    
-	    /*ArrayList<Integer> a = ot.read();
+	    ArrayList<Integer> a = ot.read();
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
 	    	b = b + a.get(i).toString();
 	    }
 	    b=b+"total"+a.size();
 	    list.setText(b);
-	    //serial.send("hola");*/
+	    //serial.send("hola");
 	}
 	
 	public void button2(View view) {
 	    // Is the toggle on?
-		//ot.start();
+		ot.start();
 	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);

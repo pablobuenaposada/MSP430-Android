@@ -105,15 +105,15 @@ int main(void){
 					  int countLimit = 0;
 					  int i=0;
 					  for(i=0; i<5; i++){
-						  countLimit += (char2Int(command[7+i])*pow(10,5-1-i));
+						  countLimit += (char2Int(command[8+i])*pow(10,5-1-i));
 					  }
 
 					  int offlineSize=0;
 					  for(i=0; i<4; i++){
-						  offlineSize += (char2Int(command[12+i])*pow(10,4-1-i));
+						  offlineSize += (char2Int(command[13+i])*pow(10,4-1-i));
 					  }
 
-					  setupOfflineTask('D',port,pin,countLimit,offlineSize);
+					  setupOfflineTask('D',port,pin,command[7],countLimit,offlineSize);
 
 				  }
 				  else if(command[3] == 'A' & command[4] == 'I'){ //SET OFFLINE TASK ANALOG INPUT
@@ -123,15 +123,15 @@ int main(void){
 					  int countLimit = 0;
 					  int i=0;
 					  for(i=0; i<5; i++){
-						  countLimit += (char2Int(command[7+i])*pow(10,5-1-i));
+						  countLimit += (char2Int(command[8+i])*pow(10,5-1-i));
 					  }
 
 					  int offlineSize=0;
 					  for(i=0; i<4; i++){
-						  offlineSize += (char2Int(command[12+i])*pow(10,4-1-i));
+						  offlineSize += (char2Int(command[13+i])*pow(10,4-1-i));
 					  }
 
-					  setupOfflineTask('I',port,pin,countLimit,offlineSize);
+					  setupOfflineTask('I',port,pin,command[7],countLimit,offlineSize);
 				  }
 			  }
 			  else if(command[1] == 'U' & command[2] == 'A' & command[3] == 'R' & command[4] == 'T'){
@@ -262,10 +262,7 @@ int main(void){
 
 
 
-#pragma vector=TIMER0_A0_VECTOR
-	__interrupt void Timer0_A0 (void) {		// Timer0 A0 interrupt service routine
-		doOfflineTask();
-}
+
 
 #pragma vector=USCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void){

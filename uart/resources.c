@@ -11,9 +11,10 @@ int offlinePos = 0;
 int offlinePort;
 int offlinePin;
 char offlineMode;
+char offlineUnits;
 unsigned int offlineCountLimit;
-unsigned int minElapsed=0;
-unsigned int secondsElapsed=0;
+unsigned int unitsElapsed=0;
+unsigned secondsElapsed=0;
 /*------------------------------------------*/
 char command3[30];
 int cmdPos3=0;
@@ -79,7 +80,7 @@ void setupPWM(int port, int pin, int period, int duty){
 	}
 }
 
-void setupOfflineTask(char mode,int port,int pin,int countLimit,int samples){
+void setupOfflineTask(char mode,int port,int pin,char units,int countLimit,int samples){
 
 	if(mode == 'D'){
 		setupDigitalInput(port,pin);
@@ -90,11 +91,22 @@ void setupOfflineTask(char mode,int port,int pin,int countLimit,int samples){
 	offlineMode = mode;
 	offlinePort = port;
 	offlinePin = pin;
-	//offlineFlag=1;
 	offlinePos=0;
 	offlineSize=samples;
 	offlineCountLimit = countLimit;
-	setupTimerA0(32767);
+	offlineUnits = units;
+	unitsElapsed =0;
+	secondsElapsed = 0;
+
+	if (units == 'M'){
+		setupTimerA0(32768);
+	}
+	else if (units == 'S'){
+		setupTimerA0(32768);
+	}
+	else if(units == 'U'){
+		setupTimerA0(33);
+	}
 }
 
 void setDigitalOutput(int port, int pin, char value){
@@ -159,27 +171,36 @@ void setPWMDuty(int port, int pin, int duty){
 
 void doOfflineTask(){
 
-	if(secondsElapsed < 60){
+	if(offlineUnits == 'M' && secondsElapsed < 60){
 		secondsElapsed += 1;
 	}
-	else{
+	else if (offlineUnits == 'S' && unitsElapsed < offlineCountLimit){
+		unitsElapsed += 1;
+	}
+	else if(offlineUnits == 'U' && unitsElapsed < offlineCountLimit){
+		unitsElapsed += 1;
+	}
+
+	if(offlineUnits == 'M' && secondsElapsed >= 60){
+		unitsElapsed += 1;
+	}
+
+	if (unitsElapsed >= offlineCountLimit & (offlinePos < offlineSize)){
 		secondsElapsed = 0;
-		minElapsed += 1;
-		if(minElapsed >= offlineCountLimit & (offlinePos < offlineSize)){
-			P1OUT ^= BIT0;
-			int value;
-			if (offlineMode == 'D'){
-				value = getDigitalInput(offlinePort,offlinePin);
-			}
-			else{
-				value = getAnalogInput(offlinePort,offlinePin);
-			}
-			offlineArray[offlinePos] = value;
-			offlinePos += 1;
+		unitsElapsed = 0;
+		P1OUT ^= BIT0;
+		int value;
+		if (offlineMode == 'D'){
+			value = getDigitalInput(offlinePort,offlinePin);
 		}
-		else if(minElapsed >= offlineCountLimit & (offlinePos >= offlineSize)){
-			stopTimerA0();
+		else{
+			value = getAnalogInput(offlinePort,offlinePin);
 		}
+		offlineArray[offlinePos] = value;
+		offlinePos += 1;
+	}
+	else if(offlinePos >= offlineSize){
+		stopTimerA0();
 	}
 }
 
@@ -238,3 +259,7 @@ __interrupt void USCI_A3_ISR(void){
     }
 }
 
+#pragma vector=TIMER0_A0_VECTOR
+	__interrupt void Timer0_A0 (void) {		// Timer0 A0 interrupt service routine
+		doOfflineTask();
+}
