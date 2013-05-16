@@ -10,7 +10,7 @@
 char command[30];
 int cmdPos=0;
 int cmdRdy=0;
-#define CMD_TIMEOUT 10000
+#define CMD_TIMEOUT 5000
 int cmdTime=0;
 
 void sendString(const char *string){
@@ -54,7 +54,7 @@ int main(void){
 	  if (cmdRdy == 1){
 
 		  if(command[0] == 'N'){ //the device notify us that it established a new connection
-
+			  __no_operation();
 		  }
 		  else if(command[0] == 'S'){
 			  if(command[1] == 'D'){

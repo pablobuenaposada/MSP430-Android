@@ -24,6 +24,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 
 	private Board board = null;	
 	private AnalogInput pot;
+	private AnalogInput pot2;
 	private DigitalOutput led1;
 	private DigitalOutput led2;
 	private DigitalInput button1;
@@ -36,10 +37,12 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	private TextView button2Text;
 	private TextView list;
 	private ProgressBar progressBar;
-	private OfflineTask ot;
+	private ProgressBar progressBar2;
+	//private OfflineTask ot;
 	private boton1 boton1Thread;
 	private boton2 boton2Thread;
 	private pot potThread;
+	private pot2 potThread2;
 	private Serial serial;
 	int i=0;
 	
@@ -55,6 +58,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		button2Text = (TextView)findViewById(R.id.textView5);
 		list = (TextView)findViewById(R.id.textView8);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+		progressBar2 = (ProgressBar) findViewById(R.id.ProgressBar01);
         		
 		try {
 			//board = new Board(this,"20:13:01:23:01:57"); 
@@ -70,10 +74,11 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
         button2 = board.createDigitalInput(DigitalInput.Pin._27);
 		led1 = board.createDigitalOutput(DigitalOutput.Pin._10);
 		led2 = board.createDigitalOutput(DigitalOutput.Pin._11);
-		pot = board.createAnalogInput(AnalogInput.Pin._67);
+		pot = board.createAnalogInput(AnalogInput.Pin._74);
+		pot2 = board.createAnalogInput(AnalogInput.Pin._67);
 		pwm = board.createPWM(PWM.Pin._42,1000,500);
 		//ot = board.createOfflineTask(26,'d',30000,30);
-		ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,1,3);
+		//ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,1,3);
 		serial = board.createSerial();
 		boton1Thread = new boton1();
 		boton1Thread.execute();
@@ -81,6 +86,9 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		boton2Thread.execute();
 		potThread = new pot();
 		potThread.execute();
+		
+		potThread2 = new pot2();
+		potThread2.execute();
 
 	}
 
@@ -100,19 +108,19 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	    	led1.write(false);
 	    }	    
 	    
-	    ArrayList<Integer> a = ot.read();
+	    /*ArrayList<Integer> a = ot.read();
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
 	    	b = b + a.get(i).toString();
 	    }
 	    b=b+"total"+a.size();
 	    list.setText(b);
-	    //serial.send("hola");
+	    //serial.send("hola");*/
 	}
 	
 	public void button2(View view) {
 	    // Is the toggle on?
-		ot.start();
+		//ot.start();
 	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);
@@ -149,11 +157,22 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 			}
 		});
 	}
+	
+	private void setPotText2(final String str) {
+		runOnUiThread(new Runnable() {
+		@Override
+		public void run() {
+			
+			progressBar2.setProgress(Integer.parseInt(str));
+			}
+		});
+	}
     
     public void onDestroy() {
     	boton1Thread.cancel(true);
     	boton2Thread.cancel(true);
-    	potThread.cancel(true);    	
+    	potThread.cancel(true);    
+    	potThread2.cancel(true);
     	board.destroy();
     	super.onDestroy();   	             
     }
@@ -228,6 +247,25 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 					break;
 				}
 				setPotText(String.valueOf(pot.read()));		
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return null;			
+		}				  
+	}
+	
+	private class pot2 extends AsyncTask<Void,Void,Void>{
+		@Override
+		protected Void doInBackground(Void... params) {
+			while (true){
+				if (isCancelled()){
+					break;
+				}
+				setPotText2(String.valueOf(pot2.read()));		
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {

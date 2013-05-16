@@ -1,1 +1,1 @@
-"./uart.obj" "./serial.obj" "./resources.obj" "./config.obj" -l"libc.a" "../lnk_msp430f5438a.cmd" 
+"./uart.obj" "./resources.obj" "./config.obj" -l"libc.a" "../lnk_msp430f5438a.cmd" 

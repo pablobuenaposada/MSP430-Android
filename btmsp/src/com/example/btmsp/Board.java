@@ -112,7 +112,7 @@ public class Board {
 		private int pin;
 		
 		public enum Pin{
-	    	_67(67);
+	    	_67(67),_74(74);
 	    	
 	    	private int pin;
 	    	

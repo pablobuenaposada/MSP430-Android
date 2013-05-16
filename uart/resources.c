@@ -49,9 +49,17 @@ void setupDigitalInput(int port, int pin){
 void setupAnalogInput(int port, int pin){
 	if(port == 6){
 		if (pin == 7){
-			ADC12CTL0 = ADC12ON + ADC12SHT0_2;
+			ADC12CTL0 = ADC12SHT0_3 + ADC12ON;
 			ADC12CTL1 = ADC12SHP;
-			ADC12MCTL0 = ADC12SREF_1 + ADC12INCH_7;
+			ADC12MCTL0 = ADC12SREF_0 + ADC12INCH_7;
+			ADC12CTL0 |= ADC12ENC;
+		}
+	}
+	else if (port == 7){
+		if(pin == 4){
+			ADC12CTL0 = ADC12SHT0_3 + ADC12ON;
+			ADC12CTL1 = ADC12SHP;
+			ADC12MCTL0 = ADC12SREF_0 + ADC12INCH_12;
 			ADC12CTL0 |= ADC12ENC;
 		}
 	}
@@ -117,16 +125,20 @@ int getDigitalInput(int port, int pin){
 }
 
 int getAnalogInput(int port, int pin){
+
+	setupAnalogInput(port,pin);
 	if(port == 6){
 		if (pin == 7){
-			int i;
-			int sum=0;
-			for(i=0; i<8; i++){
-				ADC12CTL0 |= ADC12SC;// Start conversions
-				while (!(ADC12IFG & 0x0001));
-				sum += (int)ADC12MEM0;
-			}
-			return sum >> 3;
+			ADC12CTL0 |= ADC12SC;// Start conversions
+			while (!(ADC12IFG & 0x0001));
+			return (int)ADC12MEM0;
+		}
+	}
+	else if(port == 7){
+		if(pin == 4){
+			ADC12CTL0 |= ADC12SC;// Start conversions
+			while (!(ADC12IFG & 0x0001));
+			return (int)ADC12MEM0;
 		}
 	}
 	return 0; //if any problem occurs

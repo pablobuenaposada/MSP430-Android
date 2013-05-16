@@ -9,7 +9,6 @@ CG_TOOL_ROOT := C:/ti/ccsv5/tools/compiler/msp430_4.1.2
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./uart.obj" \
-"./serial.obj" \
 "./resources.obj" \
 "./config.obj" \
 -l"libc.a" \
@@ -125,8 +124,8 @@ uart.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QUOTED) "uart.out"
-	-$(RM) "config.pp" "resources.pp" "serial.pp" "uart.pp" 
-	-$(RM) "config.obj" "resources.obj" "serial.obj" "uart.obj" 
+	-$(RM) "config.pp" "resources.pp" "uart.pp" 
+	-$(RM) "config.obj" "resources.obj" "uart.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
