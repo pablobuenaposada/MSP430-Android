@@ -11,6 +11,7 @@ resources.obj: C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/stdarg.h
 resources.obj: C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/linkage.h
 resources.obj: C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/_lock.h
 resources.obj: C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/string.h
+resources.obj: ../resources.h
 
 ../resources.c: 
 C:/ti/ccsv5/ccs_base/msp430/include/msp430.h: 
@@ -23,3 +24,4 @@ C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/stdarg.h:
 C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/linkage.h: 
 C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/_lock.h: 
 C:/ti/ccsv5/tools/compiler/msp430_4.1.2/include/string.h: 
+../resources.h: 

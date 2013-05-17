@@ -226,8 +226,7 @@ public class Board {
 				}
 				else if (units.equals(OfflineTask.Units.SECONDS)){
 					this.board.communicate('r',"SOTDI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
-				}
-				
+				}				
 			}
 			else if(mode.equals(OfflineTask.Mode.ANALOG)){
 				if (units.equals(OfflineTask.Units.MINUTES)){

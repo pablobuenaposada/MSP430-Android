@@ -10,7 +10,6 @@ ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./uart.obj" \
 "./resources.obj" \
-"./config.obj" \
 -l"libc.a" \
 "../lnk_msp430f5438a.cmd" \
 
@@ -124,8 +123,8 @@ uart.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QUOTED) "uart.out"
-	-$(RM) "config.pp" "resources.pp" "uart.pp" 
-	-$(RM) "config.obj" "resources.obj" "uart.obj" 
+	-$(RM) "resources.pp" "uart.pp" 
+	-$(RM) "resources.obj" "uart.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

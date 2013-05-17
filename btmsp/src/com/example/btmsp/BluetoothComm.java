@@ -16,6 +16,7 @@ public class BluetoothComm{
 	private InputStream BTin = null;
     private OutputStream BTout = null;   
     private BluetoothSocket BTsocket = null;
+    private final int TIMEOUT=1000;
 	
 	public BluetoothComm(String address) throws BluetoothDisabled, NoBluetoothSupported{		
 		BluetoothAdapter BluetoothAdapter = android.bluetooth.BluetoothAdapter.getDefaultAdapter();
@@ -52,7 +53,7 @@ public class BluetoothComm{
 		byte[] buffer = new byte[10];
 		int bytesRead;
 		String message="";
-		long timeoutTime = System.currentTimeMillis()+1000;
+		long timeoutTime = System.currentTimeMillis()+TIMEOUT;
 		
 		while (!message.contains("/")){			
 			try {

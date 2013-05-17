@@ -3,29 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#define MAIN_FILE
 #include "resources.h"
-#include "config.h"
-
-
-char command[30];
-int cmdPos=0;
-int cmdRdy=0;
 #define CMD_TIMEOUT 5000
-int cmdTime=0;
 
-void sendString(const char *string){
-	int index;
-    for(index=0; index < strlen(string); index++){
-    	UCA0TXBUF = string[index];
-    	while (!(UCA0IFG & UCTXIFG));  // USCI_A0 TX buffer ready?
-    }
-}
-
-int char2Int(char c){
-	int number = c - '0';
-	number = number + 0;
-	return number;
-}
 
 int main(void){
 
@@ -39,10 +20,9 @@ int main(void){
     __delay_cycles(100000);                 // Delay for Osc to stabilize
   }while (SFRIFG1&OFIFG);                   // Test oscillator fault flag
 
-
-
   initUart();
   setUart19200bauds();
+  cleanUart();
 
   __bis_SR_register(SCG0);       // Enter LPM3 w/ interrupts enabled
   _enable_interrupt();
@@ -50,11 +30,11 @@ int main(void){
 
   while(1){
 
-
 	  if (cmdRdy == 1){
 
 		  if(command[0] == 'N'){ //the device notify us that it established a new connection
-			  __no_operation();
+
+
 		  }
 		  else if(command[0] == 'S'){
 			  if(command[1] == 'D'){
@@ -210,8 +190,6 @@ int main(void){
 				  if(command[6] == 'T'){
 
 					  int i=7;
-
-
 					  while(command[i] != '/'){
 						  char tx[1];
 						  sprintf(tx, "%c",command[i]);
@@ -235,18 +213,12 @@ int main(void){
 			  }
 		  }
 
-		  memset(command, 0, 30); //clean command because it has been processed
-		  cmdTime = 0;
-		  cmdPos=0; //starting point of the command pointer
-		  cmdRdy=0; //no command ready to be processed
+		  cleanUart();
 		  sendString("/"); //end of output message
 	  }
 	  else{
 		  if(cmdTime > CMD_TIMEOUT){
-			  cmdTime = 0;
-			  memset(command, 0, 30); //clean command because it has been processed
-			  cmdPos=0; //starting point of the command pointer
-			  cmdRdy=0; //no command ready to be processed
+			  cleanUart();
 		  }
 		  else{
 			  cmdTime +=1;
@@ -264,22 +236,4 @@ int main(void){
 
 
 
-#pragma vector=USCI_A0_VECTOR
-__interrupt void USCI_A0_ISR(void){
 
-    switch(__even_in_range(UCA0IV,4)){
-		case 2:
-			cmdTime = 0;
-			if (UCA0RXBUF != '/'){
-				command[cmdPos]=UCA0RXBUF;
-				cmdPos++;
-			}
-			else{
-				command[cmdPos]=UCA0RXBUF;
-				cmdPos=0;
-				cmdRdy=1;
-			}
-			break;
-		default: break;
-    }
-}

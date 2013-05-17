@@ -1,7 +1,7 @@
 #include <msp430.h>
 #include <math.h>
 #include <string.h> //for the strlen() function
-
+#include "resources.h" //to get global variables
 
 /*variable definitions for offline task mode*/
 int offlineSize;
@@ -17,6 +17,20 @@ unsigned secondsElapsed=0;
 /*------------------------------------------*/
 char command3[30];
 int cmdPos3=0;
+
+void sendString(const char *string){
+	int index;
+    for(index=0; index < strlen(string); index++){
+    	UCA0TXBUF = string[index];
+    	while (!(UCA0IFG & UCTXIFG));  // USCI_A0 TX buffer ready?
+    }
+}
+
+int char2Int(char c){
+	int number = c - '0';
+	number = number + 0;
+	return number;
+}
 
 void setupTimerA0(int countLimit){
 	TA0CCR0 = countLimit;				// Count limit (16 bit)
@@ -317,6 +331,37 @@ int getA3ReceivedSize(){
 	return cmdPos3;
 }
 
+void initUart(){
+	P3SEL |= BIT4+BIT5;                       // P3.4,5 UART option select
+}
+
+void setUart19200bauds(){
+	UCA0CTL1 |= UCSWRST;                      // **Put state machine in reset**
+    UCA0CTL1 |= UCSSEL_2;                     // CLK = ACLK
+	UCA0BR0 = 52;                           // 32k/9600 - 3.41
+	UCA0BR1 = 0;                           //
+	UCA0MCTL =UCBRS0;                          // Modulation
+	UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
+	UCA0IE |= UCRXIE;                // Enable USCI_A0 TX/RX interrupt
+}
+
+void setUart9600bauds(){
+	UCA0CTL1 |= UCSWRST; // **Put state machine in reset**
+	UCA0CTL1 |= UCSSEL_1; // CLK = ACLK
+	UCA0BR0 = 0x03; // 32k/9600 - 3.41
+	UCA0BR1 = 0x00; //
+	UCA0MCTL = 0x06; // Modulation
+	UCA0CTL1 &= ~UCSWRST; // **Initialize USCI state machine**
+	UCA0IE |= UCRXIE; // Enable USCI_A0 TX/RX interrupt
+}
+
+void cleanUart(){
+	memset(command, 0, 30); //clean command because it has been processed
+	cmdTime = 0;
+	cmdPos=0; //starting point of the command pointer
+	cmdRdy=0; //no command ready to be processed
+}
+
 #pragma vector=USCI_A3_VECTOR
 __interrupt void USCI_A3_ISR(void){
     switch(__even_in_range(UCA3IV,4)){
@@ -333,4 +378,24 @@ __interrupt void USCI_A3_ISR(void){
 #pragma vector=TIMER0_A0_VECTOR
 	__interrupt void Timer0_A0 (void) {		// Timer0 A0 interrupt service routine
 		doOfflineTask();
+}
+
+#pragma vector=USCI_A0_VECTOR
+__interrupt void USCI_A0_ISR(void){
+
+    switch(__even_in_range(UCA0IV,4)){
+		case 2:
+			cmdTime = 0;
+			if (UCA0RXBUF != '/'){
+				command[cmdPos]=UCA0RXBUF;
+				cmdPos++;
+			}
+			else{
+				command[cmdPos]=UCA0RXBUF;
+				cmdPos=0;
+				cmdRdy=1;
+			}
+			break;
+		default: break;
+    }
 }
