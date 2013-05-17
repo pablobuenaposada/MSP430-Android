@@ -21,7 +21,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class MainActivity extends Activity implements OnSeekBarChangeListener {
+public class MainActivity extends Activity {
 
 	private Board board = null;	
 	private AnalogInput pot;
@@ -31,7 +31,9 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	private DigitalInput button1;
 	private DigitalInput button2;
 	private PWM pwm;	
+	private PWM pwm2;
 	private SeekBar bar;
+	private SeekBar bar2;
 	private TextView potText;
 	private TextView dutyText;
 	private TextView button1Text;
@@ -39,12 +41,12 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	private TextView list;
 	private ProgressBar progressBar;
 	private ProgressBar progressBar2;
-	private OfflineTask ot;
+	//private OfflineTask ot;
 	private boton1 boton1Thread;
 	private boton2 boton2Thread;
 	private pot potThread;
 	private pot2 potThread2;
-	private Serial serial;
+	private Serial serial;	
 	int i=0;
 	
 	@Override
@@ -52,7 +54,9 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		bar = (SeekBar)findViewById(R.id.seekBar1); // make seekbar object
-        bar.setOnSeekBarChangeListener(this); // set seekbar listener.
+        //bar.setOnSeekBarChangeListener(this); // set seekbar listener.
+        bar2 = (SeekBar)findViewById(R.id.SeekBar01); // make seekbar object
+        //bar2.setOnSeekBarChangeListener(this); // set seekbar listener.
 		potText = (TextView)findViewById(R.id.textView7);
 		dutyText = (TextView)findViewById(R.id.textView1);
 		button1Text = (TextView)findViewById(R.id.textView2);
@@ -78,10 +82,11 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		pot = board.createAnalogInput(AnalogInput.Pin._74);
 		pot2 = board.createAnalogInput(AnalogInput.Pin._67);
 		pwm = board.createPWM(PWM.Pin._42,1000,500);
-		
+		pwm2 = board.createPWM(PWM.Pin._43,1000,500);
+		initControls();
 		
 		//ot = board.createOfflineTask(26,'d',30000,30);
-		ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.MILLISECONDS,1000,3);
+		//ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.MILLISECONDS,1000,3);
 		serial = board.createSerial();
 		boton1Thread = new boton1();
 		boton1Thread.execute();
@@ -111,19 +116,19 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	    	led1.write(false);
 	    }	    
 	    
-	    ArrayList<Integer> a = ot.read();
+	    /*ArrayList<Integer> a = ot.read();
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
 	    	b = b + a.get(i).toString();
 	    }
 	    b=b+"total"+a.size();
 	    list.setText(b);
-	    //serial.send("hola");
+	    //serial.send("hola");*/
 	}
 	
 	public void button2(View view) {
 	    // Is the toggle on?
-		ot.start();
+		//ot.start();
 	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);
@@ -170,6 +175,8 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 			}
 		});
 	}
+	
+	
     
     public void onDestroy() {
     	boton1Thread.cancel(true);
@@ -179,20 +186,34 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     	board.destroy();
     	super.onDestroy();   	             
     }
+    
+    private void initControls() {
+    	bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+    		public void onStopTrackingTouch(SeekBar arg0) {
+    		}
+ 
+		    public void onStartTrackingTouch(SeekBar arg0) {
+		    }
+		    
+		    public void onProgressChanged(SeekBar arg0,int progress, boolean arg2) {
+		    	pwm.setDuty(progress);
+		    }
+    	});
+    	
+    	bar2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+    		public void onStopTrackingTouch(SeekBar arg0) {
+    		}
+ 
+		    public void onStartTrackingTouch(SeekBar arg0) {
+		    }
+		    
+		    public void onProgressChanged(SeekBar arg0,int progress, boolean arg2) {
+		    	pwm2.setDuty(progress);
+		    }
+    	});
+    }
 
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {		
-		dutyText.setText(String.valueOf(progress));
-		pwm.setDuty(progress);
-	}
-
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-	}
-
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {		
-	}
+	
 	
 	private class boton1 extends AsyncTask<Void,Void,Void>{
 		@Override

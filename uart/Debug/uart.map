@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.1.2                      
 ******************************************************************************
->> Linked Thu May 16 19:13:10 2013
+>> Linked Fri May 17 01:26:47 2013
 
 OUTPUT FILE NAME:   <uart.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00005c5c
@@ -19,7 +19,7 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   RAM                   00001c00   00004000  000004ae  00003b52  RWIX
-  FLASH                 00005c00   0000a380  00005904  00004a7c  RWIX
+  FLASH                 00005c00   0000a380  00005b6c  00004814  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -132,7 +132,7 @@ section   page    origin      length       input sections
                   00005c5c    0000001a     rts430x_lc_sd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
                   00005c76    0000000a     resources.obj (.text:_isr:Timer0_A0)
 
-.text      0    00005c80    00005640     
+.text      0    00005c80    000058a8     
                   00005c80    000008ce     uart.obj (.text:main)
                   0000654e    00000698     rts430x_lc_sd_eabi.lib : pow.obj (.text:pow)
                   00006be6    00000448                            : xlog.obj (.text:_Log)
@@ -141,129 +141,129 @@ section   page    origin      length       input sections
                   00007800    0000038a                            : xexp.obj (.text:_Exp)
                   00007b8a    000002da                            : frcmpyd.obj (.text:_frcmpyd)
                   00007e64    000002d8                            : addd.obj (.text:__mspabi_addd)
-                  0000813c    00000260                            : frcaddd.obj (.text:_frcaddd)
-                  0000839c    00000244                            : mpyd.obj (.text:__mspabi_mpyd)
-                  000085e0    00000218                            : divd.obj (.text:__mspabi_divd)
-                  000087f8    0000020c                            : _printfi.obj (.text:ecvt)
-                  00008a04    00000206                            : _printfi.obj (.text:_setfield)
-                  00008c0a    00000206                            : _printfi.obj (.text:fcvt)
-                  00008e10    000001f2                            : _printfi.obj (.text:_pproc_fge)
-                  00009002    000001d2                            : _printfi.obj (.text:_printfi)
-                  000091d4    000001a0                            : xdscale.obj (.text:_Dscale)
-                  00009374    000001a0                            : _printfi.obj (.text:_pconv_e)
-                  00009514    00000164                            : _printfi.obj (.text:_getarg_diouxp)
-                  00009678    00000134                            : cmpd.obj (.text:__mspabi_cmpd)
-                  000097ac    00000120                            : _printfi.obj (.text:_pproc_diouxp)
-                  000098cc    00000104                            : _printfi.obj (.text:_pconv_g)
-                  000099d0    000000fc                            : xdnorm.obj (.text:_Dnorm)
-                  00009acc    000000fa                            : _printfi.obj (.text:_ltostr)
-                  00009bc6    000000fa                            : _printfi.obj (.text:_pproc_fwp)
-                  00009cc0    000000d6                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
-                  00009d96    000000ca     resources.obj (.text:setupDigitalInput)
-                  00009e60    000000c6     rts430x_lc_sd_eabi.lib : xdint.obj (.text:_Dint)
-                  00009f26    000000be     resources.obj (.text:doOfflineTask)
-                  00009fe4    000000b4     rts430x_lc_sd_eabi.lib : renormd.obj (.text:_renormd)
-                  0000a098    000000a6                            : memory.obj (.text:malloc)
-                  0000a13e    000000a0                            : fltlid.obj (.text:__mspabi_fltlid)
-                  0000a1de    000000a0                            : _printfi.obj (.text:_pproc_str)
-                  0000a27e    00000088                            : _printfi.obj (.text:_mcpy)
-                  0000a306    00000086                            : _printfi.obj (.text:_div)
-                  0000a38c    00000086     resources.obj (.text:setupOfflineTask)
-                  0000a412    00000086     resources.obj (.text:setupPWM)
-                  0000a498    00000082     rts430x_lc_sd_eabi.lib : fixdul.obj (.text:__mspabi_fixdul)
-                  0000a51a    00000082                            : _printfi.obj (.text:_ecpy)
-                  0000a59c    00000080                            : fixdli.obj (.text:__mspabi_fixdli)
-                  0000a61c    0000007c                            : ltoa.obj (.text:ltoa)
-                  0000a698    0000007a                            : _printfi.obj (.text:_pconv_f)
-                  0000a712    00000076     resources.obj (.text:setDigitalOutput)
-                  0000a788    00000074     rts430x_lc_sd_eabi.lib : cvtfd.obj (.text:__mspabi_cvtfd)
-                  0000a7fc    00000072                            : xdunscal.obj (.text:_Dunscale)
-                  0000a86e    0000006e                            : autoinit.obj (.text:_auto_init)
-                  0000a8dc    0000006e     resources.obj (.text:setupDigitalOutput)
-                  0000a94a    00000058     rts430x_lc_sd_eabi.lib : mult64_f5hw.obj (.text:__mpyll)
-                  0000a9a2    00000058                            : div32u.obj (.text)
-                  0000a9fa    00000056                            : xdtest.obj (.text:_Dtest)
-                  0000aa50    00000054                            : atoi.obj (.text:atoi)
-                  0000aaa4    0000004a     resources.obj (.text:getDigitalInput)
-                  0000aaee    00000048     rts430x_lc_sd_eabi.lib : _printfi.obj (.text:_fcpy)
-                  0000ab36    00000046     resources.obj (.text:setupAnalogInput)
-                  0000ab7c    00000044     rts430x_lc_sd_eabi.lib : _printfi.obj (.text:_pproc_fflags)
-                  0000abc0    00000040                            : cpy_util.obj (.text:__memcpy_far)
-                  0000ac00    00000040                            : div32s.obj (.text)
-                  0000ac40    0000003e                            : llmath.obj (.text:__mspabi_sllll)
-                  0000ac7e    0000003e                            : llmath.obj (.text:__mspabi_srlll)
-                  0000acbc    0000003e     resources.obj (.text:getAnalogInput)
-                  0000acfa    0000003e     rts430x_lc_sd_eabi.lib : asr32.obj (.text:l_asr_const)
-                  0000ad38    0000003e                            : lsl32.obj (.text:l_lsl_const)
-                  0000ad76    0000003e                            : lsr32.obj (.text:l_lsr_const)
-                  0000adb4    0000003c                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
-                  0000adf0    00000038                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  0000ae28    00000038                            : memory.obj (.text:minit)
-                  0000ae60    00000038                            : sprintf.obj (.text:sprintf)
-                  0000ae98    00000038                            : strncpy.obj (.text:strncpy)
-                  0000aed0    00000036                            : signal.obj (.text:signal)
-                  0000af06    00000032                            : xferaise.obj (.text:_Feraise)
-                  0000af38    00000032                            : subd.obj (.text:__mspabi_subd)
-                  0000af6a    00000032                            : raise.obj (.text:raise)
-                  0000af9c    00000030                            : feraiseexcept.obj (.text:feraiseexcept)
-                  0000afcc    0000002a                            : negd.obj (.text:__mspabi_negd)
-                  0000aff6    0000002a     resources.obj (.text:setupUart9600A3)
-                  0000b020    00000028     rts430x_lc_sd_eabi.lib : fixdi.obj (.text:__mspabi_fixdi)
-                  0000b048    00000028                            : memccpy.obj (.text:memccpy)
-                  0000b070    00000026     uart.obj (.text:sendString)
-                  0000b096    00000026     resources.obj (.text:txA3)
-                  0000b0bc    00000022     rts430x_lc_sd_eabi.lib : mult32_f5hw.obj (.text)
-                  0000b0de    00000022     config.obj (.text:setUart19200bauds)
-                  0000b100    0000001e     resources.obj (.text:rxA3)
-                  0000b11e    0000001c     rts430x_lc_sd_eabi.lib : xdclass.obj (.text:_Dclass)
-                  0000b13a    00000018                            : sprintf.obj (.text:_outs)
-                  0000b152    00000016                            : div16u.obj (.text)
-                  0000b168    00000016                            : mult16_f5hw.obj (.text)
-                  0000b17e    00000014                            : memset.obj (.text:memset)
-                  0000b192    00000012                            : fixdu.obj (.text:__mspabi_fixdu)
-                  0000b1a4    00000012                            : sprintf.obj (.text:_outc)
-                  0000b1b6    00000012                            : memcpy.obj (.text:memcpy)
-                  0000b1c8    00000012     resources.obj (.text:setupTimerA0)
-                  0000b1da    00000012     rts430x_lc_sd_eabi.lib : strlen.obj (.text:strlen)
-                  0000b1ec    00000010                            : asr32.obj (.text:l_asr)
-                  0000b1fc    00000010                            : lsl32.obj (.text:l_lsl)
-                  0000b20c    00000010                            : lsr32.obj (.text:l_lsr)
-                  0000b21c    0000000e                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
-                  0000b22a    0000000e                            : log.obj (.text:log)
-                  0000b238    0000000c                            : fltid.obj (.text:__mspabi_fltid)
-                  0000b244    0000000c                            : toupper.obj (.text:toupper)
-                  0000b250    0000000a                            : abs.obj (.text:abs)
-                  0000b25a    0000000a                            : fs_neg.obj (.text)
-                  0000b264    0000000a                            : lsl16.obj (.text)
-                  0000b26e    0000000a                            : lsr16.obj (.text)
-                  0000b278    0000000a     resources.obj (.text:setPWMDuty)
-                  0000b282    0000000a     resources.obj (.text:setPWMPeriod)
-                  0000b28c    00000008     uart.obj (.text:char2Int)
-                  0000b294    00000008     config.obj (.text:initUart)
-                  0000b29c    00000008     resources.obj (.text:stopTimerA0)
-                  0000b2a4    00000006     resources.obj (.text:getA3ReceivedSize)
-                  0000b2aa    00000006     resources.obj (.text:getOfflineTask)
-                  0000b2b0    00000006     resources.obj (.text:getOfflineTaskSize)
-                  0000b2b6    00000004     rts430x_lc_sd_eabi.lib : pre_init.obj (.text:_system_pre_init)
-                  0000b2ba    00000004                            : exit.obj (.text:abort)
-                  0000b2be    00000002                            : _lock.obj (.text:_nop)
+                  0000813c    000002bc     resources.obj (.text:setupPWM)
+                  000083f8    00000260     rts430x_lc_sd_eabi.lib : frcaddd.obj (.text:_frcaddd)
+                  00008658    00000244                            : mpyd.obj (.text:__mspabi_mpyd)
+                  0000889c    00000218                            : divd.obj (.text:__mspabi_divd)
+                  00008ab4    0000020c                            : _printfi.obj (.text:ecvt)
+                  00008cc0    00000206                            : _printfi.obj (.text:_setfield)
+                  00008ec6    00000206                            : _printfi.obj (.text:fcvt)
+                  000090cc    000001f2                            : _printfi.obj (.text:_pproc_fge)
+                  000092be    000001d2                            : _printfi.obj (.text:_printfi)
+                  00009490    000001a0                            : xdscale.obj (.text:_Dscale)
+                  00009630    000001a0                            : _printfi.obj (.text:_pconv_e)
+                  000097d0    00000164                            : _printfi.obj (.text:_getarg_diouxp)
+                  00009934    00000134                            : cmpd.obj (.text:__mspabi_cmpd)
+                  00009a68    00000120                            : _printfi.obj (.text:_pproc_diouxp)
+                  00009b88    00000104                            : _printfi.obj (.text:_pconv_g)
+                  00009c8c    000000fc                            : xdnorm.obj (.text:_Dnorm)
+                  00009d88    000000fa                            : _printfi.obj (.text:_ltostr)
+                  00009e82    000000fa                            : _printfi.obj (.text:_pproc_fwp)
+                  00009f7c    000000d6                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  0000a052    000000ca     resources.obj (.text:setupDigitalInput)
+                  0000a11c    000000c6     rts430x_lc_sd_eabi.lib : xdint.obj (.text:_Dint)
+                  0000a1e2    000000be     resources.obj (.text:doOfflineTask)
+                  0000a2a0    000000b4     rts430x_lc_sd_eabi.lib : renormd.obj (.text:_renormd)
+                  0000a354    000000a6                            : memory.obj (.text:malloc)
+                  0000a3fa    000000a0                            : fltlid.obj (.text:__mspabi_fltlid)
+                  0000a49a    000000a0                            : _printfi.obj (.text:_pproc_str)
+                  0000a53a    00000088                            : _printfi.obj (.text:_mcpy)
+                  0000a5c2    00000086                            : _printfi.obj (.text:_div)
+                  0000a648    00000086     resources.obj (.text:setupOfflineTask)
+                  0000a6ce    00000082     rts430x_lc_sd_eabi.lib : fixdul.obj (.text:__mspabi_fixdul)
+                  0000a750    00000082                            : _printfi.obj (.text:_ecpy)
+                  0000a7d2    00000080                            : fixdli.obj (.text:__mspabi_fixdli)
+                  0000a852    0000007c                            : ltoa.obj (.text:ltoa)
+                  0000a8ce    0000007a                            : _printfi.obj (.text:_pconv_f)
+                  0000a948    00000076     resources.obj (.text:setDigitalOutput)
+                  0000a9be    00000074     rts430x_lc_sd_eabi.lib : cvtfd.obj (.text:__mspabi_cvtfd)
+                  0000aa32    00000072                            : xdunscal.obj (.text:_Dunscale)
+                  0000aaa4    0000006e                            : autoinit.obj (.text:_auto_init)
+                  0000ab12    0000006e     resources.obj (.text:setupDigitalOutput)
+                  0000ab80    00000058     rts430x_lc_sd_eabi.lib : mult64_f5hw.obj (.text:__mpyll)
+                  0000abd8    00000058                            : div32u.obj (.text)
+                  0000ac30    00000056                            : xdtest.obj (.text:_Dtest)
+                  0000ac86    00000054                            : atoi.obj (.text:atoi)
+                  0000acda    0000004a     resources.obj (.text:getDigitalInput)
+                  0000ad24    00000048     rts430x_lc_sd_eabi.lib : _printfi.obj (.text:_fcpy)
+                  0000ad6c    00000046     resources.obj (.text:setupAnalogInput)
+                  0000adb2    00000044     rts430x_lc_sd_eabi.lib : _printfi.obj (.text:_pproc_fflags)
+                  0000adf6    00000040                            : cpy_util.obj (.text:__memcpy_far)
+                  0000ae36    00000040                            : div32s.obj (.text)
+                  0000ae76    0000003e                            : llmath.obj (.text:__mspabi_sllll)
+                  0000aeb4    0000003e                            : llmath.obj (.text:__mspabi_srlll)
+                  0000aef2    0000003e     resources.obj (.text:getAnalogInput)
+                  0000af30    0000003e     rts430x_lc_sd_eabi.lib : asr32.obj (.text:l_asr_const)
+                  0000af6e    0000003e                            : lsl32.obj (.text:l_lsl_const)
+                  0000afac    0000003e                            : lsr32.obj (.text:l_lsr_const)
+                  0000afea    0000003c                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  0000b026    0000003c     resources.obj (.text:setPWMDuty)
+                  0000b062    00000038     rts430x_lc_sd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  0000b09a    00000038                            : memory.obj (.text:minit)
+                  0000b0d2    00000038                            : sprintf.obj (.text:sprintf)
+                  0000b10a    00000038                            : strncpy.obj (.text:strncpy)
+                  0000b142    00000036                            : signal.obj (.text:signal)
+                  0000b178    00000032                            : xferaise.obj (.text:_Feraise)
+                  0000b1aa    00000032                            : subd.obj (.text:__mspabi_subd)
+                  0000b1dc    00000032                            : raise.obj (.text:raise)
+                  0000b20e    00000030                            : feraiseexcept.obj (.text:feraiseexcept)
+                  0000b23e    0000002a                            : negd.obj (.text:__mspabi_negd)
+                  0000b268    0000002a     resources.obj (.text:setupUart9600A3)
+                  0000b292    00000028     rts430x_lc_sd_eabi.lib : fixdi.obj (.text:__mspabi_fixdi)
+                  0000b2ba    00000028                            : memccpy.obj (.text:memccpy)
+                  0000b2e2    00000026     uart.obj (.text:sendString)
+                  0000b308    00000026     resources.obj (.text:txA3)
+                  0000b32e    00000022     rts430x_lc_sd_eabi.lib : mult32_f5hw.obj (.text)
+                  0000b350    00000022     config.obj (.text:setUart19200bauds)
+                  0000b372    0000001e     resources.obj (.text:rxA3)
+                  0000b390    0000001c     rts430x_lc_sd_eabi.lib : xdclass.obj (.text:_Dclass)
+                  0000b3ac    00000018                            : sprintf.obj (.text:_outs)
+                  0000b3c4    00000016                            : div16u.obj (.text)
+                  0000b3da    00000016                            : mult16_f5hw.obj (.text)
+                  0000b3f0    00000014                            : memset.obj (.text:memset)
+                  0000b404    00000012                            : fixdu.obj (.text:__mspabi_fixdu)
+                  0000b416    00000012                            : sprintf.obj (.text:_outc)
+                  0000b428    00000012                            : memcpy.obj (.text:memcpy)
+                  0000b43a    00000012     resources.obj (.text:setupTimerA0)
+                  0000b44c    00000012     rts430x_lc_sd_eabi.lib : strlen.obj (.text:strlen)
+                  0000b45e    00000010                            : asr32.obj (.text:l_asr)
+                  0000b46e    00000010                            : lsl32.obj (.text:l_lsl)
+                  0000b47e    00000010                            : lsr32.obj (.text:l_lsr)
+                  0000b48e    0000000e                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  0000b49c    0000000e                            : log.obj (.text:log)
+                  0000b4aa    0000000c                            : fltid.obj (.text:__mspabi_fltid)
+                  0000b4b6    0000000c                            : toupper.obj (.text:toupper)
+                  0000b4c2    0000000a                            : abs.obj (.text:abs)
+                  0000b4cc    0000000a                            : fs_neg.obj (.text)
+                  0000b4d6    0000000a                            : lsl16.obj (.text)
+                  0000b4e0    0000000a                            : lsr16.obj (.text)
+                  0000b4ea    0000000a     resources.obj (.text:setPWMPeriod)
+                  0000b4f4    00000008     uart.obj (.text:char2Int)
+                  0000b4fc    00000008     config.obj (.text:initUart)
+                  0000b504    00000008     resources.obj (.text:stopTimerA0)
+                  0000b50c    00000006     resources.obj (.text:getA3ReceivedSize)
+                  0000b512    00000006     resources.obj (.text:getOfflineTask)
+                  0000b518    00000006     resources.obj (.text:getOfflineTaskSize)
+                  0000b51e    00000004     rts430x_lc_sd_eabi.lib : pre_init.obj (.text:_system_pre_init)
+                  0000b522    00000004                            : exit.obj (.text:abort)
+                  0000b526    00000002                            : _lock.obj (.text:_nop)
 
-.const     0    0000b2c0    000001be     
-                  0000b2c0    00000101     rts430x_lc_sd_eabi.lib : ctype.obj (.const:.string:_ctypes_)
-                  0000b3c1    00000001     --HOLE-- [fill = 0]
-                  0000b3c2    00000038                            : xlog.obj (.const:p)
-                  0000b3fa    00000024                            : _printfi.obj (.const:.string)
-                  0000b41e    00000020                            : xdint.obj (.const:mask$1)
-                  0000b43e    00000018                            : xexp.obj (.const:s)
-                  0000b456    00000010     uart.obj (.const:.string)
-                  0000b466    00000010     rts430x_lc_sd_eabi.lib : xexp.obj (.const:c)
-                  0000b476    00000008                            : xdint.obj (.const:sub$2)
+.const     0    0000b528    000001be     
+                  0000b528    00000101     rts430x_lc_sd_eabi.lib : ctype.obj (.const:.string:_ctypes_)
+                  0000b629    00000001     --HOLE-- [fill = 0]
+                  0000b62a    00000038                            : xlog.obj (.const:p)
+                  0000b662    00000024                            : _printfi.obj (.const:.string)
+                  0000b686    00000020                            : xdint.obj (.const:mask$1)
+                  0000b6a6    00000018                            : xexp.obj (.const:s)
+                  0000b6be    00000010     uart.obj (.const:.string)
+                  0000b6ce    00000010     rts430x_lc_sd_eabi.lib : xexp.obj (.const:c)
+                  0000b6de    00000008                            : xdint.obj (.const:sub$2)
 
-.cinit     0    0000b47e    00000086     
-                  0000b47e    00000064     (.cinit..data.load) [load image, compression = rle]
-                  0000b4e2    0000000c     (__TI_handler_table)
-                  0000b4ee    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  0000b4f4    00000010     (__TI_cinit_table)
+.cinit     0    0000b6e6    00000086     
+                  0000b6e6    00000064     (.cinit..data.load) [load image, compression = rle]
+                  0000b74a    0000000c     (__TI_handler_table)
+                  0000b756    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  0000b75c    00000010     (__TI_cinit_table)
 
 USCI_A3    0    0000ffd8    00000002     
                   0000ffd8    00000002     resources.obj (.int44)
@@ -281,14 +281,14 @@ USCI_A0    0    0000fff2    00000002
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 0000b4f4 records: 2, size/record: 8, table size: 16
-	.data: load addr=0000b47e, load size=00000064 bytes, run addr=00001c00, run size=000001ba bytes, compression=rle
-	.bss: load addr=0000b4ee, load size=00000006 bytes, run addr=00001efc, run size=00000114 bytes, compression=zero_init
+__TI_cinit_table @ 0000b75c records: 2, size/record: 8, table size: 16
+	.data: load addr=0000b6e6, load size=00000064 bytes, run addr=00001c00, run size=000001ba bytes, compression=rle
+	.bss: load addr=0000b756, load size=00000006 bytes, run addr=00001efc, run size=00000114 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0000b4e2 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 0000b74a records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_rle24
 	index: 2, handler: __TI_decompress_none
@@ -380,7 +380,7 @@ address    name
 00000732   ADC12MEM9
 00000733   ADC12MEM9_H
 00000732   ADC12MEM9_L
-0000b2ba   C$$EXIT
+0000b522   C$$EXIT
 00000150   CRCDI
 00000152   CRCDIRB
 00000153   CRCDIRB_H
@@ -976,13 +976,13 @@ address    name
 0000015c   WDTCTL
 0000015d   WDTCTL_H
 0000015c   WDTCTL_L
-0000b11e   _Dclass
+0000b390   _Dclass
 00001cb0   _Denorm
-00009e60   _Dint
-000099d0   _Dnorm
-000091d4   _Dscale
-0000a9fa   _Dtest
-0000a7fc   _Dunscale
+0000a11c   _Dint
+00009c8c   _Dnorm
+00009490   _Dscale
+0000ac30   _Dtest
+0000aa32   _Dunscale
 00001cc0   _Eps
 00001db6   _Errno
 00007800   _Exp
@@ -995,7 +995,7 @@ address    name
 00001d90   _FXbig
 00001d94   _FZero
 00001da8   _Fenv
-0000af06   _Feraise
+0000b178   _Feraise
 00001cd0   _Hugeval
 00001ce0   _Inf
 00006be6   _Log
@@ -1008,139 +1008,139 @@ address    name
 00005c00   __STACK_END
 000000a0   __STACK_SIZE
 00000140   __SYSMEM_SIZE
-0000b4f4   __TI_CINIT_Base
-0000b504   __TI_CINIT_Limit
-0000b4e2   __TI_Handler_Table_Base
-0000b4ee   __TI_Handler_Table_Limit
+0000b75c   __TI_CINIT_Base
+0000b76c   __TI_CINIT_Limit
+0000b74a   __TI_Handler_Table_Base
+0000b756   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 00000001   __TI_args_main
-0000adb4   __TI_decompress_none
-0000b21c   __TI_decompress_rle24
+0000afea   __TI_decompress_none
+0000b48e   __TI_decompress_rle24
 00000001   __TI_exit
-0000adf0   __TI_zero_init
+0000b062   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-0000abc0   __memcpy_far
+0000adf6   __memcpy_far
 00007e64   __mspabi_addd
-00009678   __mspabi_cmpd
-0000a788   __mspabi_cvtfd
-000085e0   __mspabi_divd
-0000ac00   __mspabi_divli
-0000b152   __mspabi_divu
-0000a9a2   __mspabi_divul
+00009934   __mspabi_cmpd
+0000a9be   __mspabi_cvtfd
+0000889c   __mspabi_divd
+0000ae36   __mspabi_divli
+0000b3c4   __mspabi_divu
+0000abd8   __mspabi_divul
 00007472   __mspabi_divull
-0000b020   __mspabi_fixdi
-0000a59c   __mspabi_fixdli
-0000b192   __mspabi_fixdu
-0000a498   __mspabi_fixdul
-0000b238   __mspabi_fltid
-0000a13e   __mspabi_fltlid
-0000839c   __mspabi_mpyd
-0000b168   __mspabi_mpyi_f5hw
-0000b0bc   __mspabi_mpyl_f5hw
-0000a94a   __mspabi_mpyll_f5hw
-0000afcc   __mspabi_negd
-0000b25a   __mspabi_negf
-0000ac00   __mspabi_remli
-0000b152   __mspabi_remu
-0000a9a2   __mspabi_remul
-0000b264   __mspabi_slli
-0000b1fc   __mspabi_slll
-0000ad70   __mspabi_slll_1
-0000ad4c   __mspabi_slll_10
-0000ad48   __mspabi_slll_11
-0000ad44   __mspabi_slll_12
-0000ad40   __mspabi_slll_13
-0000ad3c   __mspabi_slll_14
-0000ad38   __mspabi_slll_15
-0000ad6c   __mspabi_slll_2
-0000ad68   __mspabi_slll_3
-0000ad64   __mspabi_slll_4
-0000ad60   __mspabi_slll_5
-0000ad5c   __mspabi_slll_6
-0000ad58   __mspabi_slll_7
-0000ad54   __mspabi_slll_8
-0000ad50   __mspabi_slll_9
-0000ac40   __mspabi_sllll
-0000b1ec   __mspabi_sral
-0000ad32   __mspabi_sral_1
-0000ad0e   __mspabi_sral_10
-0000ad0a   __mspabi_sral_11
-0000ad06   __mspabi_sral_12
-0000ad02   __mspabi_sral_13
-0000acfe   __mspabi_sral_14
-0000acfa   __mspabi_sral_15
-0000ad2e   __mspabi_sral_2
-0000ad2a   __mspabi_sral_3
-0000ad26   __mspabi_sral_4
-0000ad22   __mspabi_sral_5
-0000ad1e   __mspabi_sral_6
-0000ad1a   __mspabi_sral_7
-0000ad16   __mspabi_sral_8
-0000ad12   __mspabi_sral_9
-0000b26e   __mspabi_srli
-0000b20c   __mspabi_srll
-0000adae   __mspabi_srll_1
-0000ad8a   __mspabi_srll_10
-0000ad86   __mspabi_srll_11
-0000ad82   __mspabi_srll_12
-0000ad7e   __mspabi_srll_13
-0000ad7a   __mspabi_srll_14
-0000ad76   __mspabi_srll_15
-0000adaa   __mspabi_srll_2
-0000ada6   __mspabi_srll_3
-0000ada2   __mspabi_srll_4
-0000ad9e   __mspabi_srll_5
-0000ad9a   __mspabi_srll_6
-0000ad96   __mspabi_srll_7
-0000ad92   __mspabi_srll_8
-0000ad8e   __mspabi_srll_9
-0000ac7e   __mspabi_srlll
-0000af38   __mspabi_subd
-0000a86e   _auto_init
+0000b292   __mspabi_fixdi
+0000a7d2   __mspabi_fixdli
+0000b404   __mspabi_fixdu
+0000a6ce   __mspabi_fixdul
+0000b4aa   __mspabi_fltid
+0000a3fa   __mspabi_fltlid
+00008658   __mspabi_mpyd
+0000b3da   __mspabi_mpyi_f5hw
+0000b32e   __mspabi_mpyl_f5hw
+0000ab80   __mspabi_mpyll_f5hw
+0000b23e   __mspabi_negd
+0000b4cc   __mspabi_negf
+0000ae36   __mspabi_remli
+0000b3c4   __mspabi_remu
+0000abd8   __mspabi_remul
+0000b4d6   __mspabi_slli
+0000b46e   __mspabi_slll
+0000afa6   __mspabi_slll_1
+0000af82   __mspabi_slll_10
+0000af7e   __mspabi_slll_11
+0000af7a   __mspabi_slll_12
+0000af76   __mspabi_slll_13
+0000af72   __mspabi_slll_14
+0000af6e   __mspabi_slll_15
+0000afa2   __mspabi_slll_2
+0000af9e   __mspabi_slll_3
+0000af9a   __mspabi_slll_4
+0000af96   __mspabi_slll_5
+0000af92   __mspabi_slll_6
+0000af8e   __mspabi_slll_7
+0000af8a   __mspabi_slll_8
+0000af86   __mspabi_slll_9
+0000ae76   __mspabi_sllll
+0000b45e   __mspabi_sral
+0000af68   __mspabi_sral_1
+0000af44   __mspabi_sral_10
+0000af40   __mspabi_sral_11
+0000af3c   __mspabi_sral_12
+0000af38   __mspabi_sral_13
+0000af34   __mspabi_sral_14
+0000af30   __mspabi_sral_15
+0000af64   __mspabi_sral_2
+0000af60   __mspabi_sral_3
+0000af5c   __mspabi_sral_4
+0000af58   __mspabi_sral_5
+0000af54   __mspabi_sral_6
+0000af50   __mspabi_sral_7
+0000af4c   __mspabi_sral_8
+0000af48   __mspabi_sral_9
+0000b4e0   __mspabi_srli
+0000b47e   __mspabi_srll
+0000afe4   __mspabi_srll_1
+0000afc0   __mspabi_srll_10
+0000afbc   __mspabi_srll_11
+0000afb8   __mspabi_srll_12
+0000afb4   __mspabi_srll_13
+0000afb0   __mspabi_srll_14
+0000afac   __mspabi_srll_15
+0000afe0   __mspabi_srll_2
+0000afdc   __mspabi_srll_3
+0000afd8   __mspabi_srll_4
+0000afd4   __mspabi_srll_5
+0000afd0   __mspabi_srll_6
+0000afcc   __mspabi_srll_7
+0000afc8   __mspabi_srll_8
+0000afc4   __mspabi_srll_9
+0000aeb4   __mspabi_srlll
+0000b1aa   __mspabi_subd
+0000aaa4   _auto_init
 00005c5c   _c_int00
 00005c5c   _c_int00_noexit
-0000b2c0   _ctypes_
-0000813c   _frcaddd
+0000b528   _ctypes_
+000083f8   _frcaddd
 0000702e   _frcdivd
 00007b8a   _frcmpyd
 00001da0   _lock
-0000b2be   _nop
-00009002   _printfi
-00009fe4   _renormd
+0000b526   _nop
+000092be   _printfi
+0000a2a0   _renormd
 0000fffe   _reset_vector
 00005b60   _stack
 00001dbc   _sys_memory
-0000b2b6   _system_pre_init
+0000b51e   _system_pre_init
 00001da4   _unlock
-0000b2ba   abort
-0000b250   abs
-0000aa50   atoi
+0000b522   abort
+0000b4c2   abs
+0000ac86   atoi
 ffffffff   binit
-0000b28c   char2Int
+0000b4f4   char2Int
 00001db0   cmdPos
 00001d9e   cmdPos3
 00001db2   cmdRdy
 00001db4   cmdTime
 00001fec   command
 00001fce   command3
-00009f26   doOfflineTask
-0000af9c   feraiseexcept
-0000b2a4   getA3ReceivedSize
-0000acbc   getAnalogInput
-0000aaa4   getDigitalInput
-0000b2aa   getOfflineTask
-0000b2b0   getOfflineTaskSize
-0000b294   initUart
-0000b22a   log
-0000a61c   ltoa
+0000a1e2   doOfflineTask
+0000b20e   feraiseexcept
+0000b50c   getA3ReceivedSize
+0000aef2   getAnalogInput
+0000acda   getDigitalInput
+0000b512   getOfflineTask
+0000b518   getOfflineTaskSize
+0000b4fc   initUart
+0000b49c   log
+0000a852   ltoa
 00005c80   main
-0000a098   malloc
-0000b048   memccpy
-0000b1b6   memcpy
-0000b17e   memset
-0000ae28   minit
+0000a354   malloc
+0000b2ba   memccpy
+0000b428   memcpy
+0000b3f0   memset
+0000b09a   minit
 00001efe   offlineArray
 00001fcc   offlineCountLimit
 00001fca   offlineMode
@@ -1150,28 +1150,28 @@ ffffffff   binit
 00001efc   offlineSize
 00001fcb   offlineUnits
 0000654e   pow
-0000af6a   raise
-0000b100   rxA3
+0000b1dc   raise
+0000b372   rxA3
 00001d9c   secondsElapsed
-0000b070   sendString
-0000a712   setDigitalOutput
-0000b278   setPWMDuty
-0000b282   setPWMPeriod
-0000b0de   setUart19200bauds
-0000ab36   setupAnalogInput
-00009d96   setupDigitalInput
-0000a8dc   setupDigitalOutput
-0000a38c   setupOfflineTask
-0000a412   setupPWM
-0000b1c8   setupTimerA0
-0000aff6   setupUart9600A3
-0000aed0   signal
-0000ae60   sprintf
-0000b29c   stopTimerA0
-0000b1da   strlen
-0000ae98   strncpy
-0000b244   toupper
-0000b096   txA3
+0000b2e2   sendString
+0000a948   setDigitalOutput
+0000b026   setPWMDuty
+0000b4ea   setPWMPeriod
+0000b350   setUart19200bauds
+0000ad6c   setupAnalogInput
+0000a052   setupDigitalInput
+0000ab12   setupDigitalOutput
+0000a648   setupOfflineTask
+0000813c   setupPWM
+0000b43a   setupTimerA0
+0000b268   setupUart9600A3
+0000b142   signal
+0000b0d2   sprintf
+0000b504   stopTimerA0
+0000b44c   strlen
+0000b10a   strncpy
+0000b4b6   toupper
+0000b308   txA3
 00001d9a   unitsElapsed
 
 
@@ -1911,143 +1911,143 @@ address    name
 00007800   _Exp
 00007b8a   _frcmpyd
 00007e64   __mspabi_addd
-0000813c   _frcaddd
-0000839c   __mspabi_mpyd
-000085e0   __mspabi_divd
-00009002   _printfi
-000091d4   _Dscale
-00009678   __mspabi_cmpd
-000099d0   _Dnorm
-00009d96   setupDigitalInput
-00009e60   _Dint
-00009f26   doOfflineTask
-00009fe4   _renormd
-0000a098   malloc
-0000a13e   __mspabi_fltlid
-0000a38c   setupOfflineTask
-0000a412   setupPWM
-0000a498   __mspabi_fixdul
-0000a59c   __mspabi_fixdli
-0000a61c   ltoa
-0000a712   setDigitalOutput
-0000a788   __mspabi_cvtfd
-0000a7fc   _Dunscale
-0000a86e   _auto_init
-0000a8dc   setupDigitalOutput
-0000a94a   __mspabi_mpyll_f5hw
-0000a9a2   __mspabi_divul
-0000a9a2   __mspabi_remul
-0000a9fa   _Dtest
-0000aa50   atoi
-0000aaa4   getDigitalInput
-0000ab36   setupAnalogInput
-0000abc0   __memcpy_far
-0000ac00   __mspabi_divli
-0000ac00   __mspabi_remli
-0000ac40   __mspabi_sllll
-0000ac7e   __mspabi_srlll
-0000acbc   getAnalogInput
-0000acfa   __mspabi_sral_15
-0000acfe   __mspabi_sral_14
-0000ad02   __mspabi_sral_13
-0000ad06   __mspabi_sral_12
-0000ad0a   __mspabi_sral_11
-0000ad0e   __mspabi_sral_10
-0000ad12   __mspabi_sral_9
-0000ad16   __mspabi_sral_8
-0000ad1a   __mspabi_sral_7
-0000ad1e   __mspabi_sral_6
-0000ad22   __mspabi_sral_5
-0000ad26   __mspabi_sral_4
-0000ad2a   __mspabi_sral_3
-0000ad2e   __mspabi_sral_2
-0000ad32   __mspabi_sral_1
-0000ad38   __mspabi_slll_15
-0000ad3c   __mspabi_slll_14
-0000ad40   __mspabi_slll_13
-0000ad44   __mspabi_slll_12
-0000ad48   __mspabi_slll_11
-0000ad4c   __mspabi_slll_10
-0000ad50   __mspabi_slll_9
-0000ad54   __mspabi_slll_8
-0000ad58   __mspabi_slll_7
-0000ad5c   __mspabi_slll_6
-0000ad60   __mspabi_slll_5
-0000ad64   __mspabi_slll_4
-0000ad68   __mspabi_slll_3
-0000ad6c   __mspabi_slll_2
-0000ad70   __mspabi_slll_1
-0000ad76   __mspabi_srll_15
-0000ad7a   __mspabi_srll_14
-0000ad7e   __mspabi_srll_13
-0000ad82   __mspabi_srll_12
-0000ad86   __mspabi_srll_11
-0000ad8a   __mspabi_srll_10
-0000ad8e   __mspabi_srll_9
-0000ad92   __mspabi_srll_8
-0000ad96   __mspabi_srll_7
-0000ad9a   __mspabi_srll_6
-0000ad9e   __mspabi_srll_5
-0000ada2   __mspabi_srll_4
-0000ada6   __mspabi_srll_3
-0000adaa   __mspabi_srll_2
-0000adae   __mspabi_srll_1
-0000adb4   __TI_decompress_none
-0000adf0   __TI_zero_init
-0000ae28   minit
-0000ae60   sprintf
-0000ae98   strncpy
-0000aed0   signal
-0000af06   _Feraise
-0000af38   __mspabi_subd
-0000af6a   raise
-0000af9c   feraiseexcept
-0000afcc   __mspabi_negd
-0000aff6   setupUart9600A3
-0000b020   __mspabi_fixdi
-0000b048   memccpy
-0000b070   sendString
-0000b096   txA3
-0000b0bc   __mspabi_mpyl_f5hw
-0000b0de   setUart19200bauds
-0000b100   rxA3
-0000b11e   _Dclass
-0000b152   __mspabi_divu
-0000b152   __mspabi_remu
-0000b168   __mspabi_mpyi_f5hw
-0000b17e   memset
-0000b192   __mspabi_fixdu
-0000b1b6   memcpy
-0000b1c8   setupTimerA0
-0000b1da   strlen
-0000b1ec   __mspabi_sral
-0000b1fc   __mspabi_slll
-0000b20c   __mspabi_srll
-0000b21c   __TI_decompress_rle24
-0000b22a   log
-0000b238   __mspabi_fltid
-0000b244   toupper
-0000b250   abs
-0000b25a   __mspabi_negf
-0000b264   __mspabi_slli
-0000b26e   __mspabi_srli
-0000b278   setPWMDuty
-0000b282   setPWMPeriod
-0000b28c   char2Int
-0000b294   initUart
-0000b29c   stopTimerA0
-0000b2a4   getA3ReceivedSize
-0000b2aa   getOfflineTask
-0000b2b0   getOfflineTaskSize
-0000b2b6   _system_pre_init
-0000b2ba   C$$EXIT
-0000b2ba   abort
-0000b2be   _nop
-0000b2c0   _ctypes_
-0000b4e2   __TI_Handler_Table_Base
-0000b4ee   __TI_Handler_Table_Limit
-0000b4f4   __TI_CINIT_Base
-0000b504   __TI_CINIT_Limit
+0000813c   setupPWM
+000083f8   _frcaddd
+00008658   __mspabi_mpyd
+0000889c   __mspabi_divd
+000092be   _printfi
+00009490   _Dscale
+00009934   __mspabi_cmpd
+00009c8c   _Dnorm
+0000a052   setupDigitalInput
+0000a11c   _Dint
+0000a1e2   doOfflineTask
+0000a2a0   _renormd
+0000a354   malloc
+0000a3fa   __mspabi_fltlid
+0000a648   setupOfflineTask
+0000a6ce   __mspabi_fixdul
+0000a7d2   __mspabi_fixdli
+0000a852   ltoa
+0000a948   setDigitalOutput
+0000a9be   __mspabi_cvtfd
+0000aa32   _Dunscale
+0000aaa4   _auto_init
+0000ab12   setupDigitalOutput
+0000ab80   __mspabi_mpyll_f5hw
+0000abd8   __mspabi_divul
+0000abd8   __mspabi_remul
+0000ac30   _Dtest
+0000ac86   atoi
+0000acda   getDigitalInput
+0000ad6c   setupAnalogInput
+0000adf6   __memcpy_far
+0000ae36   __mspabi_divli
+0000ae36   __mspabi_remli
+0000ae76   __mspabi_sllll
+0000aeb4   __mspabi_srlll
+0000aef2   getAnalogInput
+0000af30   __mspabi_sral_15
+0000af34   __mspabi_sral_14
+0000af38   __mspabi_sral_13
+0000af3c   __mspabi_sral_12
+0000af40   __mspabi_sral_11
+0000af44   __mspabi_sral_10
+0000af48   __mspabi_sral_9
+0000af4c   __mspabi_sral_8
+0000af50   __mspabi_sral_7
+0000af54   __mspabi_sral_6
+0000af58   __mspabi_sral_5
+0000af5c   __mspabi_sral_4
+0000af60   __mspabi_sral_3
+0000af64   __mspabi_sral_2
+0000af68   __mspabi_sral_1
+0000af6e   __mspabi_slll_15
+0000af72   __mspabi_slll_14
+0000af76   __mspabi_slll_13
+0000af7a   __mspabi_slll_12
+0000af7e   __mspabi_slll_11
+0000af82   __mspabi_slll_10
+0000af86   __mspabi_slll_9
+0000af8a   __mspabi_slll_8
+0000af8e   __mspabi_slll_7
+0000af92   __mspabi_slll_6
+0000af96   __mspabi_slll_5
+0000af9a   __mspabi_slll_4
+0000af9e   __mspabi_slll_3
+0000afa2   __mspabi_slll_2
+0000afa6   __mspabi_slll_1
+0000afac   __mspabi_srll_15
+0000afb0   __mspabi_srll_14
+0000afb4   __mspabi_srll_13
+0000afb8   __mspabi_srll_12
+0000afbc   __mspabi_srll_11
+0000afc0   __mspabi_srll_10
+0000afc4   __mspabi_srll_9
+0000afc8   __mspabi_srll_8
+0000afcc   __mspabi_srll_7
+0000afd0   __mspabi_srll_6
+0000afd4   __mspabi_srll_5
+0000afd8   __mspabi_srll_4
+0000afdc   __mspabi_srll_3
+0000afe0   __mspabi_srll_2
+0000afe4   __mspabi_srll_1
+0000afea   __TI_decompress_none
+0000b026   setPWMDuty
+0000b062   __TI_zero_init
+0000b09a   minit
+0000b0d2   sprintf
+0000b10a   strncpy
+0000b142   signal
+0000b178   _Feraise
+0000b1aa   __mspabi_subd
+0000b1dc   raise
+0000b20e   feraiseexcept
+0000b23e   __mspabi_negd
+0000b268   setupUart9600A3
+0000b292   __mspabi_fixdi
+0000b2ba   memccpy
+0000b2e2   sendString
+0000b308   txA3
+0000b32e   __mspabi_mpyl_f5hw
+0000b350   setUart19200bauds
+0000b372   rxA3
+0000b390   _Dclass
+0000b3c4   __mspabi_divu
+0000b3c4   __mspabi_remu
+0000b3da   __mspabi_mpyi_f5hw
+0000b3f0   memset
+0000b404   __mspabi_fixdu
+0000b428   memcpy
+0000b43a   setupTimerA0
+0000b44c   strlen
+0000b45e   __mspabi_sral
+0000b46e   __mspabi_slll
+0000b47e   __mspabi_srll
+0000b48e   __TI_decompress_rle24
+0000b49c   log
+0000b4aa   __mspabi_fltid
+0000b4b6   toupper
+0000b4c2   abs
+0000b4cc   __mspabi_negf
+0000b4d6   __mspabi_slli
+0000b4e0   __mspabi_srli
+0000b4ea   setPWMPeriod
+0000b4f4   char2Int
+0000b4fc   initUart
+0000b504   stopTimerA0
+0000b50c   getA3ReceivedSize
+0000b512   getOfflineTask
+0000b518   getOfflineTaskSize
+0000b51e   _system_pre_init
+0000b522   C$$EXIT
+0000b522   abort
+0000b526   _nop
+0000b528   _ctypes_
+0000b74a   __TI_Handler_Table_Base
+0000b756   __TI_Handler_Table_Limit
+0000b75c   __TI_CINIT_Base
+0000b76c   __TI_CINIT_Limit
 0000fffe   _reset_vector
 ffffffff   __binit__
 ffffffff   __c_args__

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Board {
 	
 	private BluetoothComm communication = null;	
-	
+
 	public Board(String BTaddress) throws BluetoothDisabled, NoBluetoothSupported{		
 		communication = new BluetoothComm(BTaddress);
 		communicate('r',"N/"); //notify that we are a new connection
@@ -144,10 +144,11 @@ public class Board {
 	
 	public static class PWM{
 		private Board board;
-		private int pin;		
+		private int pin;	
+		
 		
 		public enum Pin{
-	    	_41(41),_42(42),_43(43),_45(45),_46(46);
+	    	_41(41),_42(42),_43(43),_45(45),_46(46),_73(73),_86(86),_14(14),_12(12),_15(15),_13(13),_82(82),_81(81);
 	    	
 	    	private int pin;
 	    	
@@ -160,10 +161,9 @@ public class Board {
 	    	}
 	    }
 		
-		private PWM (Board board, com.example.btmsp.Board.PWM.Pin pin, int period, int duty){
+		private PWM (Board board, com.example.btmsp.Board.PWM.Pin pin, int period, int duty){			
 			this.board = board;
-			this.pin = pin.getPin();
-						
+			this.pin = pin.getPin();						
 			this.board.communicate('r',"SPWM"+this.pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
 		}
 		

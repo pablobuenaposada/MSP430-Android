@@ -115,21 +115,29 @@
         android:layout_marginTop="21dp"
         android:max="4096" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ProgressBar01"
-        android:layout_marginTop="62dp"
-        android:layout_toRightOf="@+id/textView4"
-        android:text="@string/hello_world" />
-
     <SeekBar
         android:id="@+id/seekBar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:max="300" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView8"
+        android:layout_marginBottom="23dp"
+        android:layout_toRightOf="@+id/textView4"
+        android:text="@string/hello_world" />
+
+    <SeekBar
+        android:id="@+id/SeekBar01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_alignLeft="@+id/seekBar1"
         android:max="300" />
 
 </RelativeLayout>

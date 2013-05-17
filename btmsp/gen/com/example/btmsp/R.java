@@ -25,7 +25,8 @@ public final class R {
     }
     public static final class id {
         public static final int ProgressBar01=0x7f08000b;
-        public static final int action_settings=0x7f08000d;
+        public static final int SeekBar01=0x7f08000d;
+        public static final int action_settings=0x7f08000e;
         public static final int progressBar1=0x7f080009;
         public static final int seekBar1=0x7f080007;
         public static final int textView1=0x7f08000c;

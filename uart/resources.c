@@ -6,7 +6,6 @@
 /*variable definitions for offline task mode*/
 int offlineSize;
 int offlineArray[100];
-//int offlineFlag = 0;
 int offlinePos = 0;
 int offlinePort;
 int offlinePin;
@@ -67,17 +66,75 @@ void setupAnalogInput(int port, int pin){
 }
 
 void setupPWM(int port, int pin, int period, int duty){
-	pin=pin+1;
+
 	if(port == 4){
+		if(pin == 1){
+			TB0CCR1 = duty;
+			TB0CCTL1 = OUTMOD_7;
+		}
+		else if (pin == 2){
+			TB0CCR2 = duty;
+			TB0CCTL2 = OUTMOD_7;
+		}
+		else if (pin == 3){
+			TB0CCR3 = duty;
+			TB0CCTL3 = OUTMOD_7;
+		}
+		else if (pin == 5){
+			TB0CCR5 = duty;
+			TB0CCTL5 = OUTMOD_7;
+		}
+		else if (pin == 6){
+			TB0CCR6 = duty;
+			TB0CCTL6 = OUTMOD_7;
+		}
+		pin=pin+1;
 		P4DIR |= (int)(pow(2,pin-1));
 		P4SEL |= (int)(pow(2,pin-1));
-
-		TB0CCR0 = period; //PWM period
-		TB0CCR2 = duty; //PWM duty cycle, time cycle on vs. off
-
-		TB0CCTL2 = OUTMOD_7; // TA0CCR1 reset/set -- high voltage below count and
-		TB0CTL = TASSEL_2 + MC_1;
+		TB0CCR0 = period;
+		TB0CTL = TBSSEL_2 + MC_1;
 	}
+	else if(port == 7){
+		if(pin == 3){
+			TA1CCR2 = duty;
+			TA1CCTL2 = OUTMOD_7;
+			pin=pin+1;
+			P7DIR |= (int)(pow(2,pin-1));
+			P7SEL |= (int)(pow(2,pin-1));
+			TA1CCR0 = period;
+			TA1CTL = TASSEL_2 + MC_1;
+		}
+	}
+	else if(port == 8){
+		if(pin == 6){
+			TA1CCR2 = duty;
+			TA1CCTL2 = OUTMOD_7;
+			pin=pin+1;
+			P8DIR |= (int)(pow(2,pin-1));
+			P8SEL |= (int)(pow(2,pin-1));
+			TA1CCR0 = period;
+			TA1CTL = TASSEL_2 + MC_1;
+		}
+		else if(pin == 2){
+			TA0CCR2 = duty;
+			TA0CCTL2 = OUTMOD_7;
+			pin=pin+1;
+			P8DIR |= (int)(pow(2,pin-1));
+			P8SEL |= (int)(pow(2,pin-1));
+			TA0CCR0 = period;
+			TA0CTL = TASSEL_2 + MC_1;
+		}
+		else if(pin == 1){
+			TA0CCR1 = duty;
+			TA0CCTL1 = OUTMOD_7;
+			pin=pin+1;
+			P8DIR |= (int)(pow(2,pin-1));
+			P8SEL |= (int)(pow(2,pin-1));
+			TA0CCR0 = period;
+			TA0CTL = TASSEL_2 + MC_1;
+		}
+	}
+
 }
 
 void setupOfflineTask(char mode,int port,int pin,char units,int countLimit,int samples){
@@ -99,13 +156,13 @@ void setupOfflineTask(char mode,int port,int pin,char units,int countLimit,int s
 	secondsElapsed = 0;
 
 	if (units == 'M'){
-		setupTimerA0(32768);
+		setupTimerA0(32768); //32KHZ ACLK SO 32768 are 1 second
 	}
 	else if (units == 'S'){
-		setupTimerA0(32768);
+		setupTimerA0(32768);  //32KHZ ACLK SO 32768 are 1 second
 	}
 	else if(units == 'U'){
-		setupTimerA0(33);
+		setupTimerA0(33);  //32KHZ ACLK SO 33 are 1 millisecond
 	}
 }
 
@@ -157,15 +214,29 @@ int getAnalogInput(int port, int pin){
 }
 
 void setPWMPeriod(int port, int pin, int period){
-	pin=pin+1;
+
 	if(port == 4){
 		TB0CCR0 = period; //PWM period
 	}
 }
 void setPWMDuty(int port, int pin, int duty){
-	pin=pin+1;
+
 	if(port == 4){
-		TB0CCR2 = duty; //PWM duty cycle, time cycle on vs. off
+		if(pin == 1){
+			TB0CCR1 = duty;
+		}
+		else if(pin == 2){
+			TB0CCR2 = duty;
+		}
+		else if(pin == 3){
+			TB0CCR3 = duty;
+		}
+		else if(pin == 5){
+			TB0CCR5 = duty;
+		}
+		else if(pin == 6){
+			TB0CCR6 = duty;
+		}
 	}
 }
 
