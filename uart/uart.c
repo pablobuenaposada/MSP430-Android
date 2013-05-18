@@ -212,9 +212,8 @@ int main(void){
 			  }
 		  }
 
-		  cleanUart();
 		  sendString("/"); //end of output message
-
+		  cleanUart();
 
 	  }
 	  else{

@@ -6,19 +6,24 @@ import android.util.Log;
 
 public class Board {
 	
+	public enum Mode{
+    	SEND,SEND_READ;
+	}
+	
 	private BluetoothComm communication = null;	
 
 	public Board(String BTaddress) throws BluetoothDisabled, NoBluetoothSupported{		
 		communication = new BluetoothComm(BTaddress);
-		communicate('r',"N/"); //notify that we are a new connection
+		communicate(Board.Mode.SEND_READ,"N/"); //notify that we are a new connection
 	}	
     
-    private synchronized String communicate(char mode, String toSend){
-    	if(mode == 's'){
+    private synchronized String communicate(Board.Mode mode, String toSend){    	
+    	
+    	if(mode == Board.Mode.SEND){
     		send(toSend);
     		return null;
     	}
-    	else if(mode == 'r'){    		
+    	else if(mode == Board.Mode.SEND_READ){    		
 			try {
 				return read(toSend);
 			} catch (TimeoutException e) {				
@@ -62,15 +67,15 @@ public class Board {
 	    public DigitalOutput(Board board,com.example.btmsp.Board.DigitalOutput.Pin pin){
 	    	this.board=board;
 	    	this.pin=pin.getPin();
-	    	board.communicate('r',"SDO"+this.pin+"/");	    	  
+	    	board.communicate(Board.Mode.SEND_READ,"SDO"+this.pin+"/");	    	  
 	    }
 	      
 	    public synchronized void write(boolean state){
 	    	if(state == true){
-	    		board.communicate('r',"DO"+pin+"H/");
+	    		board.communicate(Board.Mode.SEND_READ,"DO"+pin+"H/");
 	    	}
 	    	else{
-	    		board.communicate('r',"DO"+pin+"L/");
+	    		board.communicate(Board.Mode.SEND_READ,"DO"+pin+"L/");
 	    	}
 	    }      
 	}
@@ -96,11 +101,11 @@ public class Board {
 		public DigitalInput(Board board, com.example.btmsp.Board.DigitalInput.Pin pin){
 			this.board=board;
 			this.pin=pin.getPin();
-			board.communicate('r',"SDI"+this.pin+"/");			
+			board.communicate(Board.Mode.SEND_READ,"SDI"+this.pin+"/");			
 		}
 		
 		public synchronized boolean read(){			
-			if (board.communicate('r',"DI"+pin+"/").contains("1/")){
+			if (board.communicate(Board.Mode.SEND_READ,"DI"+pin+"/").contains("1/")){
 				return true;	    		  
 	    	}
 	    	else{
@@ -130,11 +135,11 @@ public class Board {
 		public AnalogInput(Board board, com.example.btmsp.Board.AnalogInput.Pin pin){
 			this.board=board;
 			this.pin=pin.getPin();			
-			this.board.communicate('r',"SAI"+this.pin+"/");			
+			this.board.communicate(Board.Mode.SEND_READ,"SAI"+this.pin+"/");			
 		}
 		
 		public synchronized int read(){			
-			String rawValue = board.communicate('r',"AI"+pin+"/");
+			String rawValue = board.communicate(Board.Mode.SEND_READ,"AI"+pin+"/");
 			
 			try{				
 				return Integer.parseInt(rawValue.split("/")[0]);							
@@ -168,15 +173,15 @@ public class Board {
 		private PWM (Board board, com.example.btmsp.Board.PWM.Pin pin, int period, int duty){			
 			this.board = board;
 			this.pin = pin.getPin();						
-			this.board.communicate('r',"SPWM"+this.pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
+			this.board.communicate(Board.Mode.SEND_READ,"SPWM"+this.pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
 		}
 		
 		public synchronized void setDuty(int newDuty){
-			this.board.communicate('r',"PWM"+pin+"D"+newDuty+"/");
+			this.board.communicate(Board.Mode.SEND_READ,"PWM"+pin+"D"+newDuty+"/");
 		}
 		
 		public synchronized void setPeriod(int newPeriod){
-			this.board.communicate('r',"PWM"+pin+"P"+newPeriod+"/");
+			this.board.communicate(Board.Mode.SEND_READ,"PWM"+pin+"P"+newPeriod+"/");
 		}		
 	}
 	
@@ -223,30 +228,30 @@ public class Board {
 			
 			if (mode.equals(OfflineTask.Mode.DIGITAL)){
 				if (units.equals(OfflineTask.Units.MINUTES)){
-					this.board.communicate('r',"SOTDI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+					this.board.communicate(Board.Mode.SEND_READ,"SOTDI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 				}
 				else if (units.equals(OfflineTask.Units.MILLISECONDS)){
-					this.board.communicate('r',"SOTDI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+					this.board.communicate(Board.Mode.SEND_READ,"SOTDI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 				}
 				else if (units.equals(OfflineTask.Units.SECONDS)){
-					this.board.communicate('r',"SOTDI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+					this.board.communicate(Board.Mode.SEND_READ,"SOTDI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 				}				
 			}
 			else if(mode.equals(OfflineTask.Mode.ANALOG)){
 				if (units.equals(OfflineTask.Units.MINUTES)){
-					this.board.communicate('r',"SOTAI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+					this.board.communicate(Board.Mode.SEND_READ,"SOTAI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 				}
 				else if (units.equals(OfflineTask.Units.MILLISECONDS)){
-					this.board.communicate('r',"SOTAI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+					this.board.communicate(Board.Mode.SEND_READ,"SOTAI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 				}	
 				else if (units.equals(OfflineTask.Units.SECONDS)){
-					this.board.communicate('r',"SOTAI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+					this.board.communicate(Board.Mode.SEND_READ,"SOTAI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 				}
 			}
 		}
 		
 		public synchronized  ArrayList<Integer> read(){
-			String rawList = this.board.communicate('r', "OT/");			
+			String rawList = this.board.communicate(Board.Mode.SEND_READ, "OT/");			
 			
 			String[] splitList = rawList.split("\\.");			
 			ArrayList<Integer> list = new ArrayList<Integer>();
@@ -264,15 +269,15 @@ public class Board {
 	
 		public Serial(Board board){
 			this.board = board;
-			this.board.communicate('r',"SUARTA3/");
+			this.board.communicate(Board.Mode.SEND_READ,"SUARTA3/");
 		}
 		
 		public synchronized void send(String tx){
-			this.board.communicate('r',"UARTA3T"+tx+"/");			
+			this.board.communicate(Board.Mode.SEND_READ,"UARTA3T"+tx+"/");			
 		}
 		
 		public synchronized String read(){
-			String received = this.board.communicate('r',"UARTA3R/");
+			String received = this.board.communicate(Board.Mode.SEND_READ,"UARTA3R/");
 			return received.substring(0, received.length()-1);
 		}
 	}

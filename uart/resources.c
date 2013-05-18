@@ -370,7 +370,7 @@ void setUart9600bauds(){
 }
 
 void cleanUart(){
-	memset(command, 0, 30); //clean command because it has been processed
+	//memset(command, 0, 30); //clean command because it has been processed
 	cmdTime = 0;
 	cmdPos=0; //starting point of the command pointer
 	cmdRdy=0; //no command ready to be processed
@@ -400,12 +400,11 @@ __interrupt void USCI_A0_ISR(void){
     switch(__even_in_range(UCA0IV,4)){
 		case 2:
 			cmdTime = 0;
+			command[cmdPos]=UCA0RXBUF;
 			if (UCA0RXBUF != '/'){
-				command[cmdPos]=UCA0RXBUF;
 				cmdPos++;
 			}
 			else{
-				command[cmdPos]=UCA0RXBUF;
 				//cmdPos=0;
 				cmdRdy=1;
 			}
