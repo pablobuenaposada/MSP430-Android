@@ -1,15 +1,5 @@
 package com.example.btmsp;
 
-import java.util.ArrayList;
-
-import com.example.btmsp.Board.AnalogInput;
-import com.example.btmsp.Board.DigitalInput;
-import com.example.btmsp.Board.DigitalOutput;
-import com.example.btmsp.Board.OfflineTask;
-import com.example.btmsp.Board.PWM;
-
-import com.example.btmsp.Board.Serial;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -196,7 +186,7 @@ public class MainActivity extends Activity {
 		    }
 		    
 		    public void onProgressChanged(SeekBar arg0,int progress, boolean arg2) {
-		    	pwm.setDuty(progress);		    	
+		    	pwm.setDutyNonACK(progress);		    	
 		    }
     	});
     	

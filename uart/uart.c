@@ -33,8 +33,7 @@ int main(void){
 	  if (cmdRdy == 1){
 
 		  if(command[0] == 'N'){ //the device notify us that it established a new connection
-
-
+			  sendString("/"); //end of output message
 		  }
 		  else if(command[0] == 'S'){
 			  if(command[1] == 'D'){
@@ -119,6 +118,7 @@ int main(void){
 					  setupUart9600A3();
 				  }
 			  }
+			  sendString("/"); //end of output message
 		  }
 
 		  else if(command[0] == 'D'){
@@ -140,6 +140,7 @@ int main(void){
 					  sendString("0");
 				  }
 			  }
+			  sendString("/"); //end of output message
 		  }
 
 		  else if(command[0] == 'A'){ //GET ANALOG INPUT VALUE
@@ -151,6 +152,7 @@ int main(void){
 				  sprintf(adcValue,"%d",getAnalogInput(port,pin));
 				  sendString(adcValue);
 			  }
+			  sendString("/"); //end of output message
 		  }
 
 		  else if(command[0] == 'P' & command[1] == 'W' & command[2] == 'M'){ //SET PERIOD OR DUTY CYCLE OF PWM
@@ -163,11 +165,14 @@ int main(void){
 			  memcpy(to, from+6, cmdPos-6);
 			  int value = atoi(to);
 			  free(to);
-			  if (command[5] == 'P'){
+			  if (command[5] == 'P' | command[5] == 'p'){
 				  setPWMPeriod(port,pin,value);
 			  }
-			  else if(command[5] == 'D'){
+			  else if(command[5] == 'D' | command[5] == 'd'){
 				  setPWMDuty(port,pin,value);
+			  }
+			  if(command[5] == 'P' | command[5] == 'D'){
+				  sendString("/"); //end of output message
 			  }
 		  }
 
@@ -182,6 +187,7 @@ int main(void){
 				  sendString(c);
 				  sendString(".");
 			  }
+			  sendString("/"); //end of output message
 		  }
 
 		  else if(command[0] == 'U' & command[1] == 'A' & command[2] == 'R' & command[3] == 'T'){
@@ -195,7 +201,6 @@ int main(void){
 						  txA3(tx);
 						  i++;
 					  }
-
 				  }
 				  else if(command[6] == 'R'){
 
@@ -210,9 +215,13 @@ int main(void){
 
 				  }
 			  }
+			  sendString("/"); //end of output message
+		  }
+		  else{
+			  sendString("/"); //end of output message
 		  }
 
-		  sendString("/"); //end of output message
+
 		  cleanUart();
 
 	  }
