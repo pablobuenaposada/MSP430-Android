@@ -54,7 +54,7 @@ int main(void){
 				  if(command[2] == 'I'){ //SETUP ANALOG INPUT
 					  int port = char2Int(command[3]);
 			  		  int pin = char2Int(command[4]);
-			  		  setupAnalogInput(port,pin);
+			  		  setupAnalogInputPort(port,pin);
 				  }
 			  }
 
@@ -154,16 +154,15 @@ int main(void){
 		  }
 
 		  else if(command[0] == 'P' & command[1] == 'W' & command[2] == 'M'){ //SET PERIOD OR DUTY CYCLE OF PWM
+
 			  int port = char2Int(command[3]);
 			  int pin = char2Int(command[4]);
-			  int lenValue = char2Int(command[6]);
-			  int value = 0;
-			  int i;
 
-			  for(i=0; i<lenValue; i++){
-				  value += (char2Int(command[7+i])*pow(10,lenValue-1-i));
-			  }
-
+			  const char* from = command;
+			  char *to = (char*) malloc(cmdPos-6);
+			  memcpy(to, from+6, cmdPos-6);
+			  int value = atoi(to);
+			  free(to);
 			  if (command[5] == 'P'){
 				  setPWMPeriod(port,pin,value);
 			  }
@@ -215,6 +214,8 @@ int main(void){
 
 		  cleanUart();
 		  sendString("/"); //end of output message
+
+
 	  }
 	  else{
 		  if(cmdTime > CMD_TIMEOUT){

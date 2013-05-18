@@ -20,7 +20,7 @@
 
 void setupDigitalOutput(int port, int pin);
 void setupDigitalInput(int port, int pin);
-void setupAnalogInput(int port, int pin);
+void setupAnalogInputPort(int port, int pin);
 void setupPWM(int port, int pin, int period, int duty);
 
 void setDigitalOutput(int port, int pin, char value);

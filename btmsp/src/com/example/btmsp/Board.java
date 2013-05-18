@@ -2,6 +2,8 @@ package com.example.btmsp;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class Board {
 	
 	private BluetoothComm communication = null;	
@@ -19,7 +21,7 @@ public class Board {
     	else if(mode == 'r'){    		
 			try {
 				return read(toSend);
-			} catch (TimeoutException e) {
+			} catch (TimeoutException e) {				
 				return "/";
 			}			  		
     	}
@@ -132,13 +134,15 @@ public class Board {
 		}
 		
 		public synchronized int read(){			
-			String rawValue = board.communicate('r',"AI"+pin+"/");			
-			try{
-				return Integer.parseInt(rawValue.substring(0, rawValue.length()-1));			
+			String rawValue = board.communicate('r',"AI"+pin+"/");
+			
+			try{				
+				return Integer.parseInt(rawValue.split("/")[0]);							
 			}
-			catch(Exception e){
+			catch(java.lang.Throwable e){				
 				return -1;
 			}
+			
 		}
 	}
 	
@@ -168,11 +172,11 @@ public class Board {
 		}
 		
 		public synchronized void setDuty(int newDuty){
-			this.board.communicate('r',"PWM"+pin+"D"+String.valueOf(newDuty).length()+newDuty+"/");
+			this.board.communicate('r',"PWM"+pin+"D"+newDuty+"/");
 		}
 		
 		public synchronized void setPeriod(int newPeriod){
-			this.board.communicate('r',"PWM"+pin+"P"+String.valueOf(newPeriod).length()+newPeriod+"/");
+			this.board.communicate('r',"PWM"+pin+"P"+newPeriod+"/");
 		}		
 	}
 	

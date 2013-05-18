@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
 		
 		//ot = board.createOfflineTask(26,'d',30000,30);
 		//ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.MILLISECONDS,1000,3);
-		serial = board.createSerial();
+		//serial = board.createSerial();
 		boton1Thread = new boton1();
 		boton1Thread.execute();
 		boton2Thread = new boton2();
@@ -196,7 +196,7 @@ public class MainActivity extends Activity {
 		    }
 		    
 		    public void onProgressChanged(SeekBar arg0,int progress, boolean arg2) {
-		    	pwm.setDuty(progress);
+		    	pwm.setDuty(progress);		    	
 		    }
     	});
     	
@@ -229,7 +229,7 @@ public class MainActivity extends Activity {
 					setTextButton1("off");					
 				}				
 				try {
-					Thread.sleep(200);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -253,7 +253,7 @@ public class MainActivity extends Activity {
 					setTextButton2("off");					
 				}				
 				try {
-					Thread.sleep(200);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -272,7 +272,7 @@ public class MainActivity extends Activity {
 				}
 				setPotText(String.valueOf(pot.read()));		
 				try {
-					Thread.sleep(200);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -291,7 +291,7 @@ public class MainActivity extends Activity {
 				}
 				setPotText2(String.valueOf(pot2.read()));		
 				try {
-					Thread.sleep(200);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

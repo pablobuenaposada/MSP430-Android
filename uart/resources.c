@@ -60,23 +60,47 @@ void setupDigitalInput(int port, int pin){
 	}
 }
 
+void setupAnalogInputPort(int port, int pin){
+	if(port == 6){
+		pin=pin+1;
+		P6DIR &= ~(int)(pow(2,pin-1));
+		P6SEL &= ~(int)(pow(2,pin-1));
+
+	}
+	else if(port == 7){
+		pin=pin+1;
+		P7DIR &= ~(int)(pow(2,pin-1));
+		P7SEL &= ~(int)(pow(2,pin-1));
+	}
+}
+
 void setupAnalogInput(int port, int pin){
+
+	ADC12CTL0 = ADC12SHT0_3 + ADC12ON;
+	ADC12CTL1 = ADC12SHP;
+	ADC12MCTL0 = ADC12SREF_0;
+
+
 	if(port == 6){
 		if (pin == 7){
-			ADC12CTL0 = ADC12SHT0_3 + ADC12ON;
-			ADC12CTL1 = ADC12SHP;
-			ADC12MCTL0 = ADC12SREF_0 + ADC12INCH_7;
-			ADC12CTL0 |= ADC12ENC;
+			ADC12MCTL0 |= ADC12INCH_7;
 		}
 	}
 	else if (port == 7){
 		if(pin == 4){
-			ADC12CTL0 = ADC12SHT0_3 + ADC12ON;
-			ADC12CTL1 = ADC12SHP;
-			ADC12MCTL0 = ADC12SREF_0 + ADC12INCH_12;
-			ADC12CTL0 |= ADC12ENC;
+			ADC12MCTL0 |= ADC12INCH_12;
+		}
+		else if(pin == 5){
+			ADC12MCTL0 |= ADC12INCH_13;
+		}
+		else if(pin == 6){
+			ADC12MCTL0 |= ADC12INCH_14;
+		}
+		else if(pin == 7){
+			ADC12MCTL0 |= ADC12INCH_15;
 		}
 	}
+	ADC12CTL0 |= ADC12ENC;
 }
 
 void setupPWM(int port, int pin, int period, int duty){
@@ -210,21 +234,11 @@ int getDigitalInput(int port, int pin){
 int getAnalogInput(int port, int pin){
 
 	setupAnalogInput(port,pin);
-	if(port == 6){
-		if (pin == 7){
-			ADC12CTL0 |= ADC12SC;// Start conversions
-			while (!(ADC12IFG & 0x0001));
-			return (int)ADC12MEM0;
-		}
-	}
-	else if(port == 7){
-		if(pin == 4){
-			ADC12CTL0 |= ADC12SC;// Start conversions
-			while (!(ADC12IFG & 0x0001));
-			return (int)ADC12MEM0;
-		}
-	}
-	return 0; //if any problem occurs
+
+	ADC12CTL0 |= ADC12SC;// Start conversions
+	while (!(ADC12IFG & 0x0001));
+	return (int)ADC12MEM0;
+
 }
 
 void setPWMPeriod(int port, int pin, int period){
@@ -392,7 +406,7 @@ __interrupt void USCI_A0_ISR(void){
 			}
 			else{
 				command[cmdPos]=UCA0RXBUF;
-				cmdPos=0;
+				//cmdPos=0;
 				cmdRdy=1;
 			}
 			break;
