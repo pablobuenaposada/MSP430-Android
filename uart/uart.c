@@ -118,6 +118,11 @@ int main(void){
 					  setupUart9600A3();
 				  }
 			  }
+			  else if(command[1] == 'E' & command[2] == 'S' & command[3] == 'P' & command[4] == 'I'){
+				  if(command[5] == 'B' & command[6] == '3'){
+					  setupB3SPI();
+				  }
+			  }
 			  sendString("/"); //end of output message
 		  }
 
@@ -213,6 +218,22 @@ int main(void){
 						  sendString(c);
 					  }
 
+				  }
+			  }
+			  sendString("/"); //end of output message
+		  }
+
+		  else if(command[0] == 'E' & command[1] == 'S' & command[2] == 'P' & command[3] == 'I'){
+			  if(command[4] == 'B' & command[5] == '3'){
+				  if(command[6] == 'R'){
+					  int size = getB3SPIReceivedSize();
+					  char *recieved = rxB3SPI(size);
+					  int i;
+					  for(i=0; i < size; i++){
+						  char c[1];
+						  sprintf(c, "%c",recieved[i]);
+						  sendString(c);
+					  }
 				  }
 			  }
 			  sendString("/"); //end of output message

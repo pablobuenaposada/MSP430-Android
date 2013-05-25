@@ -39,6 +39,10 @@ void txA3(const char *string);
 char *rxA3(int size);
 int getA3ReceivedSize();
 
+void setupB3SPI();
+char *rxB3SPI(int size);
+int getB3SPIReceivedSize();
+
 void initUart();
 void setUart19200bauds();
 void setUart9600();

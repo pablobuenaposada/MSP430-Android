@@ -36,7 +36,8 @@ public class MainActivity extends Activity {
 	private boton2 boton2Thread;
 	private pot potThread;
 	private pot2 potThread2;
-	private Serial serial;	
+	private Serial serial;
+	private SPI spi;
 	int i=0;
 	
 	@Override
@@ -73,6 +74,7 @@ public class MainActivity extends Activity {
 		pot2 = board.createAnalogInput(AnalogInput.Pin._67);
 		pwm = board.createPWM(PWM.Pin._42,1000,500);
 		pwm2 = board.createPWM(PWM.Pin._43,1000,500);
+		spi = board.createSPI();
 		initControls();
 		
 		//ot = board.createOfflineTask(26,'d',30000,30);
@@ -104,7 +106,8 @@ public class MainActivity extends Activity {
 	    	led1.write(true);
 	    } else {
 	    	led1.write(false);
-	    }	    
+	    }
+	    list.setText(spi.read());
 	    
 	    /*ArrayList<Integer> a = ot.read();
 	    String b = "";
@@ -165,8 +168,6 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-	
-	
     
     public void onDestroy() {
     	boton1Thread.cancel(true);
@@ -212,12 +213,12 @@ public class MainActivity extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				if (button1.read()){
+				/*if (button1.read()){
 					setTextButton1("on");					
 				}
 				else{
 					setTextButton1("off");					
-				}				
+				}*/				
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -236,12 +237,12 @@ public class MainActivity extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				if (button2.read()){
+				/*if (button2.read()){
 					setTextButton2("on");					
 				}
 				else{
 					setTextButton2("off");					
-				}				
+				}		*/		
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -260,7 +261,7 @@ public class MainActivity extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				setPotText(String.valueOf(pot.read()));		
+				//setPotText(String.valueOf(pot.read()));		
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -279,7 +280,7 @@ public class MainActivity extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				setPotText2(String.valueOf(pot2.read()));		
+				//setPotText2(String.valueOf(pot2.read()));		
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {

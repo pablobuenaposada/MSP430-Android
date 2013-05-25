@@ -17,6 +17,9 @@ unsigned secondsElapsed=0;
 /*------------------------------------------*/
 char command3[30];
 int cmdPos3=0;
+/*------------------------------------------*/
+char bufferSPI[30];
+int bufferSPIPos=0;
 
 void sendString(const char *string){
 	int index;
@@ -374,6 +377,42 @@ void cleanUart(){
 	cmdTime = 0;
 	cmdPos=0; //starting point of the command pointer
 	cmdRdy=0; //no command ready to be processed
+}
+
+void setupB3SPI(){
+	P10SEL |= BIT1+BIT3; // P10.1,2,0 option select
+	UCB3CTL1 |= UCSWRST; // **Put state machine in reset**
+	UCB3CTL0 |= UCSYNC+UCCKPL+UCMSB; // 3-pin, 8-bit SPI slave, Clock polarity high, MSB
+	UCB3CTL1 &= ~UCSWRST; // **Initialize USCI state machine**
+	UCB3IE |= UCRXIE;
+}
+
+char *rxB3SPI(int size){
+
+	const char* commandPointer = bufferSPI;
+	char *received = (char*) malloc(size);
+	strncpy(received, commandPointer, size);
+	bufferSPIPos=0;
+	return received;
+}
+
+int getB3SPIReceivedSize(){
+	return bufferSPIPos;
+}
+
+#pragma vector=USCI_B3_VECTOR
+__interrupt void USCI_B3_ISR(void){
+	switch(__even_in_range(UCB3IV,4)){
+		case 0:break; // Vector 0 - no interrupt
+		case 2: // Vector 2 - RXIFG
+			if(bufferSPIPos < 30){
+				bufferSPI[bufferSPIPos] = (char)UCB3RXBUF;
+				bufferSPIPos++;
+			}
+			break;
+		case 4:break; // Vector 4 - TXIFG
+		default: break;
+	}
 }
 
 #pragma vector=USCI_A3_VECTOR
