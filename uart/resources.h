@@ -39,7 +39,9 @@ void txA3(const char *string);
 char *rxA3(int size);
 int getA3ReceivedSize();
 
-void setupB3SPI();
+void setupSPIB3Master();
+void setupSPIB3Slave();
+void txSPIB3(const char *string);
 char *rxB3SPI(int size);
 int getB3SPIReceivedSize();
 

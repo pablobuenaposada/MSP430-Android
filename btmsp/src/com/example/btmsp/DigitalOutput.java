@@ -21,7 +21,7 @@ public class DigitalOutput{
     public DigitalOutput(Board board,DigitalOutput.Pin pin){
     	this.board=board;
     	this.pin=pin.getPin();
-    	board.communicate(Board.Mode.SEND_READ,"SDO"+this.pin+"/");	    	  
+    	board.communicate(Board.Mode.SEND_READ,"CDO"+this.pin+"/");	    	  
     }
       
     public synchronized void write(boolean state){

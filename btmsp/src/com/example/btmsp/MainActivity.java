@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
 		pot2 = board.createAnalogInput(AnalogInput.Pin._67);
 		pwm = board.createPWM(PWM.Pin._42,1000,500);
 		pwm2 = board.createPWM(PWM.Pin._43,1000,500);
-		spi = board.createSPI();
+		spi = board.createSPI(SPI.Mode.SLAVE);
 		initControls();
 		
 		//ot = board.createOfflineTask(26,'d',30000,30);
@@ -107,8 +107,8 @@ public class MainActivity extends Activity {
 	    } else {
 	    	led1.write(false);
 	    }
-	    list.setText(spi.read());
-	    
+	    //list.setText(spi.read());
+	    spi.send("WEBA");
 	    /*ArrayList<Integer> a = ot.read();
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){

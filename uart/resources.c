@@ -379,12 +379,32 @@ void cleanUart(){
 	cmdRdy=0; //no command ready to be processed
 }
 
-void setupB3SPI(){
+void setupSPIB3Master(){
 	P10SEL |= BIT1+BIT3; // P10.1,2,0 option select
 	UCB3CTL1 |= UCSWRST; // **Put state machine in reset**
 	UCB3CTL0 |= UCSYNC+UCCKPL+UCMSB; // 3-pin, 8-bit SPI slave, Clock polarity high, MSB
 	UCB3CTL1 &= ~UCSWRST; // **Initialize USCI state machine**
 	UCB3IE |= UCRXIE;
+}
+
+void setupSPIB3Slave(){
+	P10SEL |= BIT2+BIT3;                            // P3.5,4,0 option select
+	UCB3CTL1 |= UCSWRST;                      // **Put state machine in reset**
+	UCB3CTL0 |= UCMST+UCSYNC+UCCKPL+UCMSB;    // 3-pin, 8-bit SPI master, Clock polarity high, MSB
+	UCB3CTL1 |= UCSSEL_2;                     // SMCLK
+	UCB3BR0 = 0x02;                           // /2
+	UCB3BR1 = 0;                              //
+	//UCA0MCTL = 0;                             // No modulation
+	UCB3CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
+	UCB3IE |= UCRXIE;
+}
+
+void txSPIB3(const char *string){
+	int index;
+	for(index=0; index < strlen(string); index++){
+		UCB3TXBUF = string[index];
+		while (!(UCB3IFG & UCTXIFG));  // USCI_A0 TX buffer ready?
+	}
 }
 
 char *rxB3SPI(int size){
@@ -393,6 +413,7 @@ char *rxB3SPI(int size){
 	char *received = (char*) malloc(size);
 	strncpy(received, commandPointer, size);
 	bufferSPIPos=0;
+	memset(bufferSPI, 0, 30); //clean command because it has been processed
 	return received;
 }
 

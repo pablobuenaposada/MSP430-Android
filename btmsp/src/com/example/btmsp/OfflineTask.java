@@ -47,24 +47,24 @@ public class OfflineTask{
 		
 		if (mode.equals(OfflineTask.Mode.DIGITAL)){
 			if (units.equals(OfflineTask.Units.MINUTES)){
-				this.board.communicate(Board.Mode.SEND_READ,"SOTDI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				this.board.communicate(Board.Mode.SEND_READ,"COTDI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 			}
 			else if (units.equals(OfflineTask.Units.MILLISECONDS)){
-				this.board.communicate(Board.Mode.SEND_READ,"SOTDI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				this.board.communicate(Board.Mode.SEND_READ,"COTDI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 			}
 			else if (units.equals(OfflineTask.Units.SECONDS)){
-				this.board.communicate(Board.Mode.SEND_READ,"SOTDI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				this.board.communicate(Board.Mode.SEND_READ,"COTDI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 			}				
 		}
 		else if(mode.equals(OfflineTask.Mode.ANALOG)){
 			if (units.equals(OfflineTask.Units.MINUTES)){
-				this.board.communicate(Board.Mode.SEND_READ,"SOTAI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				this.board.communicate(Board.Mode.SEND_READ,"COTAI"+pin+"M"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 			}
 			else if (units.equals(OfflineTask.Units.MILLISECONDS)){
-				this.board.communicate(Board.Mode.SEND_READ,"SOTAI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				this.board.communicate(Board.Mode.SEND_READ,"COTAI"+pin+"U"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 			}	
 			else if (units.equals(OfflineTask.Units.SECONDS)){
-				this.board.communicate(Board.Mode.SEND_READ,"SOTAI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
+				this.board.communicate(Board.Mode.SEND_READ,"COTAI"+pin+"S"+String.format("%05d", period)+String.format("%04d",numSamples)+"/");
 			}
 		}
 	}

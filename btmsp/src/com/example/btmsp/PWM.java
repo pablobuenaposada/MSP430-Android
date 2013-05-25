@@ -22,7 +22,7 @@ public class PWM{
 	public PWM (Board board, PWM.Pin pin, int period, int duty){			
 		this.board = board;
 		this.pin = pin.getPin();						
-		this.board.communicate(Board.Mode.SEND_READ,"SPWM"+this.pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
+		this.board.communicate(Board.Mode.SEND_READ,"CPWM"+this.pin+String.valueOf(period).length()+String.valueOf(duty).length()+period+duty+"/");			
 	}
 	
 	public synchronized void setDuty(int newDuty){

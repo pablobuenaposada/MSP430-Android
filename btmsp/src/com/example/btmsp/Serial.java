@@ -5,7 +5,7 @@ public class Serial{
 
 	public Serial(Board board){
 		this.board = board;
-		this.board.communicate(Board.Mode.SEND_READ,"SUARTA3/");
+		this.board.communicate(Board.Mode.SEND_READ,"CUARTA3/");
 	}
 	
 	public synchronized void send(String tx){

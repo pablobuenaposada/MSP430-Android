@@ -62,8 +62,8 @@ public class Board {
 		return new OfflineTask(this,mode,pin,units,period,numSamples);
 	}
 	
-	public SPI createSPI(){
-		return new SPI(this);
+	public SPI createSPI(SPI.Mode mode){
+		return new SPI(this,mode);
 	}
 	
 	public Serial createSerial(){

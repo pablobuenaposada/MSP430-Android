@@ -35,7 +35,7 @@ int main(void){
 		  if(command[0] == 'N'){ //the device notify us that it established a new connection
 			  sendString("/"); //end of output message
 		  }
-		  else if(command[0] == 'S'){
+		  else if(command[0] == 'C'){
 			  if(command[1] == 'D'){
 				  if(command[2] == 'O'){ //SETUP DIGITAL OUTPUT
 					  int port = char2Int(command[3]);
@@ -118,9 +118,14 @@ int main(void){
 					  setupUart9600A3();
 				  }
 			  }
-			  else if(command[1] == 'E' & command[2] == 'S' & command[3] == 'P' & command[4] == 'I'){
-				  if(command[5] == 'B' & command[6] == '3'){
-					  setupB3SPI();
+			  else if(command[1] == 'S' & command[2] == 'P' & command[3] == 'I'){
+				  if(command[4] == 'B' & command[5] == '3'){
+					  if(command[6] == 'M'){
+						  setupSPIB3Master();
+					  }
+					  else if(command[6] == 'S'){
+						  setupSPIB3Slave();
+					  }
 				  }
 			  }
 			  sendString("/"); //end of output message
@@ -223,9 +228,9 @@ int main(void){
 			  sendString("/"); //end of output message
 		  }
 
-		  else if(command[0] == 'E' & command[1] == 'S' & command[2] == 'P' & command[3] == 'I'){
-			  if(command[4] == 'B' & command[5] == '3'){
-				  if(command[6] == 'R'){
+		  else if(command[0] == 'S' & command[1] == 'P' & command[2] == 'I'){
+			  if(command[3] == 'B' & command[4] == '3'){
+				  if(command[5] == 'R'){
 					  int size = getB3SPIReceivedSize();
 					  char *recieved = rxB3SPI(size);
 					  int i;
@@ -233,6 +238,15 @@ int main(void){
 						  char c[1];
 						  sprintf(c, "%c",recieved[i]);
 						  sendString(c);
+					  }
+				  }
+				  else if(command[5] == 'T'){
+					  int i=6;
+					  while(command[i] != '/'){
+						  char tx[1];
+						  sprintf(tx, "%c",command[i]);
+						  txSPIB3(tx);
+						  i++;
 					  }
 				  }
 			  }

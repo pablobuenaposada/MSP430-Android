@@ -21,7 +21,7 @@ public class AnalogInput{
 	public AnalogInput(Board board, AnalogInput.Pin pin){
 		this.board=board;
 		this.pin=pin.getPin();			
-		this.board.communicate(Board.Mode.SEND_READ,"SAI"+this.pin+"/");			
+		this.board.communicate(Board.Mode.SEND_READ,"CAI"+this.pin+"/");			
 	}
 	
 	public synchronized int read(){			

@@ -21,7 +21,7 @@ public class DigitalInput{
 	public DigitalInput(Board board, DigitalInput.Pin pin){
 		this.board=board;
 		this.pin=pin.getPin();
-		board.communicate(Board.Mode.SEND_READ,"SDI"+this.pin+"/");			
+		board.communicate(Board.Mode.SEND_READ,"CDI"+this.pin+"/");			
 	}
 	
 	public synchronized boolean read(){			
