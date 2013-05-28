@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
 	    	led1.write(false);
 	    }
 	    //list.setText(spi.read());
-	    spi.send("WEBA");
+	    //spi.send("WEBA");
 	    /*ArrayList<Integer> a = ot.read();
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
@@ -213,12 +213,12 @@ public class MainActivity extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				/*if (button1.read()){
+				if (button1.read()){
 					setTextButton1("on");					
 				}
 				else{
 					setTextButton1("off");					
-				}*/				
+				}				
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -237,12 +237,12 @@ public class MainActivity extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				/*if (button2.read()){
+				if (button2.read()){
 					setTextButton2("on");					
 				}
 				else{
 					setTextButton2("off");					
-				}		*/		
+				}				
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -261,7 +261,7 @@ public class MainActivity extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				//setPotText(String.valueOf(pot.read()));		
+				setPotText(String.valueOf(pot.read()));		
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -280,7 +280,7 @@ public class MainActivity extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				//setPotText2(String.valueOf(pot2.read()));		
+				setPotText2(String.valueOf(pot2.read()));		
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
