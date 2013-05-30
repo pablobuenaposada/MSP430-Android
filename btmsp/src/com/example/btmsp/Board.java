@@ -69,5 +69,9 @@ public class Board {
 	public Serial createSerial(){
 		return new Serial(this);
 	}
+	
+	public I2C createI2C(int slaveAddress, I2C.Mode mode){
+		return new I2C(this,mode,slaveAddress);
+	}
 }
 

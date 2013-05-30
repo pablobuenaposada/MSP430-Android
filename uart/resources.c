@@ -20,6 +20,9 @@ int cmdPos3=0;
 /*------------------------------------------*/
 char bufferSPI[30];
 int bufferSPIPos=0;
+/*------------------------------------------*/
+int *PTxData; // Pointer to TX data
+int TXByteCtr;
 
 void sendString(const char *string){
 	int index;
@@ -30,9 +33,29 @@ void sendString(const char *string){
 }
 
 int char2Int(char c){
-	int number = c - '0';
-	number = number + 0;
-	return number;
+	if(c == 'A' | c == 'a'){
+		return 10;
+	}
+	else if(c == 'B' | c == 'b'){
+		return 11;
+	}
+	else if(c == 'C' | c == 'c'){
+		return 12;
+	}
+	else if(c == 'D' | c == 'd'){
+		return 13;
+	}
+	else if(c == 'E' | c == 'e'){
+		return 14;
+	}
+	else if(c == 'F' | c == 'f'){
+		return 15;
+	}
+	else{
+		int number = c - '0';
+		number = number + 0;
+		return number;
+	}
 }
 
 void setupTimerA0(int countLimit){
@@ -379,6 +402,24 @@ void cleanUart(){
 	cmdRdy=0; //no command ready to be processed
 }
 
+void setupI2CB0Master(int slaveAddress){
+	P3SEL |= 0x06; // Assign I2C pins to USCI_B0
+	UCB0CTL1 |= UCSWRST; // Enable SW reset
+	UCB0CTL0 = UCMST + UCMODE_3 + UCSYNC; // I2C Master, synchronous mode
+	UCB0CTL1 = UCSSEL_2 + UCSWRST; // Use SMCLK, keep SW reset
+	UCB0BR0 = 12; // fSCL = SMCLK/12 = ~100kHz
+	UCB0BR1 = 0;
+	UCB0I2CSA = slaveAddress/2; // Slave Address
+	UCB0CTL1 &= ~UCSWRST; // Clear SW reset, resume operation
+	UCB0IE |= UCTXIE; // Enable TX interrupt
+}
+
+void txI2CB0(int *data){
+	PTxData = data;   // TX array start address
+	TXByteCtr = sizeof data; 		   // Load TX byte counter
+    UCB0CTL1 |= UCTR + UCTXSTT; 	   // I2C TX, start condition
+}
+
 void setupSPIB3Master(){
 	P10SEL |= BIT1+BIT3; // P10.1,2,0 option select
 	UCB3CTL1 |= UCSWRST; // **Put state machine in reset**
@@ -471,4 +512,22 @@ __interrupt void USCI_A0_ISR(void){
 			break;
 		default: break;
     }
+}
+
+//Interrupt routine for I2C
+#pragma vector = USCI_B0_VECTOR
+__interrupt void USCI_B0_ISR(void){
+
+	switch(__even_in_range(UCB0IV,12)){
+		case 12:						// Vector 12: TXIFG
+			if (TXByteCtr){				// Check TX byte counter
+			  UCB0TXBUF = *PTxData++;	// Load TX buffer
+			  TXByteCtr--; 				// Decrement TX byte counter
+			}
+			else{
+			  UCB0CTL1 |= UCTXSTP;		// I2C stop condition
+			  UCB0IFG &= ~UCTXIFG;		// Clear USCI_B0 TX int flag
+			}
+		default: break;
+	}
 }

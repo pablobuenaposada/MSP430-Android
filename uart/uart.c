@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
 #define MAIN_FILE
 #include "resources.h"
 #define CMD_TIMEOUT 5000
@@ -128,6 +129,16 @@ int main(void){
 					  }
 				  }
 			  }
+			  else if(command[1] == 'I' & command[2] == '2' & command[3] == 'C'){
+				  if(command[4] == 'B' & command[5] == '0'){
+					  if(command[6] == 'M'){
+						  int address=(char2Int(command[7])<<4)+(char2Int(command[8]));
+						  setupI2CB0Master(address);
+					  }
+				  	  else if(command[6] == 'S'){
+				  	  }
+				  }
+			  }
 			  sendString("/"); //end of output message
 		  }
 
@@ -226,6 +237,29 @@ int main(void){
 				  }
 			  }
 			  sendString("/"); //end of output message
+		  }
+
+		  else if(command[0] == 'I' & command[1] == '2' & command[2] == 'C'){
+			  if(command[3] == 'B' & command[4] == '0'){
+				  if(command[5] == 'T'){
+					  int i=6;
+		  			  while(command[i] != '/'){
+		  				  i=i+1;
+		  			  }
+		  			  int numValues = (i-6)/2;
+		  			  int * data = (int*) malloc (numValues*2);
+		  			  int x;
+		  			  i=6;
+		  			  for(x=0; x<numValues; x++){
+		  				data[x] = (char2Int(command[i])<<4)+(char2Int(command[i+1]));
+		  				i=i+2;
+		  			  }
+		  			  txI2CB0(data);
+				  }
+		  		  else if(command[5] == 'R'){
+		  		  }
+			  }
+		      sendString("/"); //end of output message
 		  }
 
 		  else if(command[0] == 'S' & command[1] == 'P' & command[2] == 'I'){
