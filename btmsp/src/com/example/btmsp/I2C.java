@@ -2,6 +2,8 @@ package com.example.btmsp;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class I2C {
 	private Board board;
 	private I2C.Mode mode;
@@ -35,5 +37,18 @@ public class I2C {
 			
 		}
 		this.board.communicate(Board.Mode.SEND_READ,"I2CB0T"+hexData+"/");		
+	}
+	
+	public ArrayList<Integer> read(int numBytes){
+		String rawList = this.board.communicate(Board.Mode.SEND_READ,"I2CB0R"+Integer.toString(numBytes)+"/");	
+		Log.e("AAA",rawList.toString());
+		String[] splitList = rawList.split("\\.");			
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		
+		for(int i=0; i<splitList.length-1; i++){
+			
+			list.add(Integer.parseInt(splitList[i]));
+		}			
+		return list;
 	}
 }

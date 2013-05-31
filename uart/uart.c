@@ -257,6 +257,24 @@ int main(void){
 		  			  txI2CB0(data);
 				  }
 		  		  else if(command[5] == 'R'){
+		  			int i=6;
+		  			while(command[i] != '/'){
+		  				i=i+1;
+		  			}
+		  			int numDigits=i-6;
+		  			int numBytes=0;
+		  			for(i=0;i< numDigits;i++){
+		  				numBytes += (char2Int(command[6+i])*pow(10,numDigits-1-i));
+		  			}
+		  			int *data = rxI2CB0(numBytes);
+
+		  			for(i=0; i < 2; i++){
+		  				char c[4];
+		  				sprintf(c, "%d",data[i]);
+		  				char b = c[0];
+		  				sendString(c);
+		  				sendString(".");
+		  			}
 		  		  }
 			  }
 		      sendString("/"); //end of output message

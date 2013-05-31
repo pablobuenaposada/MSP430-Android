@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
 		//ot = board.createOfflineTask(26,'d',30000,30);
 		//ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.MILLISECONDS,1000,3);
 		//serial = board.createSerial();
-		i2c = board.createI2C(0xC0, I2C.Mode.MASTER);
+		i2c = board.createI2C(0x92, I2C.Mode.MASTER);
 		boton1Thread = new boton1();
 		boton1Thread.execute();
 		boton2Thread = new boton2();
@@ -104,10 +104,9 @@ public class MainActivity extends Activity {
 	}
 	
 	public void button1(View view) {
-		ArrayList<Integer> a = new ArrayList<Integer>();
-		a.add(0x05);
-		a.add(0xF5);
-		i2c.send(a);
+		//ArrayList<Integer> a = new ArrayList<Integer>();
+				
+		//a = i2c.read();
 	    // Is the toggle on?
 	    boolean on = ((ToggleButton) view).isChecked();	    
 	    if (on) {
@@ -117,28 +116,33 @@ public class MainActivity extends Activity {
 	    }
 	    //list.setText(spi.read());
 	    //spi.send("WEBA");
-	    /*ArrayList<Integer> a = ot.read();
+	    ArrayList<Integer> a =  i2c.read(2);
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
-	    	b = b + a.get(i).toString();
+	    	b = b + a.get(i).toString()+".";
 	    }
 	    b=b+"total"+a.size();
 	    list.setText(b);
-	    //serial.send("hola");*/
+	    //serial.send("hola");
 	}
 	
 	public void button2(View view) {
 	    // Is the toggle on?
 		//ot.start();
-		ArrayList<Integer> a = new ArrayList<Integer>();
-		a.add(0x05);
-		a.add(0xF0);
-		i2c.send(a);
+		
 	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);
+	    	ArrayList<Integer> a = new ArrayList<Integer>();
+			a.add(0x05);
+			a.add(0xF0);
+			i2c.send(a);
 	    } else {
 	    	led2.write(false);
+	    	ArrayList<Integer> a = new ArrayList<Integer>();
+			a.add(0x05);
+			a.add(0xF5);
+			i2c.send(a);
 	    }
 	    //list.setText(serial.read());
 	}	

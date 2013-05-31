@@ -23,6 +23,8 @@ int bufferSPIPos=0;
 /*------------------------------------------*/
 int *PTxData; // Pointer to TX data
 int TXByteCtr;
+int rxI2C[5];
+int rxI2CPos = 0;
 
 void sendString(const char *string){
 	int index;
@@ -411,7 +413,7 @@ void setupI2CB0Master(int slaveAddress){
 	UCB0BR1 = 0;
 	UCB0I2CSA = slaveAddress/2; // Slave Address
 	UCB0CTL1 &= ~UCSWRST; // Clear SW reset, resume operation
-	UCB0IE |= UCTXIE; // Enable TX interrupt
+	UCB0IE |= UCTXIE + UCRXIE; // Enable TX interrupt
 }
 
 void txI2CB0(int *data){
@@ -419,6 +421,16 @@ void txI2CB0(int *data){
 	TXByteCtr = sizeof data; 		   // Load TX byte counter
     UCB0CTL1 |= UCTR + UCTXSTT; 	   // I2C TX, start condition
 }
+
+int * rxI2CB0(int size){
+	setupI2CB0Master(0x92);
+	UCB0CTL1 |= (UCB0CTL1 & ~UCTR) | UCTXSTT;
+	while (rxI2CPos < size );
+	//UCB0CTL1 |= UCTXSTP;
+	rxI2CPos=0;
+	return rxI2C;
+}
+
 
 void setupSPIB3Master(){
 	P10SEL |= BIT1+BIT3; // P10.1,2,0 option select
@@ -519,6 +531,10 @@ __interrupt void USCI_A0_ISR(void){
 __interrupt void USCI_B0_ISR(void){
 
 	switch(__even_in_range(UCB0IV,12)){
+
+		case 10:
+			rxI2C[rxI2CPos] = UCB0RXBUF;
+			rxI2CPos++;
 		case 12:						// Vector 12: TXIFG
 			if (TXByteCtr){				// Check TX byte counter
 			  UCB0TXBUF = *PTxData++;	// Load TX buffer
