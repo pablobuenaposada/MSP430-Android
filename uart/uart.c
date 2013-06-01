@@ -34,6 +34,7 @@ int main(void){
 	  if (cmdRdy == 1){
 
 		  if(command[0] == 'N'){ //the device notify us that it established a new connection
+			  resetPorts();
 			  sendString("/"); //end of output message
 		  }
 		  else if(command[0] == 'C'){
@@ -268,10 +269,9 @@ int main(void){
 		  			}
 		  			int *data = rxI2CB0(numBytes);
 
-		  			for(i=0; i < 2; i++){
+		  			for(i=0; i < numBytes; i++){
 		  				char c[4];
 		  				sprintf(c, "%d",data[i]);
-		  				char b = c[0];
 		  				sendString(c);
 		  				sendString(".");
 		  			}

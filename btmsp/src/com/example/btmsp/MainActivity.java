@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
 		//ot = board.createOfflineTask(26,'d',30000,30);
 		//ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.MILLISECONDS,1000,3);
 		//serial = board.createSerial();
-		i2c = board.createI2C(0x92, I2C.Mode.MASTER);
+		
 		boton1Thread = new boton1();
 		boton1Thread.execute();
 		boton2Thread = new boton2();
@@ -116,6 +116,7 @@ public class MainActivity extends Activity {
 	    }
 	    //list.setText(spi.read());
 	    //spi.send("WEBA");
+	    i2c = board.createI2C(0x92, I2C.Mode.MASTER);
 	    ArrayList<Integer> a =  i2c.read(2);
 	    String b = "";
 	    for(int i=0; i < a.size(); i++){
@@ -129,7 +130,7 @@ public class MainActivity extends Activity {
 	public void button2(View view) {
 	    // Is the toggle on?
 		//ot.start();
-		
+		i2c = board.createI2C(0xC0, I2C.Mode.MASTER);
 	    boolean on = ((ToggleButton) view).isChecked();	   
 	    if (on) {
 	    	led2.write(true);
@@ -178,8 +179,7 @@ public class MainActivity extends Activity {
 	private void setPotText2(final String str) {
 		runOnUiThread(new Runnable() {
 		@Override
-		public void run() {
-			
+		public void run() {			
 			progressBar2.setProgress(Integer.parseInt(str));
 			}
 		});

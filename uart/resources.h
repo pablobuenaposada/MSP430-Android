@@ -56,3 +56,5 @@ int char2Int(char c);
 void setupI2CB0Master(int slaveAddress);
 void txI2CB0(int *data);
 int * rxI2CB0(int size);
+
+void resetPorts();

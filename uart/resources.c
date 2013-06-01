@@ -7,8 +7,8 @@
 int offlineSize;
 int offlineArray[100];
 int offlinePos = 0;
-int offlinePort;
-int offlinePin;
+int offlinePort = -1;
+int offlinePin = -1;
 char offlineMode;
 char offlineUnits;
 unsigned int offlineCountLimit;
@@ -25,6 +25,7 @@ int *PTxData; // Pointer to TX data
 int TXByteCtr;
 int rxI2C[5];
 int rxI2CPos = 0;
+#define I2C_TIMEOUT 5000
 
 void sendString(const char *string){
 	int index;
@@ -58,6 +59,20 @@ int char2Int(char c){
 		number = number + 0;
 		return number;
 	}
+}
+
+void resetPorts(){
+
+	P1OUT=0x00;
+	P2OUT=0x00;
+	P3OUT&=BIT4+BIT5; //we don't want to kill the bluetooth module connection
+	P4OUT=0x00;
+	P5OUT=0x00;
+	P6OUT=0x00;
+	P7OUT=0x00;
+	P8OUT=0x00;
+	P9OUT=0x00;
+	P10OUT=0x00;
 }
 
 void setupTimerA0(int countLimit){
@@ -298,21 +313,21 @@ void setPWMDuty(int port, int pin, int duty){
 
 void doOfflineTask(){
 
-	if(offlineUnits == 'M' && secondsElapsed < 60){
+	if(offlineUnits == 'M' && secondsElapsed < 60){ //we are in minute units and a second has passed
 		secondsElapsed += 1;
 	}
-	else if (offlineUnits == 'S' && unitsElapsed < offlineCountLimit){
+	else if (offlineUnits == 'S' && unitsElapsed < offlineCountLimit){ //we are in seconds units and a second has passed
 		unitsElapsed += 1;
 	}
-	else if(offlineUnits == 'U' && unitsElapsed < offlineCountLimit){
-		unitsElapsed += 1;
-	}
-
-	if(offlineUnits == 'M' && secondsElapsed >= 60){
+	else if(offlineUnits == 'U' && unitsElapsed < offlineCountLimit){ //we are in milliseconds units and a millisecond has passed
 		unitsElapsed += 1;
 	}
 
-	if (unitsElapsed >= offlineCountLimit & (offlinePos < offlineSize)){
+	if(offlineUnits == 'M' && secondsElapsed >= 60){ //we are in minutes units and a minute has passed
+		unitsElapsed += 1;
+	}
+
+	if (unitsElapsed >= offlineCountLimit & (offlinePos < offlineSize)){ //we arrived to the count limit so we get the measure now
 		secondsElapsed = 0;
 		unitsElapsed = 0;
 		P1OUT ^= BIT0;
@@ -323,11 +338,13 @@ void doOfflineTask(){
 		else{
 			value = getAnalogInput(offlinePort,offlinePin);
 		}
-		offlineArray[offlinePos] = value;
+		offlineArray[offlinePos] = value; //stored measure in offline measure array
 		offlinePos += 1;
 	}
-	else if(offlinePos >= offlineSize){
-		stopTimerA0();
+	else if(offlinePos >= offlineSize){ //we get all the samples that user wants
+		stopTimerA0(); //stop the timer as we don't need more measures
+		offlinePort=-1;
+		offlinePin=-1;
 	}
 }
 
@@ -423,11 +440,18 @@ void txI2CB0(int *data){
 }
 
 int * rxI2CB0(int size){
-	setupI2CB0Master(0x92);
-	UCB0CTL1 |= (UCB0CTL1 & ~UCTR) | UCTXSTT;
-	while (rxI2CPos < size );
-	//UCB0CTL1 |= UCTXSTP;
+	int time=0;
 	rxI2CPos=0;
+	UCB0CTL1 |= (UCB0CTL1 & ~UCTR) | UCTXSTT;
+	while ((rxI2CPos < size)){
+		time = time+1;
+		if(time >= I2C_TIMEOUT){
+			//UCB0CTL1 |= UCTXSTP;
+			return 0;
+		}
+	}
+	//UCB0CTL1 |= UCTXSTP;
+
 	return rxI2C;
 }
 
@@ -474,6 +498,7 @@ int getB3SPIReceivedSize(){
 	return bufferSPIPos;
 }
 
+//SPI ISR
 #pragma vector=USCI_B3_VECTOR
 __interrupt void USCI_B3_ISR(void){
 	switch(__even_in_range(UCB3IV,4)){
@@ -489,6 +514,7 @@ __interrupt void USCI_B3_ISR(void){
 	}
 }
 
+//Serial communication ISR
 #pragma vector=USCI_A3_VECTOR
 __interrupt void USCI_A3_ISR(void){
     switch(__even_in_range(UCA3IV,4)){
@@ -502,11 +528,13 @@ __interrupt void USCI_A3_ISR(void){
     }
 }
 
+//Offline task ISR
 #pragma vector=TIMER0_A0_VECTOR
 	__interrupt void Timer0_A0 (void) {		// Timer0 A0 interrupt service routine
 		doOfflineTask();
 }
 
+//Bluetooth communication ISR
 #pragma vector=USCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void){
 
