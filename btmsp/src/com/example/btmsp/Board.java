@@ -35,7 +35,7 @@ public class Board {
     
     private synchronized String read(String toSend) throws TimeoutException{
     	send(toSend);
-    	return communication.read();
+    	return communication.receive();
     }
 
 	public void destroy() {

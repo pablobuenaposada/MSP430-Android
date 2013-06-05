@@ -49,7 +49,7 @@ public class BluetoothComm{
 		}		
 	}	
 	
-	public synchronized String read() throws TimeoutException{
+	public synchronized String receive() throws TimeoutException{
 		byte[] buffer = new byte[10];
 		int bytesRead;
 		String message="";
