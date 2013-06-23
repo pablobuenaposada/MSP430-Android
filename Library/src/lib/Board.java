@@ -1,6 +1,11 @@
 package lib;
 
-public class Board {
+import java.io.Serializable;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Board implements Serializable {
 	
 	public enum Mode{
     	SEND,SEND_READ;
@@ -73,5 +78,7 @@ public class Board {
 	public I2C createI2C(int slaveAddress, I2C.Mode mode){
 		return new I2C(this,mode,slaveAddress);
 	}
+
+
 }
 
