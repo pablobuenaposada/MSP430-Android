@@ -33,6 +33,7 @@ public class MainActivity extends TabActivity {
 		addTabSpec("pwm", "PWM", R.drawable.ic_launcher,Pwm.class);
 		addTabSpec("buttons", "BUT", R.drawable.ic_launcher,Buttons.class);
 		addTabSpec("pot", "ADC", R.drawable.ic_launcher,Pot.class);
+		addTabSpec("srl", "SRL", R.drawable.ic_launcher,Srl.class);
 	}
 
 	@Override

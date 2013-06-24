@@ -28,6 +28,7 @@
         <activity android:name="Pwm"></activity>
         <activity android:name="Buttons"></activity>
         <activity android:name="Pot"></activity>
+        <activity android:name="Srl"></activity>
     </application>
 
 </manifest>
