@@ -368,7 +368,7 @@ void doOfflineTask(){
 	if (unitsElapsed >= offlineCountLimit & (offlinePos < offlineSize)){ //we arrived to the count limit so we get the measure now
 		secondsElapsed = 0;
 		unitsElapsed = 0;
-		P1OUT ^= BIT0;
+		//P1OUT ^= BIT0;
 		int value;
 		if (offlineMode == 'D'){
 			value = getDigitalInput(offlinePort,offlinePin);

@@ -33,7 +33,7 @@ public class LedButton extends Activity {
 		led7 = board.createDigitalOutput(DigitalOutput.Pin._87);
 	}	
 	
-	public void button(View view) {		
+	public void button0(View view) {		
 		boolean on = ((ToggleButton) view).isChecked();	
 		if (on) {
 			led0.write(true);

@@ -28,7 +28,6 @@ public final class R {
         public static final int button1=0x7f080010;
         public static final int button2=0x7f080011;
         public static final int editText1=0x7f080019;
-        public static final int editText2=0x7f080012;
         public static final int muestras=0x7f08000e;
         public static final int numero=0x7f080009;
         public static final int progressBar1=0x7f080014;
@@ -37,6 +36,7 @@ public final class R {
         public static final int radio1=0x7f08000c;
         public static final int radio2=0x7f08000d;
         public static final int radioGroup1=0x7f08000a;
+        public static final int resultados=0x7f080012;
         public static final int seekBar1=0x7f080017;
         public static final int seekBar2=0x7f080018;
         public static final int textView1=0x7f080008;

@@ -49,9 +49,11 @@ public class Offline extends Activity{
 		ArrayList<Integer> data = ot.read();
 		String dataString = "";
 		for(int i=0; i < data.size(); i++){
-			dataString = dataString + data.get(i).toString()+".";
+			dataString = dataString + data.get(i).toString()+"\n";
 		}
-		dataString=dataString+"total"+data.size();
+		//dataString=dataString+"total"+data.size();
+		EditText lista = (EditText)findViewById(R.id.resultados);
+		lista.setText(dataString);
 	}
 	
 	

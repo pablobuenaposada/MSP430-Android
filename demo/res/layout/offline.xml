@@ -90,7 +90,7 @@
 	</LinearLayout>
 
 	<EditText
-	    android:id="@+id/editText2"
+	    android:id="@+id/resultados"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:ems="10"
