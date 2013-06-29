@@ -6,7 +6,7 @@ public class DigitalOutput{
     private Board board;
     
     public enum Pin{
-    	_10(10),_11(11);
+    	_10(10),_11(11),_20(20),_21(21),_80(80),_81(81),_82(82),_83(83),_84(84),_85(85),_86(86),_87(87);
     	
     	private int pin;
     	

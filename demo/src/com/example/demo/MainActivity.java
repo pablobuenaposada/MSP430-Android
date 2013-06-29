@@ -34,6 +34,7 @@ public class MainActivity extends TabActivity {
 		addTabSpec("buttons", "BUT", R.drawable.ic_launcher,Buttons.class);
 		addTabSpec("pot", "ADC", R.drawable.ic_launcher,Pot.class);
 		addTabSpec("srl", "SRL", R.drawable.ic_launcher,Srl.class);
+		addTabSpec("off", "OFF", R.drawable.ic_launcher,Offline.class);
 	}
 
 	@Override

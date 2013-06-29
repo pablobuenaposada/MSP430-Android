@@ -29,6 +29,7 @@
         <activity android:name="Buttons"></activity>
         <activity android:name="Pot"></activity>
         <activity android:name="Srl"></activity>
+        <activity android:name="Offline"></activity>
     </application>
 
 </manifest>

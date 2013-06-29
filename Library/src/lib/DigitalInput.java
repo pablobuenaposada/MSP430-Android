@@ -6,7 +6,7 @@ public class DigitalInput{
 	private int pin;
 	
 	public enum Pin{
-    	_26(26),_27(27);
+    	_16(16),_17(17),_21(21),_22(22),_23(23),_24(24),_25(25),_26(26),_27(27);
     	
     	private int pin;
     	

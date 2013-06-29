@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"        
-        android:onClick="button"
+        android:onClick="button0"
         android:text="ToggleButton"
         android:textOff="LED 1"
         android:textOn="LED 1" />
@@ -21,9 +21,69 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:onClick="button2"
+        android:onClick="button1"
         android:text="ToggleButton"
         android:textOff="LED 2"
         android:textOn="LED 2" />
+    
+    <ToggleButton
+        android:id="@+id/toggleButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"        
+        android:onClick="button2"
+        android:text="ToggleButton"
+        android:textOff="LED 3"
+        android:textOn="LED 3" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="button3"
+        android:text="ToggleButton"
+        android:textOff="LED 4"
+        android:textOn="LED 4" />
+    
+    <ToggleButton
+        android:id="@+id/toggleButton5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"        
+        android:onClick="button4"
+        android:text="ToggleButton"
+        android:textOff="LED 5"
+        android:textOn="LED 5" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="button5"
+        android:text="ToggleButton"
+        android:textOff="LED 6"
+        android:textOn="LED 6" />
+    
+    <ToggleButton
+        android:id="@+id/toggleButton7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"        
+        android:onClick="button6"
+        android:text="ToggleButton"
+        android:textOff="LED 7"
+        android:textOn="LED 7" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="button7"
+        android:text="ToggleButton"
+        android:textOff="LED 8"
+        android:textOn="LED 8" />
 
 </LinearLayout>

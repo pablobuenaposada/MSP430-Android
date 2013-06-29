@@ -91,11 +91,25 @@ void setupDigitalOutput(int port, int pin){
 		P1DIR |= (int)(pow(2,pin-1));
 		P1SEL &= ~(int)(pow(2,pin-1));
 	}
+	else if(port == 2){
+		P2DIR |= (int)(pow(2,pin-1));
+		P2SEL &= ~(int)(pow(2,pin-1));
+	}
+	else if(port == 8){
+		P8DIR |= (int)(pow(2,pin-1));
+		P8SEL &= ~(int)(pow(2,pin-1));
+	}
 }
 
 void setupDigitalInput(int port, int pin){
 	pin=pin+1;
-	if(port == 2){
+	if(port == 1){
+		P1DIR &= ~(int)(pow(2,pin-1));
+		P1SEL &= ~(int)(pow(2,pin-1));
+		P1REN |= (int)(pow(2,pin-1));
+		P1OUT |= (int)(pow(2,pin-1));
+	}
+	else if(port == 2){
 		P2DIR &= ~(int)(pow(2,pin-1));
 		P2SEL &= ~(int)(pow(2,pin-1));
 		P2REN |= (int)(pow(2,pin-1));
@@ -257,12 +271,36 @@ void setDigitalOutput(int port, int pin, char value){
 			P1OUT &=  ~(int)(pow(2,pin-1));
 		}
 	}
+	else if (port == 2){
+		if (value == 'H'){
+			P2OUT |= (int)(pow(2,pin-1));
+		}
+		else if (value == 'L'){
+			P2OUT &=  ~(int)(pow(2,pin-1));
+		}
+	}
+	else if (port == 8){
+		if (value == 'H'){
+			P8OUT |= (int)(pow(2,pin-1));
+		}
+		else if (value == 'L'){
+			P8OUT &=  ~(int)(pow(2,pin-1));
+		}
+	}
 }
 
 int getDigitalInput(int port, int pin){
 	pin=pin+1;
 
-	if (port == 2){
+	if (port == 1){
+		if((int)(P1IN & (int)(pow(2,pin-1))) > 0){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
+	else if (port == 2){
 		if((int)(P2IN & (int)(pow(2,pin-1))) > 0){
 			return 1;
 		}
