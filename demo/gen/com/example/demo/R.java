@@ -24,7 +24,7 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f08001a;
+        public static final int action_settings=0x7f08001b;
         public static final int button1=0x7f080010;
         public static final int button2=0x7f080011;
         public static final int editText1=0x7f080019;
@@ -36,6 +36,7 @@ public final class R {
         public static final int radio1=0x7f08000c;
         public static final int radio2=0x7f08000d;
         public static final int radioGroup1=0x7f08000a;
+        public static final int recibido=0x7f08001a;
         public static final int resultados=0x7f080012;
         public static final int seekBar1=0x7f080017;
         public static final int seekBar2=0x7f080018;
