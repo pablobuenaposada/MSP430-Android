@@ -3,6 +3,8 @@ package com.example.demo;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,22 +18,40 @@ public class Srl extends Activity {
 	private EditText entrada;
 	private recibido recibidoThread;
 	private TextView texto;
+	private Board board;
+	private Time time;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.serial);
 		
-		entrada = (EditText)findViewById(R.id.editText1);
-		
-		Board board = (Board) getIntent().getSerializableExtra("board");
-		serial = board.createSerial();
-		texto = (EditText)findViewById(R.id.recibido);
-
+		time = new Time();		
+		entrada = (EditText)findViewById(R.id.entrada);
+		texto = (EditText)findViewById(R.id.recibido);		
+		board = (Board) getIntent().getSerializableExtra("board");
+		serial = board.createSerial();		
 	}
 	
 	public void enviar(View view) {		
 		serial.send(entrada.getText().toString());
 		entrada.setText("");
+	}
+	
+	private void setText(){
+		String recibido = serial.read();
+		if (!recibido.equals("")){
+			time.setToNow();
+			texto.append(time.format("%H:%M:%S")+" "+recibido+"\n");			
+		}
+	}
+	
+	private void setRecibido(){
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				setText();
+			}
+		});		
 	}
 	
 	private class recibido extends AsyncTask<Void,Void,Void>{
@@ -41,9 +61,9 @@ public class Srl extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				texto.setText(texto.getText()+"\n"+serial.read());
+				setRecibido();				
 				try {
-					Thread.sleep(10);
+					Thread.sleep(100);
 				} 
 				catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -64,7 +84,7 @@ public class Srl extends Activity {
 	    super.onPause();		
 	}
 	
-	public void onResume(){	
+	public void onResume(){						
 		recibidoThread = new recibido();
 		recibidoThread.execute();    	
 		super.onResume();
