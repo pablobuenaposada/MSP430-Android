@@ -24,6 +24,11 @@ public class I2c extends Activity {
 		tempText = (TextView)findViewById(R.id.temp);
 		
 		board = (Board) getIntent().getSerializableExtra("board");
+		i2c = board.createI2C(0xE4, I2C.Mode.MASTER);
+		ArrayList<Integer> a = new ArrayList<Integer>();
+		a.add(0x02);		
+		i2c.send(a);
+		
 	}
 	
 	public void led(View view) {
@@ -79,18 +84,18 @@ public class I2c extends Activity {
 	}
 	
 	public void onDestroy() {
-	     //tempThread.cancel(true);	     
+	     tempThread.cancel(true);	     
 	     super.onDestroy();
 	}
 	
 	public void onPause(){		
-		//tempThread.cancel(true);	    
+		tempThread.cancel(true);	    
 	    super.onPause();		
 	}
 	
 	public void onResume(){
-		//tempThread = new tempT();
-		//tempThread.execute();
+		tempThread = new tempT();
+		tempThread.execute();
 		super.onResume();
 	}
 
