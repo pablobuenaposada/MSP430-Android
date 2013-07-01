@@ -38,5 +38,31 @@
         android:layout_width="282dp"
         android:layout_height="wrap_content"
         android:max="4096" />
+    
+    <TextView
+        android:id="@+id/lmText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADC:0" />
+
+    <ProgressBar
+        android:id="@+id/lmBar"
+        style="?android:attr/progressBarStyleHorizontal"        
+        android:layout_width="282dp"
+        android:layout_height="wrap_content"
+        android:max="4096" />
+    
+    <TextView
+        android:id="@+id/distText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADC:0" />
+
+    <ProgressBar
+        android:id="@+id/distBar"
+        style="?android:attr/progressBarStyleHorizontal"        
+        android:layout_width="282dp"
+        android:layout_height="wrap_content"
+        android:max="4096" />
 
 </LinearLayout>

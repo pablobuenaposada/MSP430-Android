@@ -24,13 +24,17 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080024;
+        public static final int action_settings=0x7f080028;
         public static final int button1=0x7f080018;
         public static final int button2=0x7f080019;
         public static final int center=0x7f080003;
+        public static final int distBar=0x7f080022;
+        public static final int distText=0x7f080021;
         public static final int down=0x7f080005;
-        public static final int entrada=0x7f080022;
+        public static final int entrada=0x7f080026;
         public static final int left=0x7f080002;
+        public static final int lmBar=0x7f080020;
+        public static final int lmText=0x7f08001f;
         public static final int muestras=0x7f080016;
         public static final int numero=0x7f080011;
         public static final int p1=0x7f080006;
@@ -41,15 +45,15 @@ public final class R {
         public static final int radio1=0x7f080014;
         public static final int radio2=0x7f080015;
         public static final int radioGroup1=0x7f080012;
-        public static final int recibido=0x7f080023;
+        public static final int recibido=0x7f080027;
         public static final int resultados=0x7f08001a;
         public static final int right=0x7f080004;
-        public static final int seekBar1=0x7f080020;
-        public static final int seekBar2=0x7f080021;
+        public static final int seekBar1=0x7f080024;
+        public static final int seekBar2=0x7f080025;
         public static final int temp=0x7f080008;
         public static final int textView1=0x7f080000;
         public static final int textView2=0x7f080017;
-        public static final int textView3=0x7f08001f;
+        public static final int textView3=0x7f080023;
         public static final int textView5=0x7f08001b;
         public static final int textView6=0x7f08001d;
         public static final int toggleButton1=0x7f080009;
