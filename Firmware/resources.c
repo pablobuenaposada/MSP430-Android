@@ -21,10 +21,15 @@ int cmdPos3=0;
 char bufferSPI[30];
 int bufferSPIPos=0;
 /*------------------------------------------*/
-int *PTxData; // Pointer to TX data
-int TXByteCtr;
-int rxI2C[5];
-int rxI2CPos = 0;
+int *PTxData_B0; // Pointer to TX data
+int TXByteCtr_B0;
+int rxI2C_B0[5];
+int rxI2CPos_B0 = 0;
+/*------------------------------------------*/
+int *PTxData_B1; // Pointer to TX data
+int TXByteCtr_B1;
+int rxI2C_B1[5];
+int rxI2CPos_B1 = 0;
 #define I2C_TIMEOUT 5000
 
 void sendString(const char *string){
@@ -471,17 +476,30 @@ void setupI2CB0Master(int slaveAddress){
 	UCB0IE |= UCTXIE + UCRXIE; // Enable TX interrupt
 }
 
-void txI2CB0(int *data){
-	PTxData = data;   // TX array start address
-	TXByteCtr = sizeof data; 		   // Load TX byte counter
-    UCB0CTL1 |= UCTR + UCTXSTT; 	   // I2C TX, start condition
+void setupI2CB1Master(int slaveAddress){
+	P3SEL |= 0x80; // Assign I2C pins to USCI_B1
+	P5SEL |= 0x10; // Assign I2C pins to USCI_B1
+	UCB1CTL1 |= UCSWRST; // Enable SW reset
+	UCB1CTL0 = UCMST + UCMODE_3 + UCSYNC; // I2C Master, synchronous mode
+	UCB1CTL1 = UCSSEL_2 + UCSWRST; // Use SMCLK, keep SW reset
+	UCB1BR0 = 12; // fSCL = SMCLK/12 = ~100kHz
+	UCB1BR1 = 0;
+	UCB1I2CSA = slaveAddress/2; // Slave Address
+	UCB1CTL1 &= ~UCSWRST; // Clear SW reset, resume operation
+	UCB1IE |= UCTXIE + UCRXIE; // Enable TX interrupt
 }
 
-int * rxI2CB0(int size){
+void txI2CB1(int *data){
+	PTxData_B1 = data;   // TX array start address
+	TXByteCtr_B1 = sizeof data; 		   // Load TX byte counter
+    UCB1CTL1 |= UCTR + UCTXSTT; 	   // I2C TX, start condition
+}
+
+int * rxI2CB1(int size){
 	int time=0;
-	rxI2CPos=0;
-	UCB0CTL1 |= (UCB0CTL1 & ~UCTR) | UCTXSTT;
-	while ((rxI2CPos < size)){
+	rxI2CPos_B1=0;
+	UCB1CTL1 |= (UCB1CTL1 & ~UCTR) | UCTXSTT;
+	while ((rxI2CPos_B1 < size)){
 		time = time+1;
 		if(time >= I2C_TIMEOUT){
 			//UCB0CTL1 |= UCTXSTP;
@@ -490,7 +508,29 @@ int * rxI2CB0(int size){
 	}
 	//UCB0CTL1 |= UCTXSTP;
 
-	return rxI2C;
+	return rxI2C_B1;
+}
+
+void txI2CB0(int *data){
+	PTxData_B0 = data;   // TX array start address
+	TXByteCtr_B0 = sizeof data; 		   // Load TX byte counter
+    UCB0CTL1 |= UCTR + UCTXSTT; 	   // I2C TX, start condition
+}
+
+int * rxI2CB0(int size){
+	int time=0;
+	rxI2CPos_B0=0;
+	UCB0CTL1 |= (UCB0CTL1 & ~UCTR) | UCTXSTT;
+	while ((rxI2CPos_B0 < size)){
+		time = time+1;
+		if(time >= I2C_TIMEOUT){
+			//UCB0CTL1 |= UCTXSTP;
+			return 0;
+		}
+	}
+	//UCB0CTL1 |= UCTXSTP;
+
+	return rxI2C_B0;
 }
 
 
@@ -599,16 +639,38 @@ __interrupt void USCI_B0_ISR(void){
 	switch(__even_in_range(UCB0IV,12)){
 
 		case 10:
-			rxI2C[rxI2CPos] = UCB0RXBUF;
-			rxI2CPos++;
+			rxI2C_B0[rxI2CPos_B0] = UCB0RXBUF;
+			rxI2CPos_B0++;
 		case 12:						// Vector 12: TXIFG
-			if (TXByteCtr){				// Check TX byte counter
-			  UCB0TXBUF = *PTxData++;	// Load TX buffer
-			  TXByteCtr--; 				// Decrement TX byte counter
+			if (TXByteCtr_B0){				// Check TX byte counter
+			  UCB0TXBUF = *PTxData_B0++;	// Load TX buffer
+			  TXByteCtr_B0--; 				// Decrement TX byte counter
 			}
 			else{
 			  UCB0CTL1 |= UCTXSTP;		// I2C stop condition
 			  UCB0IFG &= ~UCTXIFG;		// Clear USCI_B0 TX int flag
+			}
+		default: break;
+	}
+}
+
+//Interrupt routine for I2C
+#pragma vector = USCI_B1_VECTOR
+__interrupt void USCI_B1_ISR(void){
+
+	switch(__even_in_range(UCB1IV,12)){
+
+		case 10:
+			rxI2C_B1[rxI2CPos_B1] = UCB1RXBUF;
+			rxI2CPos_B1++;
+		case 12:						// Vector 12: TXIFG
+			if (TXByteCtr_B1){				// Check TX byte counter
+			  UCB1TXBUF = *PTxData_B1++;	// Load TX buffer
+			  TXByteCtr_B1--; 				// Decrement TX byte counter
+			}
+			else{
+			  UCB1CTL1 |= UCTXSTP;		// I2C stop condition
+			  UCB1IFG &= ~UCTXIFG;		// Clear USCI_B0 TX int flag
 			}
 		default: break;
 	}

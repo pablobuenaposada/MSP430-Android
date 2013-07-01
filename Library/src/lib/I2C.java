@@ -20,7 +20,7 @@ public class I2C {
 			if (hexAddress.length() < 2) {
 			    hexAddress = "0"+hexAddress; // pad with leading zero if needed
 			}
-			this.board.communicate(Board.Mode.SEND_READ,"CI2CB0M"+hexAddress+"/");
+			this.board.communicate(Board.Mode.SEND_READ,"CI2CB1M"+hexAddress+"/");
 		}
 		else if(this.mode.equals(SPI.Mode.SLAVE)){		
 		}
@@ -36,11 +36,11 @@ public class I2C {
 			hexData = hexData + hex;
 			
 		}
-		this.board.communicate(Board.Mode.SEND_READ,"I2CB0T"+hexData+"/");		
+		this.board.communicate(Board.Mode.SEND_READ,"I2CB1T"+hexData+"/");		
 	}
 	
 	public ArrayList<Integer> read(int numBytes){
-		String rawList = this.board.communicate(Board.Mode.SEND_READ,"I2CB0R"+Integer.toString(numBytes)+"/");	
+		String rawList = this.board.communicate(Board.Mode.SEND_READ,"I2CB1R"+Integer.toString(numBytes)+"/");	
 		//Log.e("AAA",rawList.toString());
 		String[] splitList = rawList.split("\\.");			
 		ArrayList<Integer> list = new ArrayList<Integer>();

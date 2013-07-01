@@ -131,10 +131,10 @@ int main(void){
 				  }
 			  }
 			  else if(command[1] == 'I' & command[2] == '2' & command[3] == 'C'){
-				  if(command[4] == 'B' & command[5] == '0'){
+				  if(command[4] == 'B' & command[5] == '1'){
 					  if(command[6] == 'M'){
 						  int address=(char2Int(command[7])<<4)+(char2Int(command[8]));
-						  setupI2CB0Master(address);
+						  setupI2CB1Master(address);
 					  }
 				  	  else if(command[6] == 'S'){
 				  	  }
@@ -241,7 +241,7 @@ int main(void){
 		  }
 
 		  else if(command[0] == 'I' & command[1] == '2' & command[2] == 'C'){
-			  if(command[3] == 'B' & command[4] == '0'){
+			  if(command[3] == 'B' & command[4] == '1'){
 				  if(command[5] == 'T'){
 					  int i=6;
 		  			  while(command[i] != '/'){
@@ -255,7 +255,7 @@ int main(void){
 		  				data[x] = (char2Int(command[i])<<4)+(char2Int(command[i+1]));
 		  				i=i+2;
 		  			  }
-		  			  txI2CB0(data);
+		  			  txI2CB1(data);
 				  }
 		  		  else if(command[5] == 'R'){
 		  			int i=6;
@@ -267,7 +267,7 @@ int main(void){
 		  			for(i=0;i< numDigits;i++){
 		  				numBytes += (char2Int(command[6+i])*pow(10,numDigits-1-i));
 		  			}
-		  			int *data = rxI2CB0(numBytes);
+		  			int *data = rxI2CB1(numBytes);
 
 		  			for(i=0; i < numBytes; i++){
 		  				char c[4];

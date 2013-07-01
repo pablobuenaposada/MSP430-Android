@@ -57,4 +57,8 @@ void setupI2CB0Master(int slaveAddress);
 void txI2CB0(int *data);
 int * rxI2CB0(int size);
 
+void setupI2CB1Master(int slaveAddress);
+void txI2CB1(int *data);
+int * rxI2CB1(int size);
+
 void resetPorts();
