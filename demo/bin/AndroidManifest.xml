@@ -30,6 +30,7 @@
         <activity android:name="Pot"></activity>
         <activity android:name="Srl"></activity>
         <activity android:name="Offline"></activity>
+        <activity android:name="I2c"></activity>
     </application>
 
 </manifest>

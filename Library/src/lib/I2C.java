@@ -41,7 +41,7 @@ public class I2C {
 	
 	public ArrayList<Integer> read(int numBytes){
 		String rawList = this.board.communicate(Board.Mode.SEND_READ,"I2CB0R"+Integer.toString(numBytes)+"/");	
-		Log.e("AAA",rawList.toString());
+		//Log.e("AAA",rawList.toString());
 		String[] splitList = rawList.split("\\.");			
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		
