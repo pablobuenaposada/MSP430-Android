@@ -13,23 +13,80 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ToggleButton
-        android:id="@+id/toggleButton3"
+        android:id="@+id/up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:clickable="false"
         android:text="ToggleButton"
-        android:textOff="BUT 1"
-        android:textOn="BUT 1" />
+        android:textOff="ARRIBA"
+        android:textOn="ARRIBA" />
+    
+    <LinearLayout
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+        
+        <ToggleButton
+	        android:id="@+id/left"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="false"
+	        android:text="ToggleButton"
+	        android:textOff="IZQ"
+	        android:textOn="IZQ" />
+
+	    <ToggleButton
+	        android:id="@+id/center"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="false"
+	        android:text="ToggleButton"
+	        android:textOff="CENTRO"
+	        android:textOn="CENTRO" />
+	    
+	    <ToggleButton
+	        android:id="@+id/right"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="false"
+	        android:text="ToggleButton"
+	        android:textOff="DCH"
+	        android:textOn="DCH" />
+    
+    </LinearLayout>
 
     <ToggleButton
-        android:id="@+id/toggleButton4"
+        android:id="@+id/down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:clickable="false"
-        android:textOff="BUT 2"
-        android:textOn="BUT 2"
-        android:text="ToggleButton" />
+        android:text="ToggleButton"
+        android:textOff="ABAJO"
+	    android:textOn="ABAJO" />
+
+    <LinearLayout
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    
+	    <ToggleButton
+	        android:id="@+id/p1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="false"
+	        android:text="ToggleButton"
+	        android:textOff="P1"
+	    	android:textOn="P1" />
+	    
+	    <ToggleButton
+	        android:id="@+id/p2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="false"
+	        android:text="ToggleButton"
+	        android:textOff="P2"
+	    	android:textOn="P2" />
+	
+	</LinearLayout>
+	    
 
 </LinearLayout>
