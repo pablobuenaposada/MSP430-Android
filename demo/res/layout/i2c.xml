@@ -16,15 +16,31 @@
         android:id="@+id/temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ToggleButton"
-        android:onClick="led"
-        android:textOff="OFF"
-        android:textOn="ON" />
+    <LinearLayout
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    
+	    <ToggleButton
+	        android:id="@+id/toggleAzul"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="ToggleButton"
+	        android:onClick="led"
+	        android:textOff="AZUL"
+	        android:textOn="AZUL" />
+	    
+	    <ToggleButton
+	        android:id="@+id/toggleBlanco"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="ToggleButton"
+	        android:onClick="led2"
+	        android:textOff="BLANCO"
+	        android:textOn="BLANCO" />
+	    
+	 </LinearLayout>
 
 </LinearLayout>

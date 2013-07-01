@@ -33,17 +33,56 @@ public class I2c extends Activity {
 	
 	public void led(View view) {
 		i2c = board.createI2C(0xC0, I2C.Mode.MASTER);
-		boolean on = ((ToggleButton) view).isChecked();	
+		boolean on = ((ToggleButton) view).isChecked();
+		ToggleButton blanco= (ToggleButton)findViewById(R.id.toggleBlanco);
 		if (on) {			
 			ArrayList<Integer> a = new ArrayList<Integer>();
 			a.add(0x05);
-			a.add(0xF0);
+			if(blanco.isChecked()){
+				a.add(0xF0);
+			}
+			else{
+				a.add(0xF1);
+			}			
 			i2c.send(a);
 		}
 		else {			
 			ArrayList<Integer> a = new ArrayList<Integer>();
 			a.add(0x05);
-			a.add(0xF5);
+			if(blanco.isChecked()){
+				a.add(0xF4);
+			}
+			else{
+				a.add(0xF5);
+			}
+			i2c.send(a);
+		}
+	}
+	
+	public void led2(View view) {
+		i2c = board.createI2C(0xC0, I2C.Mode.MASTER);
+		boolean on = ((ToggleButton) view).isChecked();
+		ToggleButton azul= (ToggleButton)findViewById(R.id.toggleAzul);
+		if (on) {			
+			ArrayList<Integer> a = new ArrayList<Integer>();
+			a.add(0x05);
+			if(azul.isChecked()){
+				a.add(0xF0);
+			}
+			else{
+				a.add(0xF4);
+			}	
+			i2c.send(a);
+		}
+		else {			
+			ArrayList<Integer> a = new ArrayList<Integer>();
+			a.add(0x05);
+			if(azul.isChecked()){
+				a.add(0xF1);
+			}
+			else{
+				a.add(0xF5);
+			}	
 			i2c.send(a);
 		}
 	}
@@ -54,12 +93,9 @@ public class I2c extends Activity {
 			public void run() {
 				i2c = board.createI2C(0x92, I2C.Mode.MASTER);
 				ArrayList<Integer> a = i2c.read(2);
-				String b = "";
-				for(int i=0; i < a.size(); i++){
-					b = b + a.get(i).toString()+".";
-				}
-				//b=b+"total"+a.size();
-				tempText.setText(b);	
+				float temperatura = (a.get(0)*256)+a.get(1);
+				temperatura = (float) ((temperatura/32)*0.125);				
+				tempText.setText(String.format("%.02f",temperatura)+" ºC");	
 			}
 		});
 	}
