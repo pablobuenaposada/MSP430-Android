@@ -25,13 +25,9 @@ public class Buttons extends Activity {
 	private ToggleButton centerB;
 	private ToggleButton p1B;
 	private ToggleButton p2B;
-	private upT upThread;
-	private downT downThread;
-	private rightT rightThread;
-	private leftT leftThread;
-	private centerT centerThread;
-	private p1T p1Thread;
-	private p2T p2Thread;
+	
+	private btnT btnThread;
+	
 	
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +35,11 @@ public class Buttons extends Activity {
 		setContentView(R.layout.buttons);
 		
 		Board board = (Board) getIntent().getSerializableExtra("board");
-		up = board.createDigitalInput(DigitalInput.Pin._21);
-		down = board.createDigitalInput(DigitalInput.Pin._22);
-		right = board.createDigitalInput(DigitalInput.Pin._23);
-		left = board.createDigitalInput(DigitalInput.Pin._24);
-		center = board.createDigitalInput(DigitalInput.Pin._25);
+		up = board.createDigitalInput(DigitalInput.Pin._24);
+		down = board.createDigitalInput(DigitalInput.Pin._25);
+		right = board.createDigitalInput(DigitalInput.Pin._22);
+		left = board.createDigitalInput(DigitalInput.Pin._21);
+		center = board.createDigitalInput(DigitalInput.Pin._23);
 		p1 = board.createDigitalInput(DigitalInput.Pin._16);
 		p2 = board.createDigitalInput(DigitalInput.Pin._17);
 		
@@ -133,171 +129,65 @@ public class Buttons extends Activity {
 		
 	}
 	
-	private class p1T extends AsyncTask<Void,Void,Void>{
+	private class btnT extends AsyncTask<Void,Void,Void>{
 		@Override
 		protected Void doInBackground(Void... params) {
 			while (true){
+				
 				if (isCancelled()){
 					break;
 				}
 				if (p1.read()){
+					setP1(false);	
+				}
+				else{
 					setP1(true);	
 				}
-				else{
-					setP1(false);	
-				}	
-				try {
-					Thread.sleep(10);
-				} 
-				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return null;	
-		}	
-	}
-	
-	private class p2T extends AsyncTask<Void,Void,Void>{
-		@Override
-		protected Void doInBackground(Void... params) {
-			while (true){
-				if (isCancelled()){
-					break;
-				}
+				
 				if (p2.read()){
+					setP2(false);	
+				}
+				else{
 					setP2(true);	
 				}
-				else{
-					setP2(false);	
-				}	
-				try {
-					Thread.sleep(10);
-				} 
-				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return null;	
-		}	
-	}
-	
-	private class upT extends AsyncTask<Void,Void,Void>{
-		@Override
-		protected Void doInBackground(Void... params) {
-			while (true){
-				if (isCancelled()){
-					break;
-				}
+				
 				if (up.read()){
+					setUp(false);	
+				}
+				else{
 					setUp(true);	
 				}
-				else{
-					setUp(false);	
-				}	
-				try {
-					Thread.sleep(10);
-				} 
-				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return null;	
-		}	
-	}
-	
-	private class downT extends AsyncTask<Void,Void,Void>{
-		@Override
-		protected Void doInBackground(Void... params) {
-			while (true){
-				if (isCancelled()){
-					break;
-				}
+				
 				if (down.read()){
+					setDown(false);	
+				}
+				else{
 					setDown(true);	
 				}
-				else{
-					setDown(false);	
-				}	
-				try {
-					Thread.sleep(10);
-				} 
-				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return null;	
-		}	
-	}
-	
-	private class leftT extends AsyncTask<Void,Void,Void>{
-		@Override
-		protected Void doInBackground(Void... params) {
-			while (true){
-				if (isCancelled()){
-					break;
-				}
-				if (left.read()){
-					setLeft(true);	
-				}
-				else{
-					setLeft(false);	
-				}	
-				try {
-					Thread.sleep(10);
-				} 
-				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return null;	
-		}	
-	}
-	
-	private class rightT extends AsyncTask<Void,Void,Void>{
-		@Override
-		protected Void doInBackground(Void... params) {
-			while (true){
-				if (isCancelled()){
-					break;
-				}
-				if (right.read()){
-					setRight(true);	
-				}
-				else{
-					setRight(false);	
-				}	
-				try {
-					Thread.sleep(10);
-				} 
-				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return null;	
-		}	
-	}
-	
-	private class centerT extends AsyncTask<Void,Void,Void>{
-		@Override
-		protected Void doInBackground(Void... params) {
-			while (true){
-				if (isCancelled()){
-					break;
-				}
+				
 				if (center.read()){
+					setCenter(false);	
+				}
+				else{
 					setCenter(true);	
 				}
+				
+				if (right.read()){
+					setRight(false);	
+				}
 				else{
-					setCenter(false);	
-				}	
+					setRight(true);	
+				}
+				
+				if (left.read()){
+					setLeft(false);	
+				}
+				else{
+					setLeft(true);	
+				}
+				
 				try {
-					Thread.sleep(10);
+					Thread.sleep(2);
 				} 
 				catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -307,46 +197,24 @@ public class Buttons extends Activity {
 			return null;	
 		}	
 	}
-	
 	
 	
 	public void onDestroy() {
-	     upThread.cancel(true);	
-	     downThread.cancel(true);	
-	     leftThread.cancel(true);	
-	     rightThread.cancel(true);	
-	     centerThread.cancel(true);	
-	     p1Thread.cancel(true);	
-	     p2Thread.cancel(true);	
+	     
+	     btnThread.cancel(true);	     
 	     super.onDestroy();
 	}
 	
 	public void onPause(){
-		upThread.cancel(true);	
-	    downThread.cancel(true);	
-	    leftThread.cancel(true);	
-	    rightThread.cancel(true);	
-	    centerThread.cancel(true);
-	    p1Thread.cancel(true);	
-	    p2Thread.cancel(true);
+		
+	    btnThread.cancel(true);	    
 	    super.onPause();		
 	}
 	
 	public void onResume(){
-		upThread = new upT();
-    	upThread.execute(); 
-    	downThread = new downT();
-    	downThread.execute(); 
-    	leftThread = new leftT();
-    	leftThread.execute(); 
-    	rightThread = new rightT();
-    	rightThread.execute(); 
-    	centerThread = new centerT();
-    	centerThread.execute(); 
-    	p1Thread = new p1T();
-    	p1Thread.execute();
-    	p2Thread = new p2T();
-    	p2Thread.execute();
+		
+    	btnThread = new btnT();
+    	btnThread.execute();    	
     	super.onResume();
 	}
 	
