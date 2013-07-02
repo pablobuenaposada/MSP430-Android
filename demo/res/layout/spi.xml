@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:gravity="center" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SPI"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+    	<EditText
+        android:id="@+id/entrada"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+        <Button
+            android:id="@+id/button1"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enviar"
+            android:onClick="enviar" />       
+        
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recibimos:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/recibido"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:clickable="false" 
+        android:cursorVisible="false" 
+        android:focusable="false" 
+        android:focusableInTouchMode="false" >
+
+        <requestFocus />
+    </EditText>
+    
+
+</LinearLayout>

@@ -52,6 +52,7 @@ int layout offline 0x7f030004
 int layout pot 0x7f030005
 int layout pwm 0x7f030006
 int layout serial 0x7f030007
+int layout spi 0x7f030008
 int menu main 0x7f070000
 int string action_settings 0x7f040001
 int string app_name 0x7f040000

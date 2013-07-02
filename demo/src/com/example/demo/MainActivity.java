@@ -36,6 +36,7 @@ public class MainActivity extends TabActivity {
 		addTabSpec("srl", "SRL", R.drawable.ic_launcher,Srl.class);
 		addTabSpec("off", "OFF", R.drawable.ic_launcher,Offline.class);
 		addTabSpec("i2c", "I2C", R.drawable.ic_launcher,I2c.class);
+		addTabSpec("spi", "SPI", R.drawable.ic_launcher,Spi.class);
 	}
 
 	@Override
