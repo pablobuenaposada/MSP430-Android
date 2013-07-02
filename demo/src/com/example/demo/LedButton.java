@@ -17,6 +17,8 @@ public class LedButton extends Activity {
 	private DigitalOutput led5;
 	private DigitalOutput led6;
 	private DigitalOutput led7;
+	private DigitalOutput ledL1;
+	private DigitalOutput ledL2;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,7 +33,30 @@ public class LedButton extends Activity {
 		led5 = board.createDigitalOutput(DigitalOutput.Pin._85);
 		led6 = board.createDigitalOutput(DigitalOutput.Pin._86);
 		led7 = board.createDigitalOutput(DigitalOutput.Pin._87);
-	}	
+		ledL1 = board.createDigitalOutput(DigitalOutput.Pin._20);
+		ledL2 = board.createDigitalOutput(DigitalOutput.Pin._21);
+		
+	}
+	
+	public void buttonL1(View view) {		
+		boolean on = ((ToggleButton) view).isChecked();	
+		if (on) {
+			ledL1.write(true);
+		} 
+		else {
+			ledL1.write(false);
+		}		
+	}
+	
+	public void buttonL2(View view) {		
+		boolean on = ((ToggleButton) view).isChecked();	
+		if (on) {
+			ledL2.write(true);
+		} 
+		else {
+			ledL2.write(false);
+		}		
+	}
 	
 	public void button0(View view) {		
 		boolean on = ((ToggleButton) view).isChecked();	
