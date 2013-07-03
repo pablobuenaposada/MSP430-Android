@@ -33,19 +33,20 @@ public class Offline extends Activity{
 		int muestras = Integer.parseInt(muestrasText.getText().toString());		
 		
 		if (radio0.isChecked()) {
-			ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.MINUTES,tiempo,muestras);
+			ot = board.createOfflineTask(OfflineTask.Pin._66,OfflineTask.Mode.ANALOG,OfflineTask.Units.MINUTES,tiempo,muestras);
 		}
 		else if (radio1.isChecked()) {
-			ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.SECONDS,tiempo,muestras);
+			ot = board.createOfflineTask(OfflineTask.Pin._66,OfflineTask.Mode.ANALOG,OfflineTask.Units.SECONDS,tiempo,muestras);
 		}
 		else if (radio2.isChecked()){
-			ot = board.createOfflineTask(OfflineTask.Pin._67,OfflineTask.Mode.ANALOG,OfflineTask.Units.MILLISECONDS,tiempo,muestras);
+			ot = board.createOfflineTask(OfflineTask.Pin._66,OfflineTask.Mode.ANALOG,OfflineTask.Units.MILLISECONDS,tiempo,muestras);
 		}
 		
 		ot.start();
 	}
 	
 	public void button2(View view) {
+		ot = board.createOfflineTask(OfflineTask.Pin._66,OfflineTask.Mode.ANALOG,OfflineTask.Units.MINUTES,1,1);
 		ArrayList<Integer> data = ot.read();
 		String dataString = "";
 		for(int i=0; i < data.size(); i++){

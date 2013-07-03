@@ -13,7 +13,7 @@ public class OfflineTask{
 	private int numSamples;
 	
 	public enum Pin{
-    	_67(67);
+    	_67(67),_66(66);
     	
     	private int pin;
     	
@@ -41,7 +41,7 @@ public class OfflineTask{
 		this.pin = pin.getPin();
 		this.period = period;
 		this.numSamples = numSamples;
-	}
+	}	
 	
 	public synchronized void start(){			
 		
@@ -80,5 +80,9 @@ public class OfflineTask{
 		}			
 		return list;
 	}
+	
+	
+	
+	 
 	 
 }
