@@ -10,6 +10,8 @@ ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./resources.obj" \
 "./main.obj" \
+"./LCD_lib.obj" \
+"./I2C_LCD.obj" \
 -l"libc.a" \
 "../lnk_msp430f5438a.cmd" \
 
@@ -123,8 +125,8 @@ Firmware.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QUOTED) "Firmware.out"
-	-$(RM) "main.pp" "resources.pp" 
-	-$(RM) "main.obj" "resources.obj" 
+	-$(RM) "I2C_LCD.pp" "LCD_lib.pp" "main.pp" "resources.pp" 
+	-$(RM) "I2C_LCD.obj" "LCD_lib.obj" "main.obj" "resources.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -35,10 +35,10 @@ public class Buttons extends Activity {
 		setContentView(R.layout.buttons);
 		
 		Board board = (Board) getIntent().getSerializableExtra("board");
-		up = board.createDigitalInput(DigitalInput.Pin._14);
-		down = board.createDigitalInput(DigitalInput.Pin._15);
-		right = board.createDigitalInput(DigitalInput.Pin._12);
-		left = board.createDigitalInput(DigitalInput.Pin._11);
+		up = board.createDigitalInput(DigitalInput.Pin._11);
+		down = board.createDigitalInput(DigitalInput.Pin._12);
+		right = board.createDigitalInput(DigitalInput.Pin._14);
+		left = board.createDigitalInput(DigitalInput.Pin._15);
 		center = board.createDigitalInput(DigitalInput.Pin._13);
 		p1 = board.createDigitalInput(DigitalInput.Pin._16);
 		p2 = board.createDigitalInput(DigitalInput.Pin._17);
@@ -49,14 +49,7 @@ public class Buttons extends Activity {
     	leftB = (ToggleButton)findViewById(R.id.left);
     	centerB = (ToggleButton)findViewById(R.id.center);
     	p1B = (ToggleButton)findViewById(R.id.p1);
-    	p2B = (ToggleButton)findViewById(R.id.p2);
-    	
-    	/*boton1Thread = new btn1();
-    	boton1Thread.execute();
-    	boton2Thread = new btn2();
-    	boton2Thread.execute();*/
-    	
-    	
+    	p2B = (ToggleButton)findViewById(R.id.p2);    	
 	}
 	
 	private void setP1(final boolean state){

@@ -6,6 +6,7 @@
 
 #define MAIN_FILE
 #include "resources.h"
+#include "LCD_lib.h"
 #define CMD_TIMEOUT 5000
 
 
@@ -25,7 +26,7 @@ int main(void){
   setUart19200bauds();
   cleanUart();
 
-  __bis_SR_register(SCG0);       // Enter LPM3 w/ interrupts enabled
+  __bis_SR_register(SCG0);
   _enable_interrupt();
   __no_operation();                         // For debugger
 
@@ -140,6 +141,12 @@ int main(void){
 				  	  }
 				  }
 			  }
+			  else if(command[1] == 'L' & command[2] == 'C' & command[3] == 'D'){
+				  i2c_init();
+				  lcd_init();
+			  }
+
+
 			  sendString("/"); //end of output message
 		  }
 
@@ -304,6 +311,18 @@ int main(void){
 			  }
 			  sendString("/"); //end of output message
 		  }
+		  else if(command[0] == 'L' & command[1] == 'C' & command[2] == 'D'){
+			  lcd_command(CLR);
+			  int i=3;
+			  while(command[i] != '/'){
+				  char tx[1];
+				  sprintf(tx, "%c",command[i]);
+				  lcd_print(tx,1);
+				  i++;
+			  }
+			  sendString("/"); //end of output message
+		  }
+
 		  else{
 			  sendString("/"); //end of output message
 		  }

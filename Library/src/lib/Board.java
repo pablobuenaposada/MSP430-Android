@@ -78,6 +78,10 @@ public class Board implements Serializable {
 	public I2C createI2C(int slaveAddress, I2C.Mode mode){
 		return new I2C(this,mode,slaveAddress);
 	}
+	
+	public LCD createLCD(){
+		return new LCD(this);
+	}
 
 
 }

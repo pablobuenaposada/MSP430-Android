@@ -50,11 +50,7 @@ public class Pot extends Activity {
 		pot2 = board.createAnalogInput(AnalogInput.Pin._67);
 		pot3 = board.createAnalogInput(AnalogInput.Pin._65);
 		pot4 = board.createAnalogInput(AnalogInput.Pin._66);
-		pot7 = board.createAnalogInput(AnalogInput.Pin._75);
-		
-		//pot1Thread = new pot();
-		//boton2Thread = new btn2();
-		//pot1Thread.execute(); 
+		pot7 = board.createAnalogInput(AnalogInput.Pin._75);		
 		
 	}
 	
@@ -63,7 +59,7 @@ public class Pot extends Activity {
 			@Override
 			public void run() {
 				float voltage = (float) (Float.parseFloat(str)*0.0007496948);
-				potText.setText("ADC:"+str+"  "+String.format("%.02f",voltage)+"v");
+				potText.setText("LDR:"+str+"  "+String.format("%.02f",voltage)+"v");
 				progressBar.setProgress(Integer.parseInt(str));
 			}
 		});
@@ -74,7 +70,7 @@ public class Pot extends Activity {
 			@Override
 			public void run() {
 				float voltage = (float) (Float.parseFloat(str)*0.0007496948);
-				pot2Text.setText("ADC:"+str+"  "+String.format("%.02f",voltage)+"v");
+				pot2Text.setText("LDR:"+str+"  "+String.format("%.02f",voltage)+"v");
 				progressBar2.setProgress(Integer.parseInt(str));
 			}
 		});
@@ -85,7 +81,7 @@ public class Pot extends Activity {
 			@Override
 			public void run() {
 				float voltage = (float) (Float.parseFloat(str)*0.0007496948);
-				pot3Text.setText("ADC:"+str+"  "+String.format("%.02f",voltage)+"v");
+				pot3Text.setText("LM:"+str+"  "+String.format("%.02f",voltage)+"v");
 				progressBar3.setProgress(Integer.parseInt(str));
 			}
 		});
@@ -96,7 +92,7 @@ public class Pot extends Activity {
 			@Override
 			public void run() {
 				float voltage = (float) (Float.parseFloat(str)*0.0007496948);
-				pot4Text.setText("ADC:"+str+"  "+String.format("%.02f",voltage)+"v");
+				pot4Text.setText("DIST:"+str+"  "+String.format("%.02f",voltage)+"v");
 				progressBar4.setProgress(Integer.parseInt(str));
 			}
 		});
@@ -112,31 +108,6 @@ public class Pot extends Activity {
 					break;
 				}
 				setPot(String.valueOf(pot.read()));
-				pot7.read();
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				setPot2(String.valueOf(pot2.read()));
-				pot7.read();
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				setPot3(String.valueOf(pot3.read()));
-				pot7.read();
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				setPot4(String.valueOf(pot4.read()));
-				pot7.read();
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -174,6 +145,7 @@ public class Pot extends Activity {
 				if (isCancelled()){
 					break;
 				}
+				pot7.read();
 				setPot3(String.valueOf(pot3.read()));	
 				try {
 					Thread.sleep(10);
@@ -207,29 +179,29 @@ public class Pot extends Activity {
 	
 	public void onDestroy() {
 	     pot1Thread.cancel(true);	
-	     //pot2Thread.cancel(true);	
-	     //pot3Thread.cancel(true);	
-	     //pot4Thread.cancel(true);	
+	     pot2Thread.cancel(true);	
+	     pot3Thread.cancel(true);	
+	     pot4Thread.cancel(true);	
 	     super.onDestroy();
 	}
 	
 	public void onPause(){		
 		pot1Thread.cancel(true);	
-	    //pot2Thread.cancel(true);
-	    //pot3Thread.cancel(true);	
-	    //pot4Thread.cancel(true);
+	    pot2Thread.cancel(true);
+	    pot3Thread.cancel(true);	
+	    pot4Thread.cancel(true);
 	    super.onPause();		
 	}
 	
 	public void onResume(){
 		pot1Thread = new pot();
-		//pot2Thread = new pot2();
-		//pot3Thread = new pot3();
-		//pot4Thread = new pot4();
+		pot2Thread = new pot2();
+		pot3Thread = new pot3();
+		pot4Thread = new pot4();
 		pot1Thread.execute();    	
-		//pot2Thread.execute();
-		//pot3Thread.execute();
-		//pot4Thread.execute();
+		pot2Thread.execute();
+		pot3Thread.execute();
+		pot4Thread.execute();
 		super.onResume();
 	}
 }

@@ -1,1 +1,1 @@
-"./resources.obj" "./main.obj" -l"libc.a" "../lnk_msp430f5438a.cmd" 
+"./resources.obj" "./main.obj" "./LCD_lib.obj" "./I2C_LCD.obj" -l"libc.a" "../lnk_msp430f5438a.cmd" 
