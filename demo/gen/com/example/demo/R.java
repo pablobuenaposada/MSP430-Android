@@ -37,8 +37,8 @@ public final class R {
         public static final int lmText=0x7f080024;
         public static final int muestras=0x7f08001c;
         public static final int numero=0x7f080017;
-        public static final int p1=0x7f080006;
-        public static final int p2=0x7f080007;
+        public static final int p1=0x7f080007;
+        public static final int p2=0x7f080006;
         public static final int progressBar1=0x7f080021;
         public static final int progressBar2=0x7f080023;
         public static final int radio0=0x7f080019;

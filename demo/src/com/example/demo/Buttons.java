@@ -35,11 +35,11 @@ public class Buttons extends Activity {
 		setContentView(R.layout.buttons);
 		
 		Board board = (Board) getIntent().getSerializableExtra("board");
-		up = board.createDigitalInput(DigitalInput.Pin._24);
-		down = board.createDigitalInput(DigitalInput.Pin._25);
-		right = board.createDigitalInput(DigitalInput.Pin._22);
-		left = board.createDigitalInput(DigitalInput.Pin._21);
-		center = board.createDigitalInput(DigitalInput.Pin._23);
+		up = board.createDigitalInput(DigitalInput.Pin._14);
+		down = board.createDigitalInput(DigitalInput.Pin._15);
+		right = board.createDigitalInput(DigitalInput.Pin._12);
+		left = board.createDigitalInput(DigitalInput.Pin._11);
+		center = board.createDigitalInput(DigitalInput.Pin._13);
 		p1 = board.createDigitalInput(DigitalInput.Pin._16);
 		p2 = board.createDigitalInput(DigitalInput.Pin._17);
 		

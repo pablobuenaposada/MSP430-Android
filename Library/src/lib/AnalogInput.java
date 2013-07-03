@@ -6,7 +6,7 @@ public class AnalogInput{
 	private int pin;
 	
 	public enum Pin{
-    	_65(65),_66(66),_67(67),_74(74);
+    	_65(65),_66(66),_67(67),_74(74),_75(75);
     	
     	private int pin;
     	

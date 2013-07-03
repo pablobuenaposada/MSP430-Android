@@ -14,8 +14,8 @@ int id lmBar 0x7f080025
 int id lmText 0x7f080024
 int id muestras 0x7f08001c
 int id numero 0x7f080017
-int id p1 0x7f080006
-int id p2 0x7f080007
+int id p1 0x7f080007
+int id p2 0x7f080006
 int id progressBar1 0x7f080021
 int id progressBar2 0x7f080023
 int id radio0 0x7f080019

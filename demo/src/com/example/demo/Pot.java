@@ -21,6 +21,7 @@ public class Pot extends Activity {
 	private AnalogInput pot2;
 	private AnalogInput pot3;
 	private AnalogInput pot4;
+	private AnalogInput pot7;
 	private pot pot1Thread;
 	private pot2 pot2Thread;
 	private pot3 pot3Thread;
@@ -49,7 +50,7 @@ public class Pot extends Activity {
 		pot2 = board.createAnalogInput(AnalogInput.Pin._67);
 		pot3 = board.createAnalogInput(AnalogInput.Pin._65);
 		pot4 = board.createAnalogInput(AnalogInput.Pin._66);
-		
+		pot7 = board.createAnalogInput(AnalogInput.Pin._75);
 		
 		//pot1Thread = new pot();
 		//boton2Thread = new btn2();
@@ -110,7 +111,32 @@ public class Pot extends Activity {
 				if (isCancelled()){
 					break;
 				}
-				setPot(String.valueOf(pot.read()));	
+				setPot(String.valueOf(pot.read()));
+				pot7.read();
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				setPot2(String.valueOf(pot2.read()));
+				pot7.read();
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				setPot3(String.valueOf(pot3.read()));
+				pot7.read();
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				setPot4(String.valueOf(pot4.read()));
+				pot7.read();
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -181,29 +207,29 @@ public class Pot extends Activity {
 	
 	public void onDestroy() {
 	     pot1Thread.cancel(true);	
-	     pot2Thread.cancel(true);	
-	     pot3Thread.cancel(true);	
-	     pot4Thread.cancel(true);	
+	     //pot2Thread.cancel(true);	
+	     //pot3Thread.cancel(true);	
+	     //pot4Thread.cancel(true);	
 	     super.onDestroy();
 	}
 	
 	public void onPause(){		
 		pot1Thread.cancel(true);	
-	    pot2Thread.cancel(true);
-	    pot3Thread.cancel(true);	
-	    pot4Thread.cancel(true);
+	    //pot2Thread.cancel(true);
+	    //pot3Thread.cancel(true);	
+	    //pot4Thread.cancel(true);
 	    super.onPause();		
 	}
 	
 	public void onResume(){
 		pot1Thread = new pot();
-		pot2Thread = new pot2();
-		pot3Thread = new pot3();
-		pot4Thread = new pot4();
+		//pot2Thread = new pot2();
+		//pot3Thread = new pot3();
+		//pot4Thread = new pot4();
 		pot1Thread.execute();    	
-		pot2Thread.execute();
-		pot3Thread.execute();
-		pot4Thread.execute();
+		//pot2Thread.execute();
+		//pot3Thread.execute();
+		//pot4Thread.execute();
 		super.onResume();
 	}
 }

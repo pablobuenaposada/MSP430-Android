@@ -126,15 +126,17 @@ void setupAnalogInputPort(int port, int pin){
 	if(port == 6){
 		pin=pin+1;
 		P6DIR &= ~(int)(pow(2,pin-1));
-		P6SEL &= ~(int)(pow(2,pin-1));
+		P6SEL |= (int)(pow(2,pin-1));
 
 	}
 	else if(port == 7){
 		pin=pin+1;
 		P7DIR &= ~(int)(pow(2,pin-1));
-		P7SEL &= ~(int)(pow(2,pin-1));
+		P7SEL |= (int)(pow(2,pin-1));
 	}
 }
+
+
 
 void setupAnalogInput(int port, int pin){
 
@@ -144,9 +146,7 @@ void setupAnalogInput(int port, int pin){
 
 
 	if(port == 6){
-		if (pin == 7){
-			ADC12MCTL0 |= ADC12INCH_7;
-		}
+		ADC12MCTL0 =(unsigned int) pin;
 	}
 	else if (port == 7){
 		if(pin == 4){
