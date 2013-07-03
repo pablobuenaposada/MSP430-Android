@@ -58,7 +58,7 @@ public class Pot extends Activity {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				float voltage = (float) (Float.parseFloat(str)*0.0007496948);
+				float voltage = (float) (Float.parseFloat(str)*0.0006103515625);
 				potText.setText("LDR:"+str+"  "+String.format("%.02f",voltage)+"v");
 				progressBar.setProgress(Integer.parseInt(str));
 			}
@@ -69,7 +69,7 @@ public class Pot extends Activity {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				float voltage = (float) (Float.parseFloat(str)*0.0007496948);
+				float voltage = (float) (Float.parseFloat(str)*0.0006103515625);
 				pot2Text.setText("LDR:"+str+"  "+String.format("%.02f",voltage)+"v");
 				progressBar2.setProgress(Integer.parseInt(str));
 			}
@@ -80,7 +80,7 @@ public class Pot extends Activity {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				float voltage = (float) (Float.parseFloat(str)*0.0007496948);
+				float voltage = (float) (Float.parseFloat(str)*0.0006103515625);
 				pot3Text.setText("LM:"+str+"  "+String.format("%.02f",voltage)+"v");
 				progressBar3.setProgress(Integer.parseInt(str));
 			}
@@ -91,7 +91,7 @@ public class Pot extends Activity {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				float voltage = (float) (Float.parseFloat(str)*0.0007496948);
+				float voltage = (float) (Float.parseFloat(str)*0.0006103515625);
 				pot4Text.setText("DIST:"+str+"  "+String.format("%.02f",voltage)+"v");
 				progressBar4.setProgress(Integer.parseInt(str));
 			}
